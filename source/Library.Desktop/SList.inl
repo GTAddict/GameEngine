@@ -112,6 +112,33 @@ inline void SList<T>::PushBack(const T& data)
 	}
 }
 
+template<typename T>
+inline void SList<T>::InsertAfter(const Iterator& it, const T& data)
+{
+	if (it.mpCurrent == nullptr)
+	{
+		throw std::out_of_range("Cannot insert after end of list.");
+	}
+
+	if (it.mpCurrent->mpNext == mpEnd)
+	{
+		PushBack(data);
+		return;
+	}
+
+	Node* node = new Node();
+	node->mData = data;
+	++mSize;
+
+	node->mpNext = it.mpCurrent->mpNext;
+	it.mpCurrent->mpNext = node;
+
+	if (node->mpNext == nullptr)
+	{
+		mpEnd = node;
+	}
+}
+
 template <typename T>
 inline bool SList<T>::IsEmpty() const
 {
@@ -165,4 +192,133 @@ inline void SList<T>::Clear()
 	{
 		PopFront();
 	}
+}
+
+template<typename T>
+inline typename SList<T>::Iterator SList<T>::begin() const
+{
+	return Iterator(mpBegin);
+}
+
+template<typename T>
+inline typename SList<T>::Iterator SList<T>::end() const
+{
+	return Iterator(mpEnd->mpNext);
+}
+
+template<typename T>
+inline typename SList<T>::Iterator SList<T>::Find(const T & data) const
+{
+	Iterator it = begin(), itEnd = end();
+
+	for ( ; it != itEnd; ++it)
+	{
+		if (*it == data)
+		{
+			return it;
+		}
+	}
+
+	return it;
+}
+
+template<typename T>
+inline typename void SList<T>::Remove(const T& data)
+{
+	Iterator it = Find(data);
+
+	if (it.mpCurrent != nullptr)
+	{
+		if (it.mpCurrent == mpBegin)
+		{
+			PopFront();
+		}
+		else
+		{
+			SList<T>::Iterator prevIt = begin();
+			while (prevIt.mpCurrent->mpNext != it.mpCurrent)
+			{
+				++prevIt;
+			}
+
+			prevIt.mpCurrent->mpNext = it.mpCurrent->mpNext;
+			delete it.mpCurrent;
+			--mSize;
+		}
+	}
+}
+
+template<typename T>
+inline SList<T>::Iterator::Iterator()
+{
+	/// Leave it unitialized; we don't
+	/// it to be valid unless we explicitly
+	/// initialize it
+}
+
+template<typename T>
+inline SList<T>::Iterator::Iterator(Node * node)
+	:mpCurrent(node)
+{
+}
+
+template<typename T>
+inline SList<T>::Iterator::~Iterator()
+{
+}
+
+template<typename T>
+inline bool SList<T>::Iterator::operator==(const Iterator& rhs) const
+{
+	return mpCurrent == rhs.mpCurrent;
+}
+
+template<typename T>
+inline bool SList<T>::Iterator::operator!=(const Iterator& rhs) const
+{
+	return !(*this == rhs);
+}
+
+template<typename T>
+inline typename SList<T>::Iterator& SList<T>::Iterator::operator++()
+{
+	if (mpCurrent == nullptr)
+	{
+		throw std::out_of_range("Cannot increment past end of list.");
+	}
+
+	mpCurrent = mpCurrent->mpNext;
+
+	return *this;
+}
+
+template<typename T>
+inline typename SList<T>::Iterator SList<T>::Iterator::operator++(int)
+{
+	Iterator prevState = *this;
+	++*this;
+	return prevState;
+}
+
+template<typename T>
+inline const T& SList<T>::Iterator::operator*() const
+{
+	if (mpCurrent == nullptr)
+	{
+		std::runtime_error("Cannot perform operation on nullptr!");
+	}
+
+	return mpCurrent->mData;
+}
+
+template<typename T>
+inline T& SList<T>::Iterator::operator*()
+{
+	if (mpCurrent == nullptr)
+	{
+		std::runtime_error("Cannot perform operation on nullptr!");
+	}
+
+	return mpCurrent->mData;
+	//return const_cast<T&>(*(static_cast<const Iterator>(*this)));
 }

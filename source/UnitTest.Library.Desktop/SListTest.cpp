@@ -404,6 +404,47 @@ namespace UnitTestSList
 			TestListCopySemanticsPtr<float>();
 		}
 
+		TEST_METHOD(TestIterators)
+		{
+			SList<int> myList;
+
+			for (int i = 0; i < 10; ++i)
+			{
+				myList.PushBack(i);
+			}
+
+			int counter = 0;
+			for (SList<int>::Iterator it = myList.begin(), itEnd = myList.end(); it != itEnd; ++it)
+			{
+				Assert::AreEqual(counter, *it);
+				++counter;
+			}
+
+			myList.Remove(5);
+
+			counter = 0;
+			for (SList<int>::Iterator it = myList.begin(), itEnd = myList.end(); it != itEnd; ++it)
+			{
+
+				Assert::AreEqual(counter, *it);
+				++counter;
+				if (counter == 5)
+				{
+					++counter;
+				}
+			}
+
+			myList.InsertAfter(myList.Find(4), 5);
+
+			counter = 0;
+			for (SList<int>::Iterator it = myList.begin(), itEnd = myList.end(); it != itEnd; ++it)
+			{
+
+				Assert::AreEqual(counter, *it);
+				++counter;
+			}
+		}
+
 	private:
 #ifdef _DEBUG
 		static _CrtMemState sStartMemState;
