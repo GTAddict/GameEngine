@@ -42,8 +42,9 @@ public:
 		/**
 		 *	\brief		Parametrized constructor, initializes current pointer to Node passed in.
 		 *	\param node	Node that the Iterator should be initialized with.
+		 *	\param list	List that the node is part of i.e. owner list.
 		 */
-		Iterator(Node* node);
+		Iterator(Node* node, const SList<T>* const list);
 
 		/**
 		 *	\brief	Destructor, does nothing here.
@@ -79,22 +80,16 @@ public:
 		Iterator	operator++(int);
 
 		/**
-		 *	\brief	Dereference operator. This will provide the data inside the Node pointed to
-		 *			by the Iterator. This is the const version which does not allow data modification.
-		 *	\return	A const reference to the data contained in the Node pointed to by the Iterator.
-		 */
-		const T&	operator*() const;
-
-		/**
 		*	\brief	Dereference operator. This will provide the data inside the Node pointed to
-		*			by the Iterator. This is the non-const version which allows data modification.
-		*	\return	A non-const reference to the data contained in the Node pointed to by the Iterator.
+		*			by the Iterator.
+		*	\return	A reference to the data contained in the Node pointed to by the Iterator.
 		*/
 		T&			operator*();
 
 	private:
 
 		Node* mpCurrent;					/**< Stores pointer to the current node in the list */
+		const SList<T>* const mpOwner;		/**< Stores pointer to the container on which this iterator is used */
 	};
 
 public:
@@ -227,7 +222,6 @@ private:
 	Node*			mpBegin;				/**< Points to the first Node of the list */
 	Node*			mpEnd;					/**< Points to the last Node of the list */
 	unsigned int	mSize;					/**< Stores the current number of Nodes in the list */
-
 
 };
 

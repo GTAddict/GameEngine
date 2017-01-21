@@ -21,12 +21,9 @@ inline SList<T>::SList(const SList<T>& rhs)
 	, mpEnd(nullptr)
 	, mSize(0)
 {
-	Node* pNode = rhs.mpBegin;
-
-	while (pNode != nullptr)
+	for (Iterator it = rhs.begin(), itEnd = rhs.end(); it != itEnd; ++it)
 	{
-		PushBack(pNode->mData);
-		pNode = pNode->mpNext;
+		PushBack(*it);
 	}
 }
 
@@ -37,12 +34,9 @@ inline SList<T> & SList<T>::operator=(const SList<T>& rhs)
 	{
 		Clear();
 
-		Node* pNode = rhs.mpBegin;
-
-		while (pNode != nullptr)
+		for (Iterator it = rhs.begin(), itEnd = rhs.end(); it != itEnd; ++it)
 		{
-			PushBack(pNode->mData);
-			pNode = pNode->mpNext;
+			PushBack(*it);
 		}
 	}
 
@@ -197,13 +191,13 @@ inline void SList<T>::Clear()
 template<typename T>
 inline typename SList<T>::Iterator SList<T>::begin() const
 {
-	return Iterator(mpBegin);
+	return Iterator(mpBegin, this);
 }
 
 template<typename T>
 inline typename SList<T>::Iterator SList<T>::end() const
 {
-	return Iterator(mpEnd->mpNext);
+	return Iterator(mpEnd->mpNext, this);
 }
 
 template<typename T>
@@ -257,8 +251,9 @@ inline SList<T>::Iterator::Iterator()
 }
 
 template<typename T>
-inline SList<T>::Iterator::Iterator(Node * node)
-	:mpCurrent(node)
+inline SList<T>::Iterator::Iterator(Node* node, const SList<T>* const list)
+	: mpCurrent(node)
+	, mpOwner(list)
 {
 }
 
@@ -270,7 +265,7 @@ inline SList<T>::Iterator::~Iterator()
 template<typename T>
 inline bool SList<T>::Iterator::operator==(const Iterator& rhs) const
 {
-	return mpCurrent == rhs.mpCurrent;
+	return ((mpOwner == rhs.mpOwner) && (mpCurrent == rhs.mpCurrent));
 }
 
 template<typename T>
@@ -301,17 +296,6 @@ inline typename SList<T>::Iterator SList<T>::Iterator::operator++(int)
 }
 
 template<typename T>
-inline const T& SList<T>::Iterator::operator*() const
-{
-	if (mpCurrent == nullptr)
-	{
-		std::runtime_error("Cannot perform operation on nullptr!");
-	}
-
-	return mpCurrent->mData;
-}
-
-template<typename T>
 inline T& SList<T>::Iterator::operator*()
 {
 	if (mpCurrent == nullptr)
@@ -320,5 +304,4 @@ inline T& SList<T>::Iterator::operator*()
 	}
 
 	return mpCurrent->mData;
-	//return const_cast<T&>(*(static_cast<const Iterator>(*this)));
 }
