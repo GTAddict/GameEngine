@@ -197,11 +197,18 @@ inline typename SList<T>::Iterator SList<T>::begin() const
 template<typename T>
 inline typename SList<T>::Iterator SList<T>::end() const
 {
-	return Iterator(mpEnd->mpNext, this);
+	if (mpBegin == mpEnd)
+	{
+		return Iterator(mpBegin, this);
+	}
+	else
+	{
+		return Iterator(mpEnd->mpNext, this);
+	}
 }
 
 template<typename T>
-inline typename SList<T>::Iterator SList<T>::Find(const T & data) const
+inline typename SList<T>::Iterator SList<T>::Find(const T& data) const
 {
 	Iterator it = begin(), itEnd = end();
 
@@ -244,10 +251,9 @@ inline typename void SList<T>::Remove(const T& data)
 
 template<typename T>
 inline SList<T>::Iterator::Iterator()
+	: mpOwner(nullptr)
 {
-	/// Leave it unitialized; we don't
-	/// it to be valid unless we explicitly
-	/// initialize it
+	// Leave iterator unitialized.
 }
 
 template<typename T>
@@ -265,7 +271,7 @@ inline SList<T>::Iterator::~Iterator()
 template<typename T>
 inline bool SList<T>::Iterator::operator==(const Iterator& rhs) const
 {
-	return ((mpOwner == rhs.mpOwner) && (mpCurrent == rhs.mpCurrent));
+	return mpOwner && rhs.mpOwner && ((mpOwner == rhs.mpOwner) && (mpCurrent == rhs.mpCurrent));
 }
 
 template<typename T>
@@ -300,7 +306,7 @@ inline T& SList<T>::Iterator::operator*()
 {
 	if (mpCurrent == nullptr)
 	{
-		std::runtime_error("Cannot perform operation on nullptr!");
+		throw std::runtime_error("Cannot perform operation on nullptr!");
 	}
 
 	return mpCurrent->mData;

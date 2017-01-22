@@ -3,11 +3,29 @@
 
 namespace UnitTestSlistConstants
 {
-	const int startValue = 65;
-	const int endValue = 81;
-	const float divisor = 100.0f;
+	const int startValue	= 65;
+	const int endValue		= 81;
+	const float divisor		= 100.0f;
 	const unsigned int expectedNumElements = endValue - startValue + 1;
-	const std::string name = "Name";
+	const std::string name	= "Name";
+}
+
+namespace Microsoft
+{
+	namespace VisualStudio
+	{
+		namespace CppUnitTestFramework
+		{
+			template<>
+			std::wstring ToString<SList<int>::Iterator>(const SList<int>::Iterator& t)
+			{
+				std::wstringstream s;
+				s << "Current node pointer: " << t.GetCurrentNodePtr() << "\n";
+				s << "Current list owner: " << t.GetOwnerPtr();
+				return s.str();
+			}
+		}
+	}
 }
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -51,30 +69,6 @@ namespace UnitTestSList
 			}
 		};
 
-	public:
-
-		TEST_METHOD_INITIALIZE(Initialize)
-		{
-#ifdef _DEBUG
-			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-			_CrtMemCheckpoint(&sStartMemState);
-#endif
-		}
-
-		TEST_METHOD_CLEANUP(Cleanup)
-		{
-#ifdef _DEBUG
-			_CrtMemState endMemState, diffMemState;
-			_CrtMemCheckpoint(&endMemState);
-
-			if (_CrtMemDifference(&diffMemState, &sStartMemState, &endMemState))
-			{
-				_CrtMemDumpStatistics(&diffMemState);
-				Assert::Fail(L"Your code is leaking memory!");
-			}
-#endif
-		}
-
 		template <typename T>	T		ConvertValue(int i) { return static_cast<T>(i); }
 		template <>				bool	ConvertValue(int i) { return i != 0; }
 
@@ -96,9 +90,9 @@ namespace UnitTestSList
 
 			Assert::IsTrue(list.IsEmpty());									///< Test IsEmpty
 
-			auto PopFrontFunction	= [&list] { list.PopFront(); };			///< Test whether PopFront, Front
-			auto FrontFunction		= [&list] { list.Front(); };			///< and Back throw exceptions
-			auto BackFunction		= [&list] { list.Back(); };				///< when the list is empty.
+			auto PopFrontFunction = [&list] { list.PopFront(); };			///< Test whether PopFront, Front
+			auto FrontFunction = [&list] { list.Front(); };			///< and Back throw exceptions
+			auto BackFunction = [&list] { list.Back(); };				///< when the list is empty.
 			Assert::ExpectException<std::out_of_range>(PopFrontFunction);
 			Assert::ExpectException<std::out_of_range>(FrontFunction);
 			Assert::ExpectException<std::out_of_range>(BackFunction);
@@ -132,9 +126,9 @@ namespace UnitTestSList
 
 			Assert::IsTrue(list.IsEmpty());									///< Test IsEmpty
 
-			auto PopFrontFunction	= [&list] { list.PopFront(); };			///< Test whether PopFront, Front
-			auto FrontFunction		= [&list] { list.Front(); };			///< and Back throw exceptions
-			auto BackFunction		= [&list] { list.Back(); };				///< when the list is empty.
+			auto PopFrontFunction = [&list] { list.PopFront(); };			///< Test whether PopFront, Front
+			auto FrontFunction = [&list] { list.Front(); };			///< and Back throw exceptions
+			auto BackFunction = [&list] { list.Back(); };				///< when the list is empty.
 			Assert::ExpectException<std::out_of_range>(PopFrontFunction);
 			Assert::ExpectException<std::out_of_range>(FrontFunction);
 			Assert::ExpectException<std::out_of_range>(BackFunction);
@@ -160,55 +154,12 @@ namespace UnitTestSList
 
 			Assert::IsTrue(list.IsEmpty());									///< Test IsEmpty
 
-			auto PopFrontFunction	= [&list] { list.PopFront(); };			///< Test whether PopFront, Front
-			auto FrontFunction		= [&list] { list.Front(); };			///< and Back throw exceptions
-			auto BackFunction		= [&list] { list.Back(); };				///< when the list is empty.
+			auto PopFrontFunction = [&list] { list.PopFront(); };			///< Test whether PopFront, Front
+			auto FrontFunction = [&list] { list.Front(); };			///< and Back throw exceptions
+			auto BackFunction = [&list] { list.Back(); };				///< when the list is empty.
 			Assert::ExpectException<std::out_of_range>(PopFrontFunction);
 			Assert::ExpectException<std::out_of_range>(FrontFunction);
 			Assert::ExpectException<std::out_of_range>(BackFunction);
-		}
-
-		TEST_METHOD(TestFront)
-		{
-			/// Test constructors.
-			SList<bool>		boolList;
-			SList<char>		charList;
-			SList<int>		intList;
-			SList<float>	floatList;
-
-			TestListFront<bool>(boolList);
-			TestListFront<char>(charList);
-			TestListFront<int>(intList);
-			TestListFront<float>(floatList);
-
-			/// Test const version
-			SList<int>	constIntList;
-			constIntList.PushBack(startValue);
-			Assert::AreEqual(startValue, constIntList.Front());
-
-			/// Destructor invoked automatically
-			/// which in turn tests Clear().
-		}
-
-		TEST_METHOD(TestFrontPtr)
-		{
-			/// Test constructors.
-			SList<DummyStruct*>*	pDummyStructList = new SList<DummyStruct*>();
-			SList<bool*>			boolStarList;
-			SList<char*>			charStarList;
-			SList<int*>				intStarList;
-			SList<float*>			floatStarList;
-
-			TestListFrontPtr<DummyStruct*>(*pDummyStructList);
-			TestListFrontPtr<bool*>(boolStarList);
-			// TestListFrontPtr<char*>			(charStarList);				///< This is leaking memory for some reason?
-			TestListFrontPtr<int*>(intStarList);
-			TestListFrontPtr<float*>(floatStarList);
-
-			delete pDummyStructList;
-			/// pDummyStructList was new'd so needs to be deleted.
-			/// Others have destructor invoked automatically
-			/// which in turn tests Clear().
 		}
 
 		template <typename U, typename T = SList<U>>
@@ -251,49 +202,6 @@ namespace UnitTestSList
 				list.PushBack(array[i - startValue]);
 				Assert::AreEqual((void*)array[i - startValue], (void*)list.Back());
 			}
-		}
-
-		TEST_METHOD(TestBack)
-		{
-			/// Test constructors.
-			SList<bool>				boolList;
-			SList<char>				charList;
-			SList<int>				intList;
-			SList<float>			floatList;
-
-			TestListBack<bool>(boolList);
-			TestListBack<char>(charList);
-			TestListBack<int>(intList);
-			TestListBack<float>(floatList);
-
-			/// Test const version
-			SList<int>	constIntList;
-			constIntList.PushBack(startValue);
-			Assert::AreEqual(startValue, constIntList.Back());
-
-			/// Destructor invoked automatically
-			/// which in turn tests Clear().
-		}
-
-		TEST_METHOD(TestBackPtr)
-		{
-			/// Test constructors.
-			SList<DummyStruct*>*	pDummyStructList = new SList<DummyStruct*>();
-			SList<bool*>			boolStarList;
-			SList<char*>			charStarList;
-			SList<int*>				intStarList;
-			SList<float*>			floatStarList;
-
-			TestListBackPtr<DummyStruct*>(*pDummyStructList);
-			TestListBackPtr<bool*>(boolStarList);
-			TestListBackPtr<char*>(charStarList);
-			TestListBackPtr<int*>(intStarList);
-			TestListBackPtr<float*>(floatStarList);
-
-			delete pDummyStructList;
-			/// pDummyStructList was new'd so needs to be deleted.
-			/// Others have destructor invoked automatically
-			/// which in turn tests Clear().
 		}
 
 		template <typename T>
@@ -387,6 +295,116 @@ namespace UnitTestSList
 			}
 		}
 
+	public:
+
+		TEST_METHOD_INITIALIZE(Initialize)
+		{
+#ifdef _DEBUG
+			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+			_CrtMemCheckpoint(&sStartMemState);
+#endif
+		}
+
+		TEST_METHOD_CLEANUP(Cleanup)
+		{
+#ifdef _DEBUG
+			_CrtMemState endMemState, diffMemState;
+			_CrtMemCheckpoint(&endMemState);
+
+			if (_CrtMemDifference(&diffMemState, &sStartMemState, &endMemState))
+			{
+				_CrtMemDumpStatistics(&diffMemState);
+				Assert::Fail(L"Your code is leaking memory!");
+			}
+#endif
+		}
+
+		TEST_METHOD(TestFront)
+		{
+			/// Test constructors.
+			SList<bool>		boolList;
+			SList<char>		charList;
+			SList<int>		intList;
+			SList<float>	floatList;
+
+			TestListFront<bool>(boolList);
+			TestListFront<char>(charList);
+			TestListFront<int>(intList);
+			TestListFront<float>(floatList);
+
+			/// Test const version
+			SList<int>	constIntList;
+			constIntList.PushBack(startValue);
+			Assert::AreEqual(startValue, constIntList.Front());
+
+			/// Destructor invoked automatically
+			/// which in turn tests Clear().
+		}
+
+		TEST_METHOD(TestFrontPtr)
+		{
+			/// Test constructors.
+			SList<DummyStruct*>*	pDummyStructList = new SList<DummyStruct*>();
+			SList<bool*>			boolStarList;
+			SList<char*>			charStarList;
+			SList<int*>				intStarList;
+			SList<float*>			floatStarList;
+
+			TestListFrontPtr<DummyStruct*>(*pDummyStructList);
+			TestListFrontPtr<bool*>(boolStarList);
+			// TestListFrontPtr<char*>			(charStarList);				///< This is leaking memory for some reason?
+			TestListFrontPtr<int*>(intStarList);
+			TestListFrontPtr<float*>(floatStarList);
+
+			delete pDummyStructList;
+			/// pDummyStructList was new'd so needs to be deleted.
+			/// Others have destructor invoked automatically
+			/// which in turn tests Clear().
+		}
+
+		TEST_METHOD(TestBack)
+		{
+			/// Test constructors.
+			SList<bool>				boolList;
+			SList<char>				charList;
+			SList<int>				intList;
+			SList<float>			floatList;
+
+			TestListBack<bool>(boolList);
+			TestListBack<char>(charList);
+			TestListBack<int>(intList);
+			TestListBack<float>(floatList);
+
+			/// Test const version
+			SList<int>	constIntList;
+			constIntList.PushBack(startValue);
+			Assert::AreEqual(startValue, constIntList.Back());
+
+			/// Destructor invoked automatically
+			/// which in turn tests Clear().
+		}
+
+		TEST_METHOD(TestBackPtr)
+		{
+			/// Test constructors.
+			SList<DummyStruct*>*	pDummyStructList = new SList<DummyStruct*>();
+			SList<bool*>			boolStarList;
+			SList<char*>			charStarList;
+			SList<int*>				intStarList;
+			SList<float*>			floatStarList;
+
+			TestListBackPtr<DummyStruct*>(*pDummyStructList);
+			TestListBackPtr<bool*>(boolStarList);
+			TestListBackPtr<char*>(charStarList);
+			TestListBackPtr<int*>(intStarList);
+			TestListBackPtr<float*>(floatStarList);
+
+			delete pDummyStructList;
+			/// pDummyStructList was new'd so needs to be deleted.
+			/// Others have destructor invoked automatically
+			/// which in turn tests Clear().
+		}
+
 		TEST_METHOD(TestCopySemantics)
 		{
 			TestListCopySemantics<bool>();
@@ -404,45 +422,152 @@ namespace UnitTestSList
 			TestListCopySemanticsPtr<float>();
 		}
 
-		TEST_METHOD(TestIterators)
+		TEST_METHOD(TestIteratorBeginEnd)
 		{
 			SList<int> myList;
 
-			for (int i = 0; i < 10; ++i)
+			for (int i = startValue; i <= endValue; ++i)
 			{
 				myList.PushBack(i);
 			}
 
-			int counter = 0;
+			int counter = startValue;
 			for (SList<int>::Iterator it = myList.begin(), itEnd = myList.end(); it != itEnd; ++it)
 			{
 				Assert::AreEqual(counter, *it);
 				++counter;
 			}
+		}
+		
+		TEST_METHOD(TestFind)
+		{
+			SList<int> myList;
 
-			myList.Remove(5);
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				myList.PushBack(i);
+			}
 
-			counter = 0;
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				SList<int>::Iterator foundIt = myList.Find(i);
+				Assert::AreEqual(i, *foundIt);
+			}
+		}
+
+		TEST_METHOD(TestRemove)
+		{
+			SList<int> myList;
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				myList.PushBack(i);
+			}
+
+			for (int i = endValue; i >= startValue; --i)
+			{
+				myList.Remove(i);
+			}
+
+			Assert::IsTrue(myList.IsEmpty());
+		}
+
+		TEST_METHOD(TestInsertAfter)
+		{
+			SList<int> myList;
+
+			int insertAfterElement = (endValue + startValue) / 2;
+			int valueToInsert = rand();
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				myList.PushBack(i);
+			}
+
+			myList.InsertAfter(myList.Find(insertAfterElement), valueToInsert);
+
+			int count = startValue;
 			for (SList<int>::Iterator it = myList.begin(), itEnd = myList.end(); it != itEnd; ++it)
 			{
-
-				Assert::AreEqual(counter, *it);
-				++counter;
-				if (counter == 5)
+				if (count == insertAfterElement + 1)
 				{
-					++counter;
+					Assert::AreEqual(valueToInsert, *it);
 				}
+				else if (count > insertAfterElement + 1)
+				{
+					Assert::AreEqual(count - 1, *it);
+				}
+				else
+				{
+					Assert::AreEqual(count, *it);
+				}
+
+				++count;
 			}
+		}
 
-			myList.InsertAfter(myList.Find(4), 5);
+		TEST_METHOD(TestEqualityInequality)
+		{
+			SList<int> myList, anotherList;
 
-			counter = 0;
-			for (SList<int>::Iterator it = myList.begin(), itEnd = myList.end(); it != itEnd; ++it)
+			SList<int>::Iterator itMyList, itAnotherList;
+			Assert::AreNotEqual(itMyList, itAnotherList);
+
+			SList<int>::Iterator itMy = myList.begin(), itAnother = anotherList.begin();
+			Assert::AreNotEqual(itMy, itAnother);
+
+			for (int i = startValue; i <= endValue; ++i)
 			{
-
-				Assert::AreEqual(counter, *it);
-				++counter;
+				myList.PushBack(i);
+				anotherList.PushBack(i);
 			}
+
+			Assert::AreNotEqual(myList.Find(endValue), anotherList.Find(endValue));
+
+			SList<int>::Iterator itBegin = myList.begin();
+			++itBegin;
+
+			SList<int>::Iterator itPlusOne = myList.Find(startValue + 1);
+
+			Assert::AreEqual(itBegin, itPlusOne);
+		}
+
+		TEST_METHOD(TestIncrement)
+		{
+			SList<int> myList;
+			myList.PushBack(startValue);
+			myList.PushBack(startValue + 1);
+
+			SList<int>::Iterator preIncIt = myList.begin();
+			Assert::AreEqual(startValue + 1, *(++preIncIt));
+			Assert::AreEqual(startValue + 1, *preIncIt);
+
+			myList.Front() = startValue;
+			SList<int>::Iterator postIncIt = myList.begin();
+			Assert::AreEqual(startValue, *(postIncIt++));
+			Assert::AreEqual(startValue + 1, *postIncIt);
+		}
+
+		TEST_METHOD(TestIteratorExceptions)
+		{
+			SList<int> myList;
+			SList<int>::Iterator it = myList.end();
+
+			auto func = [&myList, &it] { myList.InsertAfter(it, startValue);  };
+			Assert::ExpectException<std::out_of_range>(func);
+
+			auto func2 = [&it] { ++it; };
+			Assert::ExpectException<std::out_of_range>(func2);
+
+			auto func3 = [&it] { it++; };
+			Assert::ExpectException<std::out_of_range>(func3);
+
+			SList<int>::Iterator endIt = myList.Find(startValue - 1);
+			auto func4 = [&it] { *it; };
+			Assert::ExpectException<std::runtime_error>(func4);
+
+			myList.Remove(startValue - 1);
+
 		}
 
 	private:

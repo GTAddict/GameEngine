@@ -86,10 +86,15 @@ public:
 		*/
 		T&			operator*();
 
+#if _DEBUG
+		unsigned int	GetCurrentNodePtr()	const	{ return reinterpret_cast<unsigned int>(mpCurrent); }
+		unsigned int	GetOwnerPtr()		const	{ return reinterpret_cast<unsigned int>(mpOwner);  }
+#endif
+
 	private:
 
 		Node* mpCurrent;					/**< Stores pointer to the current node in the list */
-		const SList<T>* const mpOwner;		/**< Stores pointer to the container on which this iterator is used */
+		const SList<T>* mpOwner;			/**< Stores pointer to the container on which this iterator is used */
 	};
 
 public:
