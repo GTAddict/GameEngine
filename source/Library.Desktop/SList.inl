@@ -253,7 +253,7 @@ template<typename T>
 inline SList<T>::Iterator::Iterator()
 	: mpOwner(nullptr)
 {
-	// Leave iterator unitialized.
+	// Leave node unitialized.
 }
 
 template<typename T>

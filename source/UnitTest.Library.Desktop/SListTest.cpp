@@ -16,14 +16,18 @@ namespace Microsoft
 	{
 		namespace CppUnitTestFramework
 		{
-			template<>
-			std::wstring ToString<SList<int>::Iterator>(const SList<int>::Iterator& t)
+			template <typename T>
+			std::wstring ToString(const SList<T>::template Iterator t)
 			{
 				std::wstringstream s;
 				s << "Current node pointer: " << t.GetCurrentNodePtr() << "\n";
 				s << "Current list owner: " << t.GetOwnerPtr();
 				return s.str();
 			}
+
+			template<> std::wstring ToString<SList<char>::Iterator>	(const SList<char>::Iterator& t)	{ return ToString<char>(t); }
+			template<> std::wstring ToString<SList<int>::Iterator>	(const SList<int>::Iterator& t)		{ return ToString<int>(t); }
+			template<> std::wstring ToString<SList<float>::Iterator>(const SList<float>::Iterator& t)	{ return ToString<float>(t); }
 		}
 	}
 }
@@ -295,6 +299,160 @@ namespace UnitTestSList
 			}
 		}
 
+		template <typename T>
+		void TestListIteratorBeginEnd()
+		{
+			SList<T> list;
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				list.PushBack(ConvertValue<T>(i));
+			}
+
+			int counter = startValue;
+			for (SList<T>::Iterator it = list.begin(), itEnd = list.end(); it != itEnd; ++it)
+			{
+				Assert::AreEqual(ConvertValue<T>(counter), *it);
+				++counter;
+			}
+		}
+
+		template <typename T>
+		void TestListFind()
+		{
+			SList<T> list;
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				list.PushBack(ConvertValue<T>(i));
+			}
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				SList<T>::Iterator foundIt = list.Find(ConvertValue<T>(i));
+				Assert::AreEqual(ConvertValue<T>(i), *foundIt);
+			}
+		}
+
+		template <typename T>
+		void TestListRemove()
+		{
+			SList<T> list;
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				list.PushBack(ConvertValue<T>(i));
+			}
+
+			for (int i = endValue; i >= startValue; --i)
+			{
+				list.Remove(ConvertValue<T>(i));
+			}
+
+			Assert::IsTrue(list.IsEmpty());
+		}
+
+		template <typename T>
+		void TestListInsertAfter()
+		{
+			SList<T> list;
+
+			int insertAfterElement = (endValue + startValue) / 2;
+			int valueToInsert = rand();
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				list.PushBack(ConvertValue<T>(i));
+			}
+
+			list.InsertAfter(list.Find(ConvertValue<T>(insertAfterElement)), ConvertValue<T>(valueToInsert));
+
+			int count = startValue;
+			for (SList<T>::Iterator it = list.begin(), itEnd = list.end(); it != itEnd; ++it)
+			{
+				if (count == insertAfterElement + 1)
+				{
+					Assert::AreEqual(ConvertValue<T>(valueToInsert), *it);
+				}
+				else if (count > insertAfterElement + 1)
+				{
+					Assert::AreEqual(ConvertValue<T>(count - 1), *it);
+				}
+				else
+				{
+					Assert::AreEqual(ConvertValue<T>(count), *it);
+				}
+
+				++count;
+			}
+		}
+
+		template <typename T>
+		void TestIteratorEqualityInequality()
+		{
+			SList<T> myList, anotherList;
+
+			SList<T>::Iterator itMyList, itAnotherList;
+			Assert::AreNotEqual(itMyList, itAnotherList);
+
+			SList<T>::Iterator itMy = myList.begin(), itAnother = anotherList.begin();
+			Assert::AreNotEqual(itMy, itAnother);
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				myList.PushBack(ConvertValue<T>(i));
+				anotherList.PushBack(ConvertValue<T>(i));
+			}
+
+			Assert::AreNotEqual(myList.Find(ConvertValue<T>(endValue)), anotherList.Find(ConvertValue<T>(endValue)));
+
+			SList<T>::Iterator itBegin = myList.begin();
+			++itBegin;
+
+			SList<T>::Iterator itPlusOne = myList.Find(ConvertValue<T>(startValue + 1));
+
+			Assert::AreEqual(itBegin, itPlusOne);
+		}
+
+		template <typename T>
+		void TestIteratorIncrement()
+		{
+			SList<T> list;
+			list.PushBack(ConvertValue<T>(startValue));
+			list.PushBack(ConvertValue<T>(startValue + 1));
+
+			SList<T>::Iterator preIncIt = list.begin();
+			Assert::AreEqual(ConvertValue<T>(startValue + 1), *(++preIncIt));
+			Assert::AreEqual(ConvertValue<T>(startValue + 1), *preIncIt);
+
+			list.Front() = ConvertValue<T>(startValue);
+			SList<T>::Iterator postIncIt = list.begin();
+			Assert::AreEqual(ConvertValue<T>(startValue), *(postIncIt++));
+			Assert::AreEqual(ConvertValue<T>(startValue + 1), *postIncIt);
+		}
+
+		template <typename T>
+		void TestListIteratorExceptions()
+		{
+			SList<T> list;
+			SList<T>::Iterator it = list.end();
+
+			auto insertAfterFunc = [this, &list, &it] { list.InsertAfter(it, ConvertValue<T>(startValue)); };
+			Assert::ExpectException<std::out_of_range>(insertAfterFunc);
+
+			auto preIncrementFunc = [&it] { ++it; };
+			Assert::ExpectException<std::out_of_range>(preIncrementFunc);
+
+			auto postIncrementFunc = [&it] { it++; };
+			Assert::ExpectException<std::out_of_range>(postIncrementFunc);
+
+			SList<T>::Iterator endIt = list.Find(ConvertValue<T>(startValue - 1));
+			auto dereferenceFunc = [&it] { *it; };
+			Assert::ExpectException<std::runtime_error>(dereferenceFunc);
+
+			list.Remove(ConvertValue<T>(startValue - 1));									//< This should not throw any exception
+		}
+
 	public:
 
 		TEST_METHOD_INITIALIZE(Initialize)
@@ -352,7 +510,6 @@ namespace UnitTestSList
 
 			TestListFrontPtr<DummyStruct*>(*pDummyStructList);
 			TestListFrontPtr<bool*>(boolStarList);
-			// TestListFrontPtr<char*>			(charStarList);				///< This is leaking memory for some reason?
 			TestListFrontPtr<int*>(intStarList);
 			TestListFrontPtr<float*>(floatStarList);
 
@@ -424,150 +581,57 @@ namespace UnitTestSList
 
 		TEST_METHOD(TestIteratorBeginEnd)
 		{
-			SList<int> myList;
-
-			for (int i = startValue; i <= endValue; ++i)
-			{
-				myList.PushBack(i);
-			}
-
-			int counter = startValue;
-			for (SList<int>::Iterator it = myList.begin(), itEnd = myList.end(); it != itEnd; ++it)
-			{
-				Assert::AreEqual(counter, *it);
-				++counter;
-			}
+			TestListIteratorBeginEnd<char>();
+			TestListIteratorBeginEnd<bool>();
+			TestListIteratorBeginEnd<int>();
+			TestListIteratorBeginEnd<float>();
 		}
 		
 		TEST_METHOD(TestFind)
 		{
-			SList<int> myList;
-
-			for (int i = startValue; i <= endValue; ++i)
-			{
-				myList.PushBack(i);
-			}
-
-			for (int i = startValue; i <= endValue; ++i)
-			{
-				SList<int>::Iterator foundIt = myList.Find(i);
-				Assert::AreEqual(i, *foundIt);
-			}
+			TestListFind<char>();
+			TestListFind<bool>();
+			TestListFind<int>();
+			TestListFind<float>();
 		}
 
 		TEST_METHOD(TestRemove)
 		{
-			SList<int> myList;
-
-			for (int i = startValue; i <= endValue; ++i)
-			{
-				myList.PushBack(i);
-			}
-
-			for (int i = endValue; i >= startValue; --i)
-			{
-				myList.Remove(i);
-			}
-
-			Assert::IsTrue(myList.IsEmpty());
+			TestListRemove<bool>();
+			TestListRemove<char>();
+			TestListRemove<int>();
+			TestListRemove<float>();
 		}
 
 		TEST_METHOD(TestInsertAfter)
 		{
-			SList<int> myList;
-
-			int insertAfterElement = (endValue + startValue) / 2;
-			int valueToInsert = rand();
-
-			for (int i = startValue; i <= endValue; ++i)
-			{
-				myList.PushBack(i);
-			}
-
-			myList.InsertAfter(myList.Find(insertAfterElement), valueToInsert);
-
-			int count = startValue;
-			for (SList<int>::Iterator it = myList.begin(), itEnd = myList.end(); it != itEnd; ++it)
-			{
-				if (count == insertAfterElement + 1)
-				{
-					Assert::AreEqual(valueToInsert, *it);
-				}
-				else if (count > insertAfterElement + 1)
-				{
-					Assert::AreEqual(count - 1, *it);
-				}
-				else
-				{
-					Assert::AreEqual(count, *it);
-				}
-
-				++count;
-			}
+			TestListInsertAfter<bool>();
+			TestListInsertAfter<char>();
+			TestListInsertAfter<int>();
+			TestListInsertAfter<float>();
 		}
 
 		TEST_METHOD(TestEqualityInequality)
 		{
-			SList<int> myList, anotherList;
-
-			SList<int>::Iterator itMyList, itAnotherList;
-			Assert::AreNotEqual(itMyList, itAnotherList);
-
-			SList<int>::Iterator itMy = myList.begin(), itAnother = anotherList.begin();
-			Assert::AreNotEqual(itMy, itAnother);
-
-			for (int i = startValue; i <= endValue; ++i)
-			{
-				myList.PushBack(i);
-				anotherList.PushBack(i);
-			}
-
-			Assert::AreNotEqual(myList.Find(endValue), anotherList.Find(endValue));
-
-			SList<int>::Iterator itBegin = myList.begin();
-			++itBegin;
-
-			SList<int>::Iterator itPlusOne = myList.Find(startValue + 1);
-
-			Assert::AreEqual(itBegin, itPlusOne);
+			TestIteratorEqualityInequality<char>();
+			TestIteratorEqualityInequality<int>();
+			TestIteratorEqualityInequality<float>();
 		}
 
 		TEST_METHOD(TestIncrement)
 		{
-			SList<int> myList;
-			myList.PushBack(startValue);
-			myList.PushBack(startValue + 1);
-
-			SList<int>::Iterator preIncIt = myList.begin();
-			Assert::AreEqual(startValue + 1, *(++preIncIt));
-			Assert::AreEqual(startValue + 1, *preIncIt);
-
-			myList.Front() = startValue;
-			SList<int>::Iterator postIncIt = myList.begin();
-			Assert::AreEqual(startValue, *(postIncIt++));
-			Assert::AreEqual(startValue + 1, *postIncIt);
+			TestIteratorIncrement<bool>();
+			TestIteratorIncrement<char>();
+			TestIteratorIncrement<int>();
+			TestIteratorIncrement<float>();
 		}
 
 		TEST_METHOD(TestIteratorExceptions)
 		{
-			SList<int> myList;
-			SList<int>::Iterator it = myList.end();
-
-			auto func = [&myList, &it] { myList.InsertAfter(it, startValue);  };
-			Assert::ExpectException<std::out_of_range>(func);
-
-			auto func2 = [&it] { ++it; };
-			Assert::ExpectException<std::out_of_range>(func2);
-
-			auto func3 = [&it] { it++; };
-			Assert::ExpectException<std::out_of_range>(func3);
-
-			SList<int>::Iterator endIt = myList.Find(startValue - 1);
-			auto func4 = [&it] { *it; };
-			Assert::ExpectException<std::runtime_error>(func4);
-
-			myList.Remove(startValue - 1);
-
+			TestListIteratorExceptions<char>();
+			TestListIteratorExceptions<bool>();
+			TestListIteratorExceptions<int>();
+			TestListIteratorExceptions<float>();
 		}
 
 	private:

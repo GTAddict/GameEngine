@@ -87,7 +87,20 @@ public:
 		T&			operator*();
 
 #if _DEBUG
+		/**
+		*	\brief		Utility function. This is provided so that a ToString function or similar
+		*				may access the internal state in order to log or print to console.
+		*				This function should not, and will not, be compiled in release mode.
+		*	\return		The address of the Node pointed to as an unsigned int.
+		*/
 		unsigned int	GetCurrentNodePtr()	const	{ return reinterpret_cast<unsigned int>(mpCurrent); }
+
+		/**
+		*	\brief		Utility function. This is provided so that a ToString function or similar
+		*				may access the internal state in order to log or print to console.
+		*				This function should not, and will not, be compiled in release mode.
+		*	\return		The address of the list associated with the iterator as an unsigned int.
+		*/
 		unsigned int	GetOwnerPtr()		const	{ return reinterpret_cast<unsigned int>(mpOwner);  }
 #endif
 
