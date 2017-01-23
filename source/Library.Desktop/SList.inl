@@ -174,7 +174,7 @@ inline T& SList<T>::Back()
 }
 
 template <typename T>
-inline unsigned int SList<T>::Size() const
+inline std::uint32_t SList<T>::Size() const
 {
 	return mSize;
 }
@@ -209,7 +209,7 @@ inline typename SList<T>::Iterator SList<T>::end() const
 
 template<typename T>
 inline typename SList<T>::Iterator SList<T>::Find(const T& data) const
-{
+{	
 	Iterator it = begin(), itEnd = end();
 
 	for (; it != itEnd; ++it)

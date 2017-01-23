@@ -94,7 +94,7 @@ public:
 		*				This function should not, and will not, be compiled in release mode.
 		*	\return		The address of the Node pointed to as an unsigned int.
 		*/
-		uintptr_t		GetCurrentNodePtr()	const { return reinterpret_cast<uintptr_t>(mpCurrent); }
+		std::uintptr_t	GetCurrentNodePtr()	const { return reinterpret_cast<uintptr_t>(mpCurrent); }
 
 		/**
 		*	\brief		Utility function. This is provided so that a ToString function or similar
@@ -102,7 +102,7 @@ public:
 		*				This function should not, and will not, be compiled in release mode.
 		*	\return		The address of the list associated with the iterator as an unsigned int.
 		*/
-		uintptr_t		GetOwnerPtr()		const { return reinterpret_cast<uintptr_t>(mpOwner); }
+		std::uintptr_t	GetOwnerPtr()		const { return reinterpret_cast<uintptr_t>(mpOwner); }
 #endif
 
 	private:
@@ -194,7 +194,7 @@ public:
 	*				mutable object.
 	*	\return		non-const reference to the last element.
 	*/
-	T&		Back();
+	T&				Back();
 
 	/**
 	*	\brief		Returns the number of elements contained in
@@ -240,7 +240,7 @@ private:
 
 	Node*			mpBegin;				/**< Points to the first Node of the list */
 	Node*			mpEnd;					/**< Points to the last Node of the list */
-	uint32_t		mSize;					/**< Stores the current number of Nodes in the list */
+	std::uint32_t	mSize;					/**< Stores the current number of Nodes in the list */
 
 };
 
