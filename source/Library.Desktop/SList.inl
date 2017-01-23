@@ -17,14 +17,9 @@ inline SList<T>::~SList()
 
 template<typename T>
 inline SList<T>::SList(const SList<T>& rhs)
-	: mpBegin(nullptr)
-	, mpEnd(nullptr)
-	, mSize(0)
+	: SList()
 {
-	for (Iterator it = rhs.begin(), itEnd = rhs.end(); it != itEnd; ++it)
-	{
-		PushBack(*it);
-	}
+	*this = rhs;
 }
 
 template<typename T>
@@ -34,9 +29,9 @@ inline SList<T> & SList<T>::operator=(const SList<T>& rhs)
 	{
 		Clear();
 
-		for (Iterator it = rhs.begin(), itEnd = rhs.end(); it != itEnd; ++it)
+		for (const auto& data : rhs)
 		{
-			PushBack(*it);
+			PushBack(data);
 		}
 	}
 
@@ -44,10 +39,10 @@ inline SList<T> & SList<T>::operator=(const SList<T>& rhs)
 }
 
 template <typename T>
-inline void SList<T>::PushFront(const T& data)
+inline typename SList<T>::Iterator SList<T>::PushFront(const T& data)
 {
 	Node* node = new Node();
-	
+
 	node->mData = data;
 	++mSize;
 
@@ -61,6 +56,8 @@ inline void SList<T>::PushFront(const T& data)
 		node->mpNext = mpBegin;
 		mpBegin = node;
 	}
+
+	return Iterator(node, this);
 }
 
 template <typename T>
@@ -82,12 +79,12 @@ inline void SList<T>::PopFront()
 	{
 		mpBegin = mpEnd = nullptr;
 	}
-	
+
 	delete node;
 }
 
 template <typename T>
-inline void SList<T>::PushBack(const T& data)
+inline typename SList<T>::Iterator SList<T>::PushBack(const T& data)
 {
 	Node* node = new Node();
 
@@ -104,10 +101,12 @@ inline void SList<T>::PushBack(const T& data)
 		mpEnd->mpNext = node;
 		mpEnd = node;
 	}
+
+	return Iterator(node, this);
 }
 
 template<typename T>
-inline void SList<T>::InsertAfter(const Iterator& it, const T& data)
+inline typename SList<T>::Iterator SList<T>::InsertAfter(const Iterator& it, const T& data)
 {
 	if (it.mpCurrent == nullptr)
 	{
@@ -116,8 +115,7 @@ inline void SList<T>::InsertAfter(const Iterator& it, const T& data)
 
 	if (it.mpCurrent->mpNext == mpEnd)
 	{
-		PushBack(data);
-		return;
+		return PushBack(data);
 	}
 
 	Node* node = new Node();
@@ -131,6 +129,8 @@ inline void SList<T>::InsertAfter(const Iterator& it, const T& data)
 	{
 		mpEnd = node;
 	}
+
+	return Iterator(node, this);
 }
 
 template <typename T>
@@ -212,7 +212,7 @@ inline typename SList<T>::Iterator SList<T>::Find(const T& data) const
 {
 	Iterator it = begin(), itEnd = end();
 
-	for ( ; it != itEnd; ++it)
+	for (; it != itEnd; ++it)
 	{
 		if (*it == data)
 		{
