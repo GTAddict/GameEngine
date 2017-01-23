@@ -1,4 +1,3 @@
-#include "SList.h"
 #pragma once
 
 template <typename T>
