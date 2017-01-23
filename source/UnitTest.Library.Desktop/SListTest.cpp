@@ -10,6 +10,49 @@ namespace UnitTestSlistConstants
 	const std::string name	= "Name";
 }
 
+namespace UnitTestSList
+{
+	struct DummyStruct
+	{
+		int ID;
+		std::string name;
+		void* customData;
+		int* pOwnedInteger;
+
+		DummyStruct() : ID(0), customData(nullptr), pOwnedInteger(nullptr) { pOwnedInteger = new int; }
+		DummyStruct(int inID, std::string inName, void* inCustomData)
+			: ID(inID), name(inName), customData(inCustomData), pOwnedInteger(new int(inID)) {};
+		~DummyStruct() { delete pOwnedInteger; }
+
+		DummyStruct(const DummyStruct& rhs) : ID(0), customData(nullptr), pOwnedInteger(nullptr)
+		{
+			pOwnedInteger = new int(*(rhs.pOwnedInteger));
+			ID = rhs.ID;
+			name = rhs.name;
+			customData = rhs.customData;
+		}
+
+		DummyStruct& operator=(const DummyStruct& rhs)
+		{
+			if (this != &rhs)
+			{
+				delete pOwnedInteger;
+				pOwnedInteger = new int(*(rhs.pOwnedInteger));
+				ID = rhs.ID;
+				name = rhs.name;
+				customData = rhs.customData;
+			}
+
+			return *this;
+		}
+
+		bool operator==(const DummyStruct& rhs) const
+		{
+			return (*pOwnedInteger == *rhs.pOwnedInteger) && ID == rhs.ID && name == rhs.name && customData == rhs.customData;
+		}
+	};
+}
+
 namespace Microsoft
 {
 	namespace VisualStudio
@@ -20,14 +63,30 @@ namespace Microsoft
 			std::wstring ToString(const SList<T>::template Iterator t)
 			{
 				std::wstringstream s;
-				s << "Current node pointer: " << t.GetCurrentNodePtr() << "\n";
-				s << "Current list owner: " << t.GetOwnerPtr();
+				s << "Current node pointer: ";
+#if _DEBUG
+				s << t.GetCurrentNodePtr() << "\n";
+#endif
+				s << "Current list owner: ";
+#if _DEBUG
+				s << t.GetOwnerPtr();
+#endif
 				return s.str();
 			}
 
 			template<> std::wstring ToString<SList<char>::Iterator>	(const SList<char>::Iterator& t)	{ return ToString<char>(t); }
 			template<> std::wstring ToString<SList<int>::Iterator>	(const SList<int>::Iterator& t)		{ return ToString<int>(t); }
 			template<> std::wstring ToString<SList<float>::Iterator>(const SList<float>::Iterator& t)	{ return ToString<float>(t); }
+
+			template<> std::wstring ToString<UnitTestSList::DummyStruct>(const UnitTestSList::DummyStruct& t)
+			{
+				RETURN_WIDE_STRING(t.ID);
+			}
+
+			template<> std::wstring ToString<UnitTestSList::DummyStruct>(UnitTestSList::DummyStruct* t)
+			{
+				RETURN_WIDE_STRING(t->ID);
+			}
 		}
 	}
 }
@@ -41,40 +100,9 @@ namespace UnitTestSList
 	{
 	private:
 
-		struct DummyStruct
-		{
-			int ID;
-			std::string name;
-			void* customData;
-			int* pOwnedInteger;
-
-			DummyStruct() : ID(0), customData(nullptr), pOwnedInteger(nullptr) { pOwnedInteger = new int; }
-
-			~DummyStruct() { delete pOwnedInteger; }
-
-			DummyStruct(const DummyStruct& rhs) : ID(0), customData(nullptr), pOwnedInteger(nullptr)
-			{
-				pOwnedInteger = new int(*(rhs.pOwnedInteger));
-				ID = rhs.ID;
-				name = rhs.name;
-				customData = rhs.customData;
-			}
-
-			DummyStruct& operator=(const DummyStruct& rhs)
-			{
-				if (this != &rhs)
-				{
-					delete pOwnedInteger;
-					pOwnedInteger = new int(*(rhs.pOwnedInteger));
-					ID = rhs.ID;
-					name = rhs.name;
-					customData = rhs.customData;
-				}
-			}
-		};
-
-		template <typename T>	T		ConvertValue(int i) { return static_cast<T>(i); }
-		template <>				bool	ConvertValue(int i) { return i != 0; }
+		template <typename T>	T			ConvertValue(int i) { return static_cast<T>(i); }
+		template <>				bool		ConvertValue(int i) { return i != 0; }
+		template <>				DummyStruct	ConvertValue(int i) { return DummyStruct(i , name, this); }
 
 		template <typename U, typename T = SList<U>>
 		void TestListFront(T& list)
@@ -315,6 +343,21 @@ namespace UnitTestSList
 				Assert::AreEqual(ConvertValue<T>(counter), *it);
 				++counter;
 			}
+
+			SList<T*> ptrList;
+			T array[expectedNumElements];
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				ptrList.PushBack(&array[i - startValue]);
+			}
+
+			counter = startValue;
+			for (SList<T*>::Iterator it = ptrList.begin(), itEnd = ptrList.end(); it != itEnd; ++it)
+			{
+				Assert::AreEqual(&array[counter - startValue], *it);
+				++counter;
+			}
 		}
 
 		template <typename T>
@@ -331,6 +374,20 @@ namespace UnitTestSList
 			{
 				SList<T>::Iterator foundIt = list.Find(ConvertValue<T>(i));
 				Assert::AreEqual(ConvertValue<T>(i), *foundIt);
+			}
+
+			SList<T*> ptrList;
+			T array[expectedNumElements];
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				ptrList.PushBack(&array[i - startValue]);
+			}
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				SList<T*>::Iterator foundIt = ptrList.Find(&array[i - startValue]);
+				Assert::AreEqual(&array[i - startValue], *foundIt);
 			}
 		}
 
@@ -350,6 +407,21 @@ namespace UnitTestSList
 			}
 
 			Assert::IsTrue(list.IsEmpty());
+
+			SList<T*> ptrList;
+			T array[expectedNumElements];
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				ptrList.PushBack(&array[i - startValue]);
+			}
+
+			for (int i = endValue; i >= startValue; --i)
+			{
+				ptrList.Remove(&array[i - startValue]);
+			}
+
+			Assert::IsTrue(ptrList.IsEmpty());
 		}
 
 		template <typename T>
@@ -585,6 +657,7 @@ namespace UnitTestSList
 			TestListIteratorBeginEnd<bool>();
 			TestListIteratorBeginEnd<int>();
 			TestListIteratorBeginEnd<float>();
+			TestListIteratorBeginEnd<DummyStruct>();
 		}
 		
 		TEST_METHOD(TestFind)

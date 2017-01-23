@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 
 /**
  *	\class	SList
@@ -58,14 +59,14 @@ public:
 		 *	\param rhs	The other Iterator to be compared to.
 		 *	\return		Whether the two Iterators are equal.
 		 */
-		bool		operator==(const Iterator& rhs) const;
+		bool			operator==(const Iterator& rhs) const;
 
 		/**
 		 *	\brief		Inequality operator. Returns the opposite of the equality operator. 
 		 *	\param rhs	The other Iterator to be compared to.
 		 *	\return		Whether the two Iterators are inequal.
 		 */
-		bool		operator!=(const Iterator& rhs) const;
+		bool			operator!=(const Iterator& rhs) const;
 
 		/**
 		 *	\brief	Pre-increment operator. Increments pointer and returns this.
@@ -93,7 +94,7 @@ public:
 		*				This function should not, and will not, be compiled in release mode.
 		*	\return		The address of the Node pointed to as an unsigned int.
 		*/
-		unsigned int	GetCurrentNodePtr()	const	{ return reinterpret_cast<unsigned int>(mpCurrent); }
+		uintptr_t		GetCurrentNodePtr()	const	{ return reinterpret_cast<uintptr_t>(mpCurrent); }
 
 		/**
 		*	\brief		Utility function. This is provided so that a ToString function or similar
@@ -101,7 +102,7 @@ public:
 		*				This function should not, and will not, be compiled in release mode.
 		*	\return		The address of the list associated with the iterator as an unsigned int.
 		*/
-		unsigned int	GetOwnerPtr()		const	{ return reinterpret_cast<unsigned int>(mpOwner);  }
+		uintptr_t		GetOwnerPtr()		const	{ return reinterpret_cast<uintptr_t>(mpOwner);  }
 #endif
 
 	private:
@@ -201,7 +202,7 @@ public:
 	 *				the size is cached.
 	 *	\return		The number of elements contained in the list.
 	 */
-	unsigned int	Size() const;
+	uint32_t		Size() const;
 
 	/**
 	 *	\brief		Removes all the elements in the list.
@@ -239,7 +240,7 @@ private:
 
 	Node*			mpBegin;				/**< Points to the first Node of the list */
 	Node*			mpEnd;					/**< Points to the last Node of the list */
-	unsigned int	mSize;					/**< Stores the current number of Nodes in the list */
+	uint32_t		mSize;					/**< Stores the current number of Nodes in the list */
 
 };
 
