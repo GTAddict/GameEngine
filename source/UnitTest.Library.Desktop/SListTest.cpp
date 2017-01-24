@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
+#include "ConvertVals.h"
 
 namespace UnitTestSlistConstants
 {
@@ -7,50 +8,6 @@ namespace UnitTestSlistConstants
 	const int endValue		= 81;
 	const float divisor		= 100.0f;
 	const unsigned int expectedNumElements = endValue - startValue + 1;
-	const std::string name	= "Name";
-}
-
-namespace UnitTestSList
-{
-	struct DummyStruct
-	{
-		int ID;
-		std::string name;
-		void* customData;
-		int* pOwnedInteger;
-
-		DummyStruct() : ID(0), customData(nullptr), pOwnedInteger(nullptr) { pOwnedInteger = new int; }
-		DummyStruct(int inID, std::string inName, void* inCustomData)
-			: ID(inID), name(inName), customData(inCustomData), pOwnedInteger(new int(inID)) {};
-		~DummyStruct() { delete pOwnedInteger; }
-
-		DummyStruct(const DummyStruct& rhs) : ID(0), customData(nullptr), pOwnedInteger(nullptr)
-		{
-			pOwnedInteger = new int(*(rhs.pOwnedInteger));
-			ID = rhs.ID;
-			name = rhs.name;
-			customData = rhs.customData;
-		}
-
-		DummyStruct& operator=(const DummyStruct& rhs)
-		{
-			if (this != &rhs)
-			{
-				delete pOwnedInteger;
-				pOwnedInteger = new int(*(rhs.pOwnedInteger));
-				ID = rhs.ID;
-				name = rhs.name;
-				customData = rhs.customData;
-			}
-
-			return *this;
-		}
-
-		bool operator==(const DummyStruct& rhs) const
-		{
-			return (*pOwnedInteger == *rhs.pOwnedInteger) && ID == rhs.ID && name == rhs.name && customData == rhs.customData;
-		}
-	};
 }
 
 namespace Microsoft
@@ -74,19 +31,9 @@ namespace Microsoft
 				return s.str();
 			}
 
-			template<> std::wstring ToString<SList<char>::Iterator>	(const SList<char>::Iterator& t)	{ return ToString<char>(t); }
-			template<> std::wstring ToString<SList<int>::Iterator>	(const SList<int>::Iterator& t)		{ return ToString<int>(t); }
-			template<> std::wstring ToString<SList<float>::Iterator>(const SList<float>::Iterator& t)	{ return ToString<float>(t); }
-
-			template<> std::wstring ToString<UnitTestSList::DummyStruct>(const UnitTestSList::DummyStruct& t)
-			{
-				RETURN_WIDE_STRING(t.ID);
-			}
-
-			template<> std::wstring ToString<UnitTestSList::DummyStruct>(UnitTestSList::DummyStruct* t)
-			{
-				RETURN_WIDE_STRING(t->ID);
-			}
+			template<> std::wstring ToString<SList<char>::Iterator>(const SList<char>::Iterator& t) { return ToString<char>(t); }
+			template<> std::wstring ToString<SList<int>::Iterator>(const SList<int>::Iterator& t) { return ToString<int>(t); }
+			template<> std::wstring ToString<SList<float>::Iterator>(const SList<float>::Iterator& t) { return ToString<float>(t); }
 		}
 	}
 }
@@ -99,10 +46,6 @@ namespace UnitTestSList
 	TEST_CLASS(UnitTestSList)
 	{
 	private:
-
-		template <typename T>	T			ConvertValue(int i) { return static_cast<T>(i); }
-		template <>				bool		ConvertValue(int i) { return i != 0; }
-		template <>				DummyStruct	ConvertValue(int i) { return DummyStruct(i , name, this); }
 
 		template <typename U, typename T = SList<U>>
 		void TestListFront(T& list)

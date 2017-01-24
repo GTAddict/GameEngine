@@ -1,7 +1,7 @@
-#include "Vector.h"
 #pragma once
 
-#define DEFAULT_CONTAINER_SIZE 5
+const uint32_t DEFAULT_CONTAINER_SIZE = 5;
+
 template <typename T>
 inline Vector<T>::Vector()
 	: Vector(DEFAULT_CONTAINER_SIZE)
@@ -146,4 +146,3 @@ inline void Vector<T>::Reserve(std::uint32_t capacity)
 	mpEnd = mpBegin + size;
 	mpCapacity = mpBegin + capacity;
 }
-

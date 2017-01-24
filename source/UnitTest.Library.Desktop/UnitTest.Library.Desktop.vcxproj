@@ -172,6 +172,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ConvertVals.h" />
+    <ClInclude Include="DummyStruct.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
