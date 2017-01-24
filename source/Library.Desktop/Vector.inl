@@ -52,13 +52,47 @@ inline void Vector<T>::PushBack(const T& data)
 template<typename T>
 inline void Vector<T>::PopBack()
 {
-	if (mpEnd == mpBegin)
+	if (IsEmpty())
 	{
 		throw std::out_of_range("Vector is empty.");
 	}
 
 	--mpEnd;
 	mpEnd->~T();
+}
+
+template<typename T>
+inline T & Vector<T>::Front()
+{
+	return const_cast<T&>(const_cast<const Vector<T>*>(this)->Front());
+}
+
+template<typename T>
+inline const T & Vector<T>::Front() const
+{
+	if (IsEmpty())
+	{
+		throw std::out_of_range("Vector is empty.");
+	}
+
+	return *mpBegin;
+}
+
+template<typename T>
+inline T & Vector<T>::Back()
+{
+	return const_cast<T&>(const_cast<const Vector<T>*>(this)->Back());
+}
+
+template<typename T>
+inline const T & Vector<T>::Back() const
+{
+	if (IsEmpty())
+	{
+		throw std::out_of_range("Vector is empty.");
+	}
+
+	return *(mpEnd - 1);
 }
 
 template<typename T>

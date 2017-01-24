@@ -24,6 +24,18 @@ namespace UnitTestVector
 			Vector<int> v;
 			v.PushBack(1);
 			v.PushBack(2);
+			v.PushBack(3);
+			v.PushBack(4);
+			v.PushBack(5);
+			v.PushBack(6);
+
+			int a = v.Front();
+			a;
+
+			int b = v.Back();
+			b;
+
+
 
 			v.PopBack();
 			v.PushBack(1);

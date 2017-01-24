@@ -16,6 +16,11 @@ public:
 	void			PushBack(const T& data);
 	void			PopBack();
 
+	T&				Front();
+	const T&		Front() const;
+	T&				Back();
+	const T&		Back() const;
+
 	const T&		operator[](const T& index) const;
 	T&				operator[](const T& index);
 
