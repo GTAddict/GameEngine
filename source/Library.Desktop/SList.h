@@ -36,21 +36,21 @@ public:
 	public:
 
 		/**
-		*	\brief	Default constructor, initializes current pointer to nullptr.
+		*	\brief		Default constructor, initializes current pointer to nullptr.
 		*/
-		Iterator();
+						Iterator();
 
 		/**
 		*	\brief		Parametrized constructor, initializes current pointer to Node passed in.
 		*	\param node	Node that the Iterator should be initialized with.
 		*	\param list	List that the node is part of i.e. owner list.
 		*/
-		Iterator(Node* node, const SList<T>* const list);
+						Iterator(Node* node, const SList<T>* const list);
 
 		/**
-		*	\brief	Destructor, does nothing here.
+		*	\brief		Destructor, does nothing here.
 		*/
-		~Iterator();
+						~Iterator();
 
 		/**
 		*	\brief		Equality operator, checks whether addresses pointed to are same or not.
@@ -69,23 +69,23 @@ public:
 		bool			operator!=(const Iterator& rhs) const;
 
 		/**
-		*	\brief	Pre-increment operator. Increments pointer and returns this.
-		*	\return	A reference to the instance just incremented.
+		*	\brief		Pre-increment operator. Increments pointer and returns this.
+		*	\return		A reference to the instance just incremented.
 		*/
-		Iterator&	operator++();
+		Iterator&		operator++();
 
 		/**
-		*	\brief	Post-increment operator. Stores a copy, increments, and returns the copy.
-		*	\return	A copy of the instance just incremented.
+		*	\brief		Post-increment operator. Stores a copy, increments, and returns the copy.
+		*	\return		A copy of the instance just incremented.
 		*/
-		Iterator	operator++(int);
+		Iterator		operator++(int);
 
 		/**
-		*	\brief	Dereference operator. This will provide the data inside the Node pointed to
-		*			by the Iterator.
-		*	\return	A reference to the data contained in the Node pointed to by the Iterator.
+		*	\brief		Dereference operator. This will provide the data inside the Node pointed to
+		*				by the Iterator.
+		*	\return		A reference to the data contained in the Node pointed to by the Iterator.
 		*/
-		T&			operator*();
+		T&				operator*();
 
 #if _DEBUG
 		/**
@@ -116,28 +116,29 @@ public:
 	/**
 	*	\brief		Default constructor, initializes the list to empty.
 	*/
-	SList();
+					SList();
 
 	/**
 	*	\brief		Destructor, clears the list.
 	*/
-	~SList();
+					~SList();
 
 	/**
 	*	\brief		Parametrized constructor, initializes the list
 	*				to empty and then deep copies the list passed in.
 	*/
-	SList(const SList<T>& rhs);
+					SList(const SList<T>& rhs);
 
 	/**
 	*	\brief		Assignment operator, clears this list and deep copies
 	*				the list passed in.
 	*/
-	SList<T>& operator=(const SList<T>& rhs);
+	SList<T>&		operator=(const SList<T>& rhs);
 
 	/**
 	*	\brief		Pushes data to the beginning of the list.
-	*	\param T	Data to push
+	*	\param T	Data to push.
+	*	\return		An iterator to the front of the list.
 	*/
 	Iterator		PushFront(const T& data);
 
@@ -149,14 +150,16 @@ public:
 
 	/**
 	*	\brief		Pushes data to the end of the list.
-	*	\param T	Data  to push
+	*	\param T	Data  to push.
+	*	\return		An iterator to the end of the list.
 	*/
 	Iterator		PushBack(const T& data);
 
 	/**
 	*	\brief		Inserts data after the given iterator.
 	*	\param it	Iterator to insert after
-	*	\param T	Data  to push
+	*	\param T	Data  to push.
+	*	\return		An iterator to the element just pushed.
 	*/
 	Iterator		InsertAfter(const Iterator& it, const T& data);
 
@@ -173,21 +176,21 @@ public:
 	*				immutable object.
 	*	\return		const reference to the first element.
 	*/
-	const	T&		Front() const;
+	const T&		Front() const;
 
 	/**
 	*	\brief		Returns the first element in the list as a
 	*				mutable object.
 	*	\return		non-const reference to the first element.
 	*/
-	T&		Front();
+	T&				Front();
 
 	/**
 	*	\brief		Returns the last element in the list as an
 	*				immutable object.
 	*	\return		const reference to the last element.
 	*/
-	const	T&		Back() const;
+	const T&		Back() const;
 
 	/**
 	*	\brief		Returns the last element in the list as a

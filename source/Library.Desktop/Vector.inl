@@ -1,6 +1,6 @@
 #pragma once
 
-const uint32_t DEFAULT_CONTAINER_SIZE = 5;
+const std::uint32_t DEFAULT_CONTAINER_SIZE = 5;
 
 template <typename T>
 inline Vector<T>::Vector()
@@ -28,13 +28,13 @@ inline Vector<T>::~Vector()
 template <typename T>
 inline std::uint32_t Vector<T>::Capacity() const
 {
-	return mpCapacity - mpBegin;
+	return static_cast<std::uint32_t>(mpCapacity - mpBegin);
 }
 
 template <typename T>
 inline std::uint32_t Vector<T>::Size() const
 {
-	return mpEnd - mpBegin;
+	return static_cast<std::uint32_t>(mpEnd - mpBegin);
 }
 
 template <typename T>
