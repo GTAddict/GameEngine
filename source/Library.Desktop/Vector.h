@@ -8,6 +8,7 @@ public:
 
 	Vector();
 	Vector(std::uint32_t capacity);
+	~Vector();
 
 	std::uint32_t	Capacity() const;
 	std::uint32_t	Size() const;
@@ -21,12 +22,16 @@ public:
 	T&				Back();
 	const T&		Back() const;
 
-	const T&		operator[](const T& index) const;
-	T&				operator[](const T& index);
+	const T&		At(std::uint32_t index) const;
+	T&				At(std::uint32_t index);
+
+	const T&		operator[](const std::uint32_t index) const;
+	T&				operator[](const std::uint32_t index);
+
+	void			Clear();
 
 private:
 
-	// void	Allocate(std::uint32_t capacity);
 	void	Reserve(std::uint32_t capacity);
 
 	T*		mpBegin;			/**< Points to the beginning of the vector. */

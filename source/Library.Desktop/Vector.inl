@@ -19,6 +19,13 @@ inline Vector<T>::Vector(std::uint32_t capacity)
 }
 
 template <typename T>
+inline Vector<T>::~Vector()
+{
+	Clear();
+	free(mpBegin);
+}
+
+template <typename T>
 inline std::uint32_t Vector<T>::Capacity() const
 {
 	return mpCapacity - mpBegin;
@@ -96,15 +103,36 @@ inline const T & Vector<T>::Back() const
 }
 
 template<typename T>
-inline const T& Vector<T>::operator[](const T& index) const
+inline const T & Vector<T>::At(std::uint32_t index) const
+{
+	return operator[](index);
+}
+
+template<typename T>
+inline T & Vector<T>::At(std::uint32_t index)
+{
+	return operator[](index);
+}
+
+template<typename T>
+inline const T& Vector<T>::operator[](std::uint32_t index) const
 {
 	return *(mpBegin + index);
 }
 
 template<typename T>
-inline T& Vector<T>::operator[](const T& index)
+inline T& Vector<T>::operator[](std::uint32_t index)
 {
 	return const_cast<T&>(const_cast<const Vector<T>*>(this)->operator[](index));
+}
+
+template<typename T>
+inline void Vector<T>::Clear()
+{
+	while (!IsEmpty())
+	{
+		PopBack();
+	}
 }
 
 
