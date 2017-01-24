@@ -151,6 +151,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="SList.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -163,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SList.inl" />
+    <None Include="Vector.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -183,6 +183,7 @@
     </ClCompile>
     <ClCompile Include="SListTest.cpp" />
     <ClCompile Include="UnitTestLibraryDesktop.cpp" />
+    <ClCompile Include="VectorTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Library.Desktop\Library.Desktop.vcxproj">

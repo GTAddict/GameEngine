@@ -24,6 +24,9 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils.cpp">
@@ -35,6 +38,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SList.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Vector.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
