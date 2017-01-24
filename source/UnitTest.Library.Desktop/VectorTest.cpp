@@ -155,6 +155,36 @@ namespace UnitTestVector
 			TestRandomAccess_Impl<DummyStruct>();
 		}
 
+		TEST_METHOD(TestIterators)
+		{
+			Vector<int> vector;
+
+			vector.PushBack(1);
+			vector.PushBack(2);
+			vector.PushBack(3);
+			vector.PushBack(4);
+
+			for (int& data : vector)
+			{
+				data++;
+			}
+
+			Vector<int>::Iterator it = vector.begin(), itEnd = vector.end();
+
+			it++; ++itEnd;
+			itEnd = it;
+			it == itEnd;
+
+			vector.Find(2);
+			vector.Find(10);
+
+			vector.Remove(1);
+			vector.Remove(3);
+			vector.Remove(4);
+			vector.Remove(2);
+			vector.Remove(10);
+		}
+
 	private:
 #ifdef _DEBUG
 		static _CrtMemState sStartMemState;

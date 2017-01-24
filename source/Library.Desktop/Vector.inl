@@ -1,3 +1,4 @@
+#include "Vector.h"
 #pragma once
 
 const std::uint32_t DEFAULT_CONTAINER_SIZE = 5;
@@ -23,6 +24,91 @@ inline Vector<T>::~Vector()
 {
 	Clear();
 	free(mpBegin);
+}
+
+template <typename T>
+inline Vector<T>::Iterator::Iterator()
+{
+	// Leave current element unintialized.
+}
+
+template<typename T>
+inline Vector<T>::Iterator::Iterator(T* element)
+{
+	mpCurrent = element;
+}
+
+template<typename T>
+inline Vector<T>::Iterator::Iterator(const Iterator& rhs)
+{
+	*this = rhs;
+}
+
+template<typename T>
+inline typename Vector<T>::Iterator& Vector<T>::Iterator::operator=(const Iterator & rhs)
+{
+	if (this != &rhs)
+	{
+		mpCurrent = rhs.mpCurrent;
+	}
+
+	return *this;
+}
+
+template <typename T>
+inline Vector<T>::Iterator::~Iterator()
+{
+}
+
+template <typename T>
+inline bool Vector<T>::Iterator::operator==(const Iterator & rhs) const
+{
+	return mpCurrent == rhs.mpCurrent;
+}
+
+template <typename T>
+inline bool Vector<T>::Iterator::operator!=(const Iterator & rhs) const
+{
+	return !(*this == rhs);
+}
+
+template<typename T>
+inline typename Vector<T>::Iterator Vector<T>::Iterator::operator+(uint32_t rhs)
+{
+	return Iterator (mpCurrent + rhs);
+}
+
+template<typename T>
+inline typename Vector<T>::Iterator Vector<T>::Iterator::operator-(uint32_t rhs)
+{
+	return Iterator(mpCurrent - rhs);
+}
+
+template<typename T>
+inline std::int32_t Vector<T>::Iterator::operator-(const Iterator & rhs)
+{
+	return static_cast<std::int32_t>(mpCurrent - rhs.mpCurrent);
+}
+
+template <typename T>
+inline typename Vector<T>::Iterator& Vector<T>::Iterator::operator++()
+{
+	++mpCurrent;
+	return *this;
+}
+
+template <typename T>
+inline typename Vector<T>::Iterator Vector<T>::Iterator::operator++(int)
+{
+	Iterator prevState = *this;
+	++mpCurrent;
+	return prevState;
+}
+
+template <typename T>
+inline T& Vector<T>::Iterator::operator*()
+{
+	return *mpCurrent;
 }
 
 template <typename T>
@@ -103,6 +189,18 @@ inline const T & Vector<T>::Back() const
 }
 
 template<typename T>
+inline typename Vector<T>::Iterator Vector<T>::begin() const
+{
+	return Iterator(mpBegin);
+}
+
+template<typename T>
+inline typename Vector<T>::Iterator Vector<T>::end() const
+{
+	return Iterator(mpEnd - 1);
+}
+
+template<typename T>
 inline const T & Vector<T>::At(std::uint32_t index) const
 {
 	return operator[](index);
@@ -127,12 +225,47 @@ inline T& Vector<T>::operator[](std::uint32_t index)
 }
 
 template<typename T>
+inline typename Vector<T>::Iterator Vector<T>::Find(const T& data) const
+{
+	Iterator it = begin(), itEnd = end();
+
+	for (; it != itEnd; ++it)
+	{
+		if (*it == data)
+		{
+			break;
+		}
+	}
+
+	return it;
+}
+
+template<typename T>
+inline void Vector<T>::Remove(const T& data)
+{
+	Iterator foundIt = Find(data);
+
+	if (foundIt != end())
+	{
+		(*foundIt).~T();
+		MoveElements(foundIt, foundIt + 1, end() - foundIt + 1);
+		--mpEnd;
+	}
+}
+
+template<typename T>
 inline void Vector<T>::Clear()
 {
 	while (!IsEmpty())
 	{
 		PopBack();
 	}
+}
+
+template<typename T>
+inline void Vector<T>::MoveElements(Iterator destination, Iterator source, uint32_t count)
+{
+	memmove(destination.mpCurrent, source.mpCurrent, count * sizeof(T));
 }
 
 

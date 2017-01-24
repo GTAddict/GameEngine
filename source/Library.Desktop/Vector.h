@@ -12,6 +12,36 @@ class Vector
 {
 public:
 
+	class Iterator
+	{
+		friend class Vector<T>;
+
+	public:
+
+		Iterator();
+		Iterator(T* element);
+		Iterator(const Iterator& rhs);
+		Iterator& operator=(const Iterator& rhs);
+		~Iterator();
+
+		bool operator==(const Iterator& rhs) const;
+		bool operator!=(const Iterator& rhs) const;
+
+		Iterator operator+(const std::uint32_t rhs);
+		Iterator operator-(const std::uint32_t rhs);
+
+		std::int32_t operator-(const Iterator& rhs);
+
+		Iterator& operator++();
+		Iterator operator++(int rhs);
+
+		T& operator*();
+
+	private:
+
+		T*	mpCurrent;
+	};
+
 	/** 
 	 *	\brief		Default constructor. It will reserve DEFAULT_CONTAINER_SIZE by default.
 	 */
@@ -86,6 +116,10 @@ public:
 	*/
 	const T&		Back() const;
 
+	Iterator		begin() const;
+
+	Iterator		end() const;
+
 	/**
 	*	\brief		Returns the element at the specified index.
 	*	\return		A non-const reference to the data at the specified index.
@@ -110,12 +144,18 @@ public:
 	*/
 	T&				operator[](const std::uint32_t index);
 
+	Iterator		Find(const T& data) const;
+
+	void			Remove(const T& data);
+
 	/**
 	*	\brief		Removes all elements from the list, and also calls their destructors.
 	*/
 	void			Clear();
 
 private:
+
+	void			MoveElements(Iterator destination, Iterator source, uint32_t count);
 
 	T*		mpBegin;			/**< Points to the beginning of the vector. */
 	T*		mpEnd;				/**< Points to the position after the last element of the vector. */
