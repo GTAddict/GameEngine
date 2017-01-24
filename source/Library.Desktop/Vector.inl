@@ -33,9 +33,10 @@ inline Vector<T>::Iterator::Iterator()
 }
 
 template<typename T>
-inline Vector<T>::Iterator::Iterator(T* element)
+inline Vector<T>::Iterator::Iterator(T* element, const Vector<T>* const pOwner)
 {
 	mpCurrent = element;
+	mpOwner	  = pOwner;
 }
 
 template<typename T>
@@ -49,7 +50,8 @@ inline typename Vector<T>::Iterator& Vector<T>::Iterator::operator=(const Iterat
 {
 	if (this != &rhs)
 	{
-		mpCurrent = rhs.mpCurrent;
+		mpCurrent	= rhs.mpCurrent;
+		mpOwner		= rhs.mpOwner;
 	}
 
 	return *this;
@@ -73,15 +75,39 @@ inline bool Vector<T>::Iterator::operator!=(const Iterator & rhs) const
 }
 
 template<typename T>
+inline bool Vector<T>::Iterator::operator<(const Iterator & rhs) const
+{
+	return mpCurrent < rhs.mpCurrent;
+}
+
+template<typename T>
+inline bool Vector<T>::Iterator::operator<=(const Iterator & rhs) const
+{
+	return mpCurrent <= rhs.mpCurrent;
+}
+
+template<typename T>
+inline bool Vector<T>::Iterator::operator>(const Iterator & rhs) const
+{
+	return mpCurrent > rhs.mpCurrent;
+}
+
+template<typename T>
+inline bool Vector<T>::Iterator::operator>=(const Iterator & rhs) const
+{
+	return mpCurrent >= rhs.mpCurrent;
+}
+
+template<typename T>
 inline typename Vector<T>::Iterator Vector<T>::Iterator::operator+(uint32_t rhs)
 {
-	return Iterator (mpCurrent + rhs);
+	return Iterator (mpCurrent + rhs, mpOwner);
 }
 
 template<typename T>
 inline typename Vector<T>::Iterator Vector<T>::Iterator::operator-(uint32_t rhs)
 {
-	return Iterator(mpCurrent - rhs);
+	return Iterator(mpCurrent - rhs, mpOwner);
 }
 
 template<typename T>
@@ -108,6 +134,11 @@ inline typename Vector<T>::Iterator Vector<T>::Iterator::operator++(int)
 template <typename T>
 inline T& Vector<T>::Iterator::operator*()
 {
+	if (mpOwner->IsEmpty() || *this < mpOwner->begin() || *this >= mpOwner->end())
+	{
+		throw std::out_of_range("Out of bounds.");
+	}
+
 	return *mpCurrent;
 }
 
@@ -191,13 +222,13 @@ inline const T & Vector<T>::Back() const
 template<typename T>
 inline typename Vector<T>::Iterator Vector<T>::begin() const
 {
-	return Iterator(mpBegin);
+	return Iterator(mpBegin, this);
 }
 
 template<typename T>
 inline typename Vector<T>::Iterator Vector<T>::end() const
 {
-	return Iterator(mpEnd - 1);
+	return Iterator(mpEnd - 1, this);
 }
 
 template<typename T>
@@ -215,6 +246,11 @@ inline T & Vector<T>::At(std::uint32_t index)
 template<typename T>
 inline const T& Vector<T>::operator[](std::uint32_t index) const
 {
+	if (index >= Size())
+	{
+		throw std::out_of_range("Out of bounds.");
+	}
+
 	return *(mpBegin + index);
 }
 
@@ -262,13 +298,6 @@ inline void Vector<T>::Clear()
 	}
 }
 
-template<typename T>
-inline void Vector<T>::MoveElements(Iterator destination, Iterator source, uint32_t count)
-{
-	memmove(destination.mpCurrent, source.mpCurrent, count * sizeof(T));
-}
-
-
 template <typename T>
 inline void Vector<T>::Reserve(std::uint32_t capacity)
 {
@@ -278,4 +307,10 @@ inline void Vector<T>::Reserve(std::uint32_t capacity)
 	mpBegin = static_cast<T*> (realloc(mpBegin, sizeof(T) * capacity));
 	mpEnd = mpBegin + size;
 	mpCapacity = mpBegin + capacity;
+}
+
+template<typename T>
+inline void Vector<T>::MoveElements(Iterator destination, Iterator source, uint32_t count)
+{
+	memmove(destination.mpCurrent, source.mpCurrent, count * sizeof(T));
 }

@@ -179,10 +179,14 @@ namespace UnitTestVector
 			vector.Find(10);
 
 			vector.Remove(1);
+			vector.PushBack(102);
 			vector.Remove(3);
+			vector.PushBack(2);
 			vector.Remove(4);
 			vector.Remove(2);
 			vector.Remove(10);
+			vector.PushBack(2);
+
 		}
 
 	private:

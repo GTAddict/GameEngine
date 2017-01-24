@@ -19,13 +19,18 @@ public:
 	public:
 
 		Iterator();
-		Iterator(T* element);
+		Iterator(T* element, const Vector<T>* const pOwner);
 		Iterator(const Iterator& rhs);
 		Iterator& operator=(const Iterator& rhs);
 		~Iterator();
 
 		bool operator==(const Iterator& rhs) const;
 		bool operator!=(const Iterator& rhs) const;
+
+		bool operator<(const Iterator& rhs) const;
+		bool operator<=(const Iterator& rhs) const;
+		bool operator>(const Iterator& rhs) const;
+		bool operator>=(const Iterator& rhs) const;
 
 		Iterator operator+(const std::uint32_t rhs);
 		Iterator operator-(const std::uint32_t rhs);
@@ -39,7 +44,8 @@ public:
 
 	private:
 
-		T*	mpCurrent;
+		T*					mpCurrent;
+		const Vector<T>*	mpOwner;
 	};
 
 	/** 
