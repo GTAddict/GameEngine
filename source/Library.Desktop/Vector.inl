@@ -37,11 +37,17 @@ inline Vector<T>::Vector(const GetCapacityFn_t& customCapacityFn, std::int32_t i
 template<typename T>
 inline Vector<T>::Vector(const Vector& rhs)
 {
-	*this = rhs;
+	operator=(rhs);
 }
 
 template<typename T>
-inline Vector<T>& Vector<T>::operator=(const Vector & rhs)
+inline Vector<T>::Vector(Vector&& rhs)
+{
+	operator=(rhs);
+}
+
+template<typename T>
+inline Vector<T>& Vector<T>::operator=(const Vector& rhs)
 {
 	if (this != &rhs)
 	{
@@ -56,6 +62,24 @@ inline Vector<T>& Vector<T>::operator=(const Vector & rhs)
 	return *this;
 }
 
+template<typename T>
+inline Vector<T>& Vector<T>::operator=(Vector&& rhs)
+{
+	Clear();
+
+	mpBegin = rhs.mpBegin;
+	mpEnd = rhs.mpEnd;
+	mpCapacity = rhs.mpCapacity;
+	mfnGetCapacity = std::move(rhs.mfnGetCapacity);
+
+	rhs.mpBegin = nullptr;
+	rhs.mpEnd = nullptr;
+	rhs.mpCapacity = nullptr;
+	rhs.mfnGetCapacity = nullptr;
+
+	return *this;
+}
+
 template <typename T>
 inline Vector<T>::~Vector()
 {
@@ -65,25 +89,32 @@ inline Vector<T>::~Vector()
 
 template <typename T>
 inline Vector<T>::Iterator::Iterator()
+	: mpCurrent(nullptr)
+	, mpOwner(nullptr)
 {
-	// Leave current element and owner unintialized.
 }
 
 template<typename T>
 inline Vector<T>::Iterator::Iterator(T* element, const Vector<T>* const pOwner)
+	: mpCurrent(element)
+	, mpOwner(pOwner)
 {
-	mpCurrent = element;
-	mpOwner	  = pOwner;
 }
 
 template<typename T>
 inline Vector<T>::Iterator::Iterator(const Iterator& rhs)
 {
-	*this = rhs;
+	operator=(rhs);
 }
 
 template<typename T>
-inline typename Vector<T>::Iterator& Vector<T>::Iterator::operator=(const Iterator & rhs)
+inline Vector<T>::Iterator::Iterator(Iterator&& rhs)
+{
+	operator=(rhs);
+}
+
+template<typename T>
+inline typename Vector<T>::Iterator& Vector<T>::Iterator::operator=(const Iterator& rhs)
 {
 	if (this != &rhs)
 	{
@@ -94,43 +125,55 @@ inline typename Vector<T>::Iterator& Vector<T>::Iterator::operator=(const Iterat
 	return *this;
 }
 
+template<typename T>
+inline typename Vector<T>::Iterator& Vector<T>::Iterator::operator=(const Iterator&& rhs)
+{
+	mpCurrent		= rhs.mpCurrent;
+	mpOwner			= rhs.mpOwner;
+
+	rhs.mpCurrent	= nullptr;
+	rhs.mpOwner		= nullptr;
+
+	return *this;
+}
+
 template <typename T>
 inline Vector<T>::Iterator::~Iterator()
 {
 }
 
 template <typename T>
-inline bool Vector<T>::Iterator::operator==(const Iterator & rhs) const
+inline bool Vector<T>::Iterator::operator==(const Iterator& rhs) const
 {
-	return mpCurrent == rhs.mpCurrent;
+	return mpOwner == rhs.mpOwner && mpCurrent == rhs.mpCurrent;
 }
 
 template <typename T>
-inline bool Vector<T>::Iterator::operator!=(const Iterator & rhs) const
+inline bool Vector<T>::Iterator::operator!=(const Iterator& rhs) const
 {
 	return !(*this == rhs);
 }
 
 template<typename T>
-inline bool Vector<T>::Iterator::operator<(const Iterator & rhs) const
+inline bool Vector<T>::Iterator::operator<(const Iterator& rhs) const
 {
 	return mpCurrent < rhs.mpCurrent;
 }
 
 template<typename T>
-inline bool Vector<T>::Iterator::operator<=(const Iterator & rhs) const
+inline bool Vector<T>::Iterator::operator<=(const Iterator& rhs) const
 {
 	return mpCurrent <= rhs.mpCurrent;
 }
 
 template<typename T>
-inline bool Vector<T>::Iterator::operator>(const Iterator & rhs) const
+inline bool Vector<T>::Iterator::operator>(const Iterator& rhs) const
 {
 	return mpCurrent > rhs.mpCurrent;
 }
 
 template<typename T>
-inline bool Vector<T>::Iterator::operator>=(const Iterator & rhs) const
+inline bool Vector<T>::Iterator::operator>=(const Iterator& rhs) const
 {
 	return mpCurrent >= rhs.mpCurrent;
 }
@@ -202,8 +245,7 @@ inline void Vector<T>::PushBack(const T& data)
 {
 	if (mpEnd == mpCapacity)
 	{
-		std::uint32_t capacity = Capacity();
-		Reserve(capacity > 0 ? 2 * capacity : 1);
+		Reserve(mfnGetCapacity(Size(), Capacity()));
 	}
 
 	mpEnd = new (mpEnd) T(data);
@@ -223,13 +265,13 @@ inline void Vector<T>::PopBack()
 }
 
 template<typename T>
-inline T & Vector<T>::Front()
+inline T& Vector<T>::Front()
 {
 	return const_cast<T&>(const_cast<const Vector<T>*>(this)->Front());
 }
 
 template<typename T>
-inline const T & Vector<T>::Front() const
+inline const T& Vector<T>::Front() const
 {
 	if (IsEmpty())
 	{

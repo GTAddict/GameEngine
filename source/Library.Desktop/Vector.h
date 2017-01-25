@@ -46,11 +46,24 @@ public:
 							Iterator(const Iterator& rhs);
 
 		/**
-		 *	\brief			Assignment operator. This will copy the current element and owner pointer.
+		*	\brief			Move constructor. This will transfer ownership of the data to itself.
+		*	\param rhs		The Iterator to move from.
+		*/
+							Iterator(Iterator&& rhs);
+
+		/**
+		 *	\brief			Copy assignment operator. This will copy the current element and owner pointer.
 		 *	\param rhs		The Iterator to make a copy from.
-		 *	\return			A copy of this newly created Iterator.
+		 *	\return			A reference to this newly created Iterator.
 		 */
-							Iterator& operator=(const Iterator& rhs);
+		Iterator&			operator=(const Iterator& rhs);
+
+		/**
+		*	\brief			Move assignment operator. This transfer ownership of the data to itself.
+		*	\param rhs		The Iterator to move from.
+		*	\return			A reference to this newly created Iterator.
+		*/
+		Iterator&			operator=(const Iterator&& rhs);
 
 		/**
 		 *	\brief			The destructor. Does nothing.
@@ -176,17 +189,30 @@ public:
 							Vector(const GetCapacityFn_t& customCapacityFn, std::int32_t initialCapacity = 0);
 
 	/**
-	*	\brief				Parametrized constructor. Deep copies the Vector provided into itself.
+	*	\brief				Copy constructor. Deep copies the Vector provided into itself.
 	*	\param rhs			The Vector to copy from.
 	*/
 							Vector(const Vector& rhs);
 
 	/**
-	*	\brief				Assignment operator. Deep copies the Vector provided into itself.
+	*	\brief				Move constructor. Transfers ownership of the list to itself.
+	*	\param rhs			The Vector to move data from.
+	*/
+							Vector(Vector&& rhs);
+
+	/**
+	*	\brief				Copy assignment operator. Deep copies the Vector provided into itself.
 	*	\param rhs			The Vector to copy from.
 	*	\return				A reference to this newly created Vector.
 	*/
 	Vector&					operator=(const Vector& rhs);
+
+	/**
+	*	\brief				Move assignment operator. Transfers ownership of the list to itself.
+	*	\param rhs			The Vector to move data from.
+	*	\return				A reference to this newly created Vector.
+	*/
+	Vector&					operator=(Vector&& rhs);
 
 	/**
 	 *	\brief				Destructor. Clears all elements and frees memory.
