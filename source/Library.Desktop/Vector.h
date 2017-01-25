@@ -143,6 +143,7 @@ public:
 		*	\brief			Dereference operator. Returns a copy of the data at the location it is
 		*					pointing to.
 		*	\return			A copy of the data at the location pointer to by the iterator.
+		*	\throw std::out_of_range if the owner is empty or if the iterator is out of bounds.
 		*/
 		T& operator*();
 
@@ -213,30 +214,35 @@ public:
 
 	/**
 	 *	\brief				Removes the element at the back of the container, and calls its destructor.
+	 *	\throw std::out_of_range if the container is empty.
 	 */
 	void					PopBack();
 
 	/**
 	 *	\brief				Returns the element at the front of the container.
 	 *	\return				A non-const reference to the data at the front of the container.
+	 *	\throw std::out_of_range if the container is empty.
 	 */
 	T&						Front();
 
 	/**
 	*	\brief				Returns the element at the front of the container.
 	*	\return				A const reference to the data at the front of the container.
+	*	\throw std::out_of_range if the container is empty.
 	*/
 	const T&				Front() const;
 
 	/**
 	*	\brief				Returns the element at the back of the container.
 	*	\return				A non-const reference to the data at the back of the container.
+	*	\throw std::out_of_range if the container is empty.
 	*/
 	T&						Back();
 
 	/**
 	*	\brief				Returns the element at the back of the container.
 	*	\return				A const reference to the data at the back of the container.
+	*	\throw std::out_of_range if the container is empty.
 	*/
 	const T&				Back() const;
 
@@ -256,6 +262,7 @@ public:
 	*	\brief				Returns the element at the specified index.
 	*	\param index		The index whose data to retrieve.
 	*	\return				A non-const reference to the data at the specified index.
+	*	\throw std::out_of_range if the index is out of bounds.
 	*/
 	T&						At(std::uint32_t index);
 
@@ -263,6 +270,7 @@ public:
 	*	\brief				Returns the element at the specified index.
 	*	\param index		The index whose data to retrieve.
 	*	\return				A const reference to the data at the specified index.
+	*	\throw std::out_of_range if the index is out of bounds.
 	*/
 	const T&				At(std::uint32_t index) const;
 	
@@ -270,6 +278,7 @@ public:
 	*	\brief				Returns the element at the specified index.
 	*	\param index		The index whose data to retrieve.
 	*	\return				A const reference to the data at the specified index.
+	*	\throw std::out_of_range if the index is out of bounds.
 	*/
 	const T&				operator[](const std::uint32_t index) const;
 
@@ -277,6 +286,7 @@ public:
 	*	\brief				Returns the element at the specified index.
 	*	\param index		The index whose data to retrieve.
 	*	\return				A non-const reference to the data at the specified index.
+	*	\throw std::out_of_range if the index is out of bounds.
 	*/
 	T&						operator[](const std::uint32_t index);
 
@@ -298,6 +308,7 @@ public:
 	*						rangeEnd (both inclusive).
 	*	\param rangeBegin	The Iterator from where to start removing elements.
 	*	\param rangeEnd		The Iterator from where to end removing elements.
+	*	\throw std::out_of_range if either Iterator provided is out of bounds.
 	*/
 	void					Remove(const Iterator& rangeBegin, const Iterator& rangeEnd);
 
