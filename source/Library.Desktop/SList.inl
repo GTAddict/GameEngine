@@ -1,3 +1,4 @@
+#include "SList.h"
 #pragma once
 
 template <typename T>
@@ -22,6 +23,12 @@ inline SList<T>::SList(const SList<T>& rhs)
 }
 
 template<typename T>
+inline SList<T>::SList(SList<T>&& rhs)
+{
+	operator=(rhs);
+}
+
+template<typename T>
 inline SList<T> & SList<T>::operator=(const SList<T>& rhs)
 {
 	if (this != &rhs)
@@ -35,6 +42,20 @@ inline SList<T> & SList<T>::operator=(const SList<T>& rhs)
 	}
 
 	return *this;
+}
+
+template<typename T>
+inline SList<T>& SList<T>::operator=(const SList<T>&& rhs)
+{
+	Clear();
+
+	mpBegin		= rhs.mpBegin;
+	mpEnd		= rhs.mpEnd;
+	mSize		= rhs.mSize;
+
+	rhs.mpBegin = nullptr;
+	rhs.mpEnd	= nullptr;
+	rhs.mSize	= 0;
 }
 
 template <typename T>

@@ -127,19 +127,34 @@ public:
 					~SList();
 
 	/**
-	*	\brief		Parametrized constructor, initializes the list
+	*	\brief		Copy constructor, initializes the list
 	*				to empty and then deep copies the list passed in.
 	*	\param rhs	The list to deep copy from.
 	*/
 					SList(const SList<T>& rhs);
 
 	/**
-	*	\brief		Assignment operator, clears this list and deep copies
+	*	\brief		Move constructor, transfers ownership of list passed
+					in to itself.
+	*	\param rhs	The list to transfer ownership from.
+	*/
+					SList(SList<T>&& rhs);
+
+	/**
+	*	\brief		Copy assignment operator, clears this list and deep copies
 	*				the list passed in.
 	*	\param rhs	The list to deep copy from.
 	*	\return		A reference to the newly created list.
 	*/
 	SList<T>&		operator=(const SList<T>& rhs);
+
+	/**
+	*	\brief		Move assignment operator, transfers ownership of list passed
+	*				in to itself.
+	*	\param rhs	The list to transfer ownership from.
+	*	\return		A reference to the newly created list.
+	*/
+	SList<T>&		operator=(const SList<T>&& rhs);
 
 	/**
 	*	\brief		Pushes data to the beginning of the list.
