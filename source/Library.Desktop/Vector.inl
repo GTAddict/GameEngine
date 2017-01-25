@@ -11,15 +11,7 @@ inline Vector<T>::Vector()
 
 template <typename T>
 inline Vector<T>::Vector(std::uint32_t capacity)
-	: Vector(
-		std::bind(
-			&Vector<T>::GetNewCapacity
-			, this
-			, std::placeholders::_1
-			, std::placeholders::_2
-		)
-		, capacity
-	)
+	: Vector(BIND_TO_GETCAPACITYFN_T(&Vector<T>::GetNewCapacity), capacity)
 {
 }
 
@@ -67,15 +59,15 @@ inline Vector<T>& Vector<T>::operator=(Vector&& rhs)
 {
 	Clear();
 
-	mpBegin = rhs.mpBegin;
-	mpEnd = rhs.mpEnd;
-	mpCapacity = rhs.mpCapacity;
-	mfnGetCapacity = std::move(rhs.mfnGetCapacity);
+	mpBegin				= rhs.mpBegin;
+	mpEnd				= rhs.mpEnd;
+	mpCapacity			= rhs.mpCapacity;
+	mfnGetCapacity		= std::move(rhs.mfnGetCapacity);
 
-	rhs.mpBegin = nullptr;
-	rhs.mpEnd = nullptr;
-	rhs.mpCapacity = nullptr;
-	rhs.mfnGetCapacity = nullptr;
+	rhs.mpBegin			= nullptr;
+	rhs.mpEnd			= nullptr;
+	rhs.mpCapacity		= nullptr;
+	rhs.mfnGetCapacity	= nullptr;
 
 	return *this;
 }
@@ -179,13 +171,13 @@ inline bool Vector<T>::Iterator::operator>=(const Iterator& rhs) const
 }
 
 template<typename T>
-inline typename Vector<T>::Iterator Vector<T>::Iterator::operator+(uint32_t rhs)
+inline typename Vector<T>::Iterator Vector<T>::Iterator::operator+(std::uint32_t rhs)
 {
 	return Iterator (mpCurrent + rhs, mpOwner);
 }
 
 template<typename T>
-inline typename Vector<T>::Iterator Vector<T>::Iterator::operator-(uint32_t rhs)
+inline typename Vector<T>::Iterator Vector<T>::Iterator::operator-(std::uint32_t rhs)
 {
 	return Iterator(mpCurrent - rhs, mpOwner);
 }
@@ -427,14 +419,14 @@ inline void Vector<T>::Reserve(std::uint32_t capacity)
 {
 	if (capacity <= 0 || capacity <= Capacity())		return;
 
-	uint32_t size = Size();
+	std::uint32_t size = Size();
 	mpBegin = static_cast<T*> (realloc(mpBegin, sizeof(T) * capacity));
 	mpEnd = mpBegin + size;
 	mpCapacity = mpBegin + capacity;
 }
 
 template<typename T>
-inline void Vector<T>::MoveElements(Iterator destination, Iterator source, uint32_t count)
+inline void Vector<T>::MoveElements(Iterator destination, Iterator source, std::uint32_t count)
 {
 	memmove(destination.mpCurrent, source.mpCurrent, count * sizeof(T));
 }
