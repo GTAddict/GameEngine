@@ -28,14 +28,20 @@ inline Vector<T>::Vector(const GetCapacityFn_t& customCapacityFn, std::int32_t i
 
 template<typename T>
 inline Vector<T>::Vector(const Vector& rhs)
+	: mpBegin(nullptr)
+	, mpEnd(nullptr)
+	, mpCapacity(nullptr)
 {
 	operator=(rhs);
 }
 
 template<typename T>
 inline Vector<T>::Vector(Vector&& rhs)
+	: mpBegin(nullptr)
+	, mpEnd(nullptr)
+	, mpCapacity(nullptr)
 {
-	operator=(rhs);
+	*this = std::move(rhs);
 }
 
 template<typename T>
@@ -57,17 +63,20 @@ inline Vector<T>& Vector<T>::operator=(const Vector& rhs)
 template<typename T>
 inline Vector<T>& Vector<T>::operator=(Vector&& rhs)
 {
-	Clear();
+	if (this != &rhs)
+	{
+		Clear();
 
-	mpBegin				= rhs.mpBegin;
-	mpEnd				= rhs.mpEnd;
-	mpCapacity			= rhs.mpCapacity;
-	mfnGetCapacity		= std::move(rhs.mfnGetCapacity);
+		mpBegin = rhs.mpBegin;
+		mpEnd = rhs.mpEnd;
+		mpCapacity = rhs.mpCapacity;
+		mfnGetCapacity = std::move(rhs.mfnGetCapacity);
 
-	rhs.mpBegin			= nullptr;
-	rhs.mpEnd			= nullptr;
-	rhs.mpCapacity		= nullptr;
-	rhs.mfnGetCapacity	= nullptr;
+		rhs.mpBegin = nullptr;
+		rhs.mpEnd = nullptr;
+		rhs.mpCapacity = nullptr;
+		rhs.mfnGetCapacity = nullptr;
+	}
 
 	return *this;
 }
@@ -102,7 +111,7 @@ inline Vector<T>::Iterator::Iterator(const Iterator& rhs)
 template<typename T>
 inline Vector<T>::Iterator::Iterator(Iterator&& rhs)
 {
-	operator=(rhs);
+	*this = std::move(rhs);
 }
 
 template<typename T>
@@ -118,13 +127,16 @@ inline typename Vector<T>::Iterator& Vector<T>::Iterator::operator=(const Iterat
 }
 
 template<typename T>
-inline typename Vector<T>::Iterator& Vector<T>::Iterator::operator=(const Iterator&& rhs)
+inline typename Vector<T>::Iterator& Vector<T>::Iterator::operator=(Iterator&& rhs)
 {
-	mpCurrent		= rhs.mpCurrent;
-	mpOwner			= rhs.mpOwner;
+	if (this != &rhs)
+	{
+		mpCurrent = rhs.mpCurrent;
+		mpOwner = rhs.mpOwner;
 
-	rhs.mpCurrent	= nullptr;
-	rhs.mpOwner		= nullptr;
+		rhs.mpCurrent = nullptr;
+		rhs.mpOwner = nullptr;
+	}
 
 	return *this;
 }

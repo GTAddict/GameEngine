@@ -65,7 +65,7 @@ public:
 		*	\param rhs		The Iterator to move from.
 		*	\return			A reference to this newly created Iterator.
 		*/
-		Iterator&			operator=(const Iterator&& rhs);
+		Iterator&			operator=(Iterator&& rhs);
 
 		/**
 		 *	\brief			The destructor. Does nothing.

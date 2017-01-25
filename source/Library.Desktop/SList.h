@@ -154,7 +154,7 @@ public:
 	*	\param rhs	The list to transfer ownership from.
 	*	\return		A reference to the newly created list.
 	*/
-	SList<T>&		operator=(const SList<T>&& rhs);
+	SList<T>&		operator=(SList<T>&& rhs);
 
 	/**
 	*	\brief		Pushes data to the beginning of the list.

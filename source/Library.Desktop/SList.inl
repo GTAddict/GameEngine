@@ -24,12 +24,13 @@ inline SList<T>::SList(const SList<T>& rhs)
 
 template<typename T>
 inline SList<T>::SList(SList<T>&& rhs)
+	: SList()
 {
-	operator=(rhs);
+	*this = std::move(rhs);
 }
 
 template<typename T>
-inline SList<T> & SList<T>::operator=(const SList<T>& rhs)
+inline SList<T>& SList<T>::operator=(const SList<T>& rhs)
 {
 	if (this != &rhs)
 	{
@@ -45,17 +46,22 @@ inline SList<T> & SList<T>::operator=(const SList<T>& rhs)
 }
 
 template<typename T>
-inline SList<T>& SList<T>::operator=(const SList<T>&& rhs)
+inline SList<T>& SList<T>::operator=(SList<T>&& rhs)
 {
-	Clear();
+	if (this != &rhs)
+	{
+		Clear();
 
-	mpBegin		= rhs.mpBegin;
-	mpEnd		= rhs.mpEnd;
-	mSize		= rhs.mSize;
+		mpBegin = rhs.mpBegin;
+		mpEnd = rhs.mpEnd;
+		mSize = rhs.mSize;
 
-	rhs.mpBegin = nullptr;
-	rhs.mpEnd	= nullptr;
-	rhs.mSize	= 0;
+		rhs.mpBegin = nullptr;
+		rhs.mpEnd = nullptr;
+		rhs.mSize = 0;
+	}
+
+	return *this;
 }
 
 template <typename T>
@@ -272,8 +278,8 @@ inline typename void SList<T>::Remove(const T& data)
 template<typename T>
 inline SList<T>::Iterator::Iterator()
 	: mpOwner(nullptr)
+	, mpCurrent(nullptr)
 {
-	// Leave node unitialized.
 }
 
 template<typename T>
