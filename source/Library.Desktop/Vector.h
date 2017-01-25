@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <functional>
 
 /**
  *	\class	Vector
@@ -11,6 +12,8 @@ template <typename T>
 class Vector
 {
 public:
+
+	typedef std::function<std::uint32_t(std::uint32_t, std::uint32_t)>	GetCapacityFn_t;
 
 	/**
 	 *	\class	Iterator
@@ -26,7 +29,7 @@ public:
 		/**
 		 *	\brief			Default constructor. Does not initialize current element or owner.
 		 */
-		Iterator();
+							Iterator();
 		
 		/**
 		 *	\brief			Parametrized constructor. The current element to point to and the owner
@@ -34,39 +37,39 @@ public:
 		 *	\param T*		The current element to point to.
 		 *	\param pOwner	The current owner Vector.
 		 */
-		Iterator(T* element, const Vector<T>* const pOwner);
+							Iterator(T* element, const Vector<T>* const pOwner);
 
 		/**
 		 *	\brief			Copy constructor. This will copy the current element and owner pointer.
 		 *	\param rhs		The Iterator to make a copy from.
 		 */
-		Iterator(const Iterator& rhs);
+							Iterator(const Iterator& rhs);
 
 		/**
 		 *	\brief			Assignment operator. This will copy the current element and owner pointer.
 		 *	\param rhs		The Iterator to make a copy from.
 		 *	\return			A copy of this newly created Iterator.
 		 */
-		Iterator& operator=(const Iterator& rhs);
+							Iterator& operator=(const Iterator& rhs);
 
 		/**
 		 *	\brief			The destructor. Does nothing.
 		 */
-		~Iterator();
+							~Iterator();
 
 		/**
 		*	\brief			Equality operator. Checks whether the two operands are equal.
 		*	\param rhs		The Iterator to compare to.
 		*	\return			True if both current element pointers are the same, false otherwise.
 		*/
-		bool operator==(const Iterator& rhs) const;
+		bool				operator==(const Iterator& rhs) const;
 		
 		/**
 		*	\brief			Inequality operator. Checks whether the two operands are inequal.
 		*	\param rhs		The Iterator to compare to.
 		*	\return			True if both current element pointers are not the same, false otherwise.
 		*/
-		bool operator!=(const Iterator& rhs) const;
+		bool				operator!=(const Iterator& rhs) const;
 
 		/**
 		*	\brief			Less than operator. Checks whether this Iterator is less than the operand passed in.
@@ -74,7 +77,7 @@ public:
 		*	\return			True if the address of the current element pointed to is less than the one of rhs,
 		*					false otherwise.
 		*/
-		bool operator<(const Iterator& rhs) const;
+		bool				operator<(const Iterator& rhs) const;
 
 		/**
 		*	\brief			Greater than or equal operator. Checks whether this Iterator is greater than or equal
@@ -83,7 +86,7 @@ public:
 		*	\return			True if the address of the current element pointed to is greater than or equal to the
 		*					one of rhs, false otherwise.
 		*/
-		bool operator<=(const Iterator& rhs) const;
+		bool				operator<=(const Iterator& rhs) const;
 
 		/**
 		*	\brief			Greater than operator. Checks whether this Iterator is greater than or equal to the
@@ -92,7 +95,7 @@ public:
 		*	\return			True if the address of the current element pointed to is greater than the one of rhs,
 		*					false otherwise.
 		*/
-		bool operator>(const Iterator& rhs) const;
+		bool				operator>(const Iterator& rhs) const;
 
 		/**
 		*	\brief			Greater than or equal operator. Checks whether this Iterator is greater than or equal
@@ -101,21 +104,21 @@ public:
 		*	\return			True if the address of the current element pointed to is greater than or equal to the
 		*					one of rhs, false otherwise.
 		*/
-		bool operator>=(const Iterator& rhs) const;
+		bool				operator>=(const Iterator& rhs) const;
 
 		/**
 		*	\brief			Addition operator. Adds the specified offset to the Iterator.
 		*	\param rhs		The offset.
 		*	\return			A new iterator pointing to the data at the specified offset.
 		*/
-		Iterator operator+(const std::uint32_t rhs);
+		Iterator			operator+(const std::uint32_t rhs);
 
 		/**
 		*	\brief			Subtraction operator. Subtracts the specified offset from the Iterator.
 		*	\param rhs		The offset.
 		*	\return			A new iterator pointing to the data at the specified offset.
 		*/
-		Iterator operator-(const std::uint32_t rhs);
+		Iterator			operator-(const std::uint32_t rhs);
 
 
 		/**
@@ -123,21 +126,21 @@ public:
 		*	\param rhs		The Iterator to subtract.
 		*	\return			The offset between the elements pointed at by the two Iterators.
 		*/
-		std::int32_t operator-(const Iterator& rhs);
+		std::int32_t		operator-(const Iterator& rhs);
 
 		/**
 		*	\brief			Pre-increment operator. Promotes the iterator to the next element
 		*					and returns a reference to itself.
 		*	\return			A reference to itself.
 		*/
-		Iterator& operator++();
+		Iterator&			operator++();
 		
 		/**
 		*	\brief			Post-increment operator. Promotes the iterator to the next element
 		*					and returns a previously saved (and thus unmodified) copy of itself.
 		*	\return			A copy of its state before this function was called.
 		*/
-		Iterator operator++(int rhs);
+		Iterator			operator++(int rhs);
 
 		/**
 		*	\brief			Dereference operator. Returns a copy of the data at the location it is
@@ -145,7 +148,7 @@ public:
 		*	\return			A copy of the data at the location pointer to by the iterator.
 		*	\throw std::out_of_range if the owner is empty or if the iterator is out of bounds.
 		*/
-		T& operator*();
+		T&					operator*();
 
 	private:
 
@@ -163,6 +166,14 @@ public:
 	 *	\param capacity		Capacity to reserve.
 	 */
 							Vector(std::uint32_t capacity);
+
+	/**
+	*	\brief				Parametrized constructor. You can pass in the custom capacity function to call whenever
+	*						the container needs to know the new capacity to resize to.
+	*	\param customCapacityFn The custom function to call to get the new capacity.
+	*	\param initialCapacity  This will override the value returned by customCapacityFn for the first allocation.
+	*/
+							Vector(const GetCapacityFn_t& customCapacityFn, std::int32_t initialCapacity = 0);
 
 	/**
 	*	\brief				Parametrized constructor. Deep copies the Vector provided into itself.
@@ -321,9 +332,19 @@ public:
 	*	\brief				Checks whether the provided Iterator is within the valid range of data.
 	*	\return				Whether the Iterator is a valid Iterator on this container.
 	*/
-	bool					IsValid(const Iterator& it);
+	bool					IsValid(const Iterator& it) const;
 
 private:
+
+	/**
+	*	\brief				Returns the new capacity that is to be allocated given the current size
+	*						and current capacity. This is the default implementation that will be
+	*						assigned to fnGetCapacity if the user doesn't provide his own.
+	*	\param size			The number of elements in the Vector right now.
+	*	\param oldCapacity	Where to move the elements from
+	*	\return				The new capacity to reserve.
+	*/
+	std::int32_t			GetNewCapacity(std::uint32_t size, std::uint32_t oldCapacity);
 
 	/**
 	*	\brief				Moves the elements to a new location after operations such as Remove.
@@ -331,11 +352,13 @@ private:
 	*	\param source		Where to move the elements from
 	*	\param count		How many elements to move
 	*/
-	void					MoveElements(Iterator destination, Iterator source, uint32_t count);
+	void					MoveElements(Iterator destination, Iterator source, std::uint32_t count);
 
 	T*		mpBegin;		/**< Points to the beginning of the vector. */
 	T*		mpEnd;			/**< Points to the position after the last element of the vector. */
 	T*		mpCapacity;		/**< Pointer to the end of the container. */
+	
+	GetCapacityFn_t			mfnGetCapacity;	/**< Function object that returns the new capacity to allocate. */
 };
 
 #include "Vector.inl"

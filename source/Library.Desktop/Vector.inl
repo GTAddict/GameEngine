@@ -11,11 +11,26 @@ inline Vector<T>::Vector()
 
 template <typename T>
 inline Vector<T>::Vector(std::uint32_t capacity)
+	: Vector(
+		std::bind(
+			&Vector<T>::GetNewCapacity
+			, this
+			, std::placeholders::_1
+			, std::placeholders::_2
+		)
+		, capacity
+	)
+{
+}
+
+template<typename T>
+inline Vector<T>::Vector(const GetCapacityFn_t& customCapacityFn, std::int32_t initialCapacity)
 	: mpBegin(nullptr)
 	, mpEnd(nullptr)
 	, mpCapacity(nullptr)
+	, mfnGetCapacity(customCapacityFn)
 {
-	Reserve(capacity);
+	Reserve(initialCapacity ? initialCapacity : mfnGetCapacity(Size(), Capacity()));
 	mpEnd = mpBegin;
 }
 
@@ -26,7 +41,7 @@ inline Vector<T>::Vector(const Vector& rhs)
 }
 
 template<typename T>
-inline Vector & Vector<T>::operator=(const Vector & rhs)
+inline Vector<T>& Vector<T>::operator=(const Vector & rhs)
 {
 	if (this != &rhs)
 	{
@@ -345,9 +360,24 @@ inline void Vector<T>::Clear()
 }
 
 template<typename T>
-inline bool Vector<T>::IsValid(const Iterator& it)
+inline bool Vector<T>::IsValid(const Iterator& it) const
 {
 	return Size() > 0 && it >= begin() && it < end();
+}
+
+template<typename T>
+inline std::int32_t Vector<T>::GetNewCapacity(std::uint32_t currentSize, std::uint32_t currentCapacity)
+{
+	currentSize;	// Currently unused
+
+	if (currentCapacity == 0)
+	{
+		return DEFAULT_CONTAINER_SIZE;
+	}
+	else
+	{
+		return static_cast<std::uint32_t>(currentCapacity * 1.5f);
+	}
 }
 
 template <typename T>
