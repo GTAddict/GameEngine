@@ -271,6 +271,115 @@ namespace UnitTestSList
 		}
 
 		template <typename T>
+		void TestListMoveSemantics()
+		{
+			SList<T> list;
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				list.PushBack(ConvertValue<T>(i));
+			}
+
+			SList<T> listConstruct(std::move(list));						///< Test move constructor
+			SList<T> listTemp;
+			
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				Assert::AreEqual(ConvertValue<T>(i), listConstruct.Front());
+				listTemp.PushBack(listConstruct.Front());
+				listConstruct.PopFront();
+			}
+
+			SList<T> listAssign;
+			listAssign = std::move(listTemp);							///< Test move assignment operator
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				Assert::AreEqual(ConvertValue<T>(i), listAssign.Front());
+				listAssign.PopFront();
+			}
+
+		}
+
+		template <typename T = DummyStruct>
+		void TestListMoveSemanticsDummyPtr()
+		{
+			SList<T*> list;
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				DummyStruct* dStruct = new DummyStruct();
+				dStruct->ID = i;
+				dStruct->name = name;
+				dStruct->customData = this;
+				*dStruct->pOwnedInteger = i;
+				list.PushBack(dStruct);
+			}
+
+			SList<T*> listConstruct(std::move(list));						///< Test move constructor	
+			SList<T*> tempList;
+			
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				DummyStruct* dStruct = listConstruct.Front();
+				Assert::AreEqual(i, dStruct->ID);
+				Assert::AreEqual(name, dStruct->name);
+				Assert::AreEqual((void*) this, dStruct->customData);
+				Assert::AreEqual(i, *dStruct->pOwnedInteger);
+				tempList.PushBack(dStruct);
+				listConstruct.PopFront();
+			}
+
+			SList<T*> listAssign;
+			listAssign = std::move(tempList);							///< Test move assignment operator
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				DummyStruct* dStruct = listAssign.Front();
+				Assert::AreEqual(i, dStruct->ID);
+				Assert::AreEqual(name, dStruct->name);
+				Assert::AreEqual((void*) this, dStruct->customData);
+				Assert::AreEqual(i, *dStruct->pOwnedInteger);
+				listAssign.PopFront();
+
+				/// Prevent memory leaks in test
+				delete dStruct;
+			}
+
+		}
+
+		template <typename T>
+		void TestListMoveSemanticsPtr()
+		{
+			T array[expectedNumElements];
+
+			SList<T*> list;
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				list.PushBack(&array[i - startValue]);
+			}
+
+			SList<T*> listConstruct(std::move(list));									///< Test move constructor
+			SList<T*> tempList;
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				Assert::AreEqual(&array[i - startValue], listConstruct.Front());
+				tempList.PushBack(listConstruct.Front());
+				listConstruct.PopFront();
+			}
+
+			SList<T*> listAssign;
+			listAssign = std::move(tempList);										///< Test move assignment operator
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				Assert::AreEqual(&array[i - startValue], listAssign.Front());
+				listAssign.PopFront();
+			}
+		}
+
+		template <typename T>
 		void TestListIteratorBeginEnd()
 		{
 			SList<T> list;
@@ -592,6 +701,23 @@ namespace UnitTestSList
 			TestListCopySemanticsPtr<char>();
 			TestListCopySemanticsPtr<int>();
 			TestListCopySemanticsPtr<float>();
+		}
+
+		TEST_METHOD(TestMoveSemantics)
+		{
+			// TestListMoveSemantics<bool>();
+			// TestListMoveSemantics<char>();
+			TestListMoveSemantics<int>();
+			TestListMoveSemantics<float>();
+		}
+
+		TEST_METHOD(TestMoveSemanticsPtr)
+		{
+			TestListMoveSemanticsDummyPtr<DummyStruct>();
+			TestListMoveSemanticsPtr<bool>();
+			TestListMoveSemanticsPtr<char>();
+			TestListMoveSemanticsPtr<int>();
+			TestListMoveSemanticsPtr<float>();
 		}
 
 		TEST_METHOD(TestIteratorBeginEnd)
