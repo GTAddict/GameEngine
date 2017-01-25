@@ -245,7 +245,7 @@ public:
 
 	/**
 	*	\brief		Removes the Node that contains the provided data.
-	*	\param		The data to be found and removed.
+	*	\param T	The data to be found and removed.
 	*/
 	void			Remove(const T& data);
 

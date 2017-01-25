@@ -19,6 +19,28 @@ inline Vector<T>::Vector(std::uint32_t capacity)
 	mpEnd = mpBegin;
 }
 
+template<typename T>
+inline Vector<T>::Vector(const Vector& rhs)
+{
+	*this = rhs;
+}
+
+template<typename T>
+inline Vector & Vector<T>::operator=(const Vector & rhs)
+{
+	if (this != &rhs)
+	{
+		Clear();
+		Reserve(rhs.Capacity());
+		for (auto& value : rhs)
+		{
+			PushBack(value);
+		}
+	}
+
+	return *this;
+}
+
 template <typename T>
 inline Vector<T>::~Vector()
 {
@@ -29,7 +51,7 @@ inline Vector<T>::~Vector()
 template <typename T>
 inline Vector<T>::Iterator::Iterator()
 {
-	// Leave current element unintialized.
+	// Leave current element and owner unintialized.
 }
 
 template<typename T>
@@ -134,7 +156,7 @@ inline typename Vector<T>::Iterator Vector<T>::Iterator::operator++(int)
 template <typename T>
 inline T& Vector<T>::Iterator::operator*()
 {
-	if (mpOwner->IsEmpty() || *this < mpOwner->begin() || *this >= mpOwner->end())
+	if (mpOwner->IsEmpty() || !mpOwner->IsValid(*this))
 	{
 		throw std::out_of_range("Out of bounds.");
 	}
@@ -203,13 +225,13 @@ inline const T & Vector<T>::Front() const
 }
 
 template<typename T>
-inline T & Vector<T>::Back()
+inline T& Vector<T>::Back()
 {
 	return const_cast<T&>(const_cast<const Vector<T>*>(this)->Back());
 }
 
 template<typename T>
-inline const T & Vector<T>::Back() const
+inline const T& Vector<T>::Back() const
 {
 	if (IsEmpty())
 	{
@@ -284,9 +306,33 @@ inline void Vector<T>::Remove(const T& data)
 	if (foundIt != end())
 	{
 		(*foundIt).~T();
-		MoveElements(foundIt, foundIt + 1, end() - foundIt + 1);
+		if (foundIt + 1 != end())
+		{
+			MoveElements(foundIt, foundIt + 1, end() - foundIt + 1);
+		}
 		--mpEnd;
 	}
+}
+
+template<typename T>
+inline void Vector<T>::Remove(const Iterator& rangeBegin, const Iterator& rangeEnd)
+{
+	if (!(IsValid(rangeBegin) && IsValid(rangeEnd)))
+	{
+		throw std::out_of_range("Invalid iterator.");
+	}
+
+	for (Iterator it = rangeBegin; it != rangeEnd; ++it)
+	{
+		(*it).~T();
+	}
+
+	if (rangeEnd + 1 != end())
+	{
+		MoveElements(rangeBegin, rangeEnd, end() - rangeEnd);
+	}
+
+	mpEnd -= rangeEnd - rangeBegin + 1;
 }
 
 template<typename T>
@@ -296,6 +342,12 @@ inline void Vector<T>::Clear()
 	{
 		PopBack();
 	}
+}
+
+template<typename T>
+inline bool Vector<T>::IsValid(const Iterator& it)
+{
+	return Size() > 0 && it >= begin() && it < end();
 }
 
 template <typename T>
