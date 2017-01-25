@@ -71,12 +71,14 @@ public:
 		/**
 		*	\brief		Pre-increment operator. Increments pointer and returns this.
 		*	\return		A reference to the instance just incremented.
+		*	\throw std::out_of_range if it is incremented past end().
 		*/
 		Iterator&		operator++();
 
 		/**
 		*	\brief		Post-increment operator. Stores a copy, increments, and returns the copy.
 		*	\return		A copy of the instance just incremented.
+		*	\throw std::out_of_range if it is incremented past end().
 		*/
 		Iterator		operator++(int);
 
@@ -84,6 +86,7 @@ public:
 		*	\brief		Dereference operator. This will provide the data inside the Node pointed to
 		*				by the Iterator.
 		*	\return		A reference to the data contained in the Node pointed to by the Iterator.
+		*	\throw std::runtime_error if nullptr is dereferenced.
 		*/
 		T&				operator*();
 
@@ -107,8 +110,8 @@ public:
 
 	private:
 
-		Node* mpCurrent;					/**< Stores pointer to the current node in the list */
-		const SList<T>* mpOwner;			/**< Stores pointer to the container on which this iterator is used */
+		Node*				mpCurrent;			/**< Stores pointer to the current node in the list */
+		const SList<T>*		mpOwner;			/**< Stores pointer to the container on which this iterator is used */
 	};
 
 public:
@@ -126,12 +129,15 @@ public:
 	/**
 	*	\brief		Parametrized constructor, initializes the list
 	*				to empty and then deep copies the list passed in.
+	*	\param rhs	The list to deep copy from.
 	*/
 					SList(const SList<T>& rhs);
 
 	/**
 	*	\brief		Assignment operator, clears this list and deep copies
 	*				the list passed in.
+	*	\param rhs	The list to deep copy from.
+	*	\return		A reference to the newly created list.
 	*/
 	SList<T>&		operator=(const SList<T>& rhs);
 
@@ -145,6 +151,7 @@ public:
 	/**
 	*	\brief		Pops data from the beginning of the list.
 	*				Does not return the data.
+	*	\throw std::out_of_range if the size of the list is 0.
 	*/
 	void			PopFront();
 
@@ -160,6 +167,7 @@ public:
 	*	\param it	Iterator to insert after
 	*	\param T	Data  to push.
 	*	\return		An iterator to the element just pushed.
+	*	\throw std::out_of_range if an element is inserted after end().
 	*/
 	Iterator		InsertAfter(const Iterator& it, const T& data);
 
@@ -175,6 +183,7 @@ public:
 	*	\brief		Returns the first element in the list as an
 	*				immutable object.
 	*	\return		const reference to the first element.
+	*	\throw std::out_of_range if the size of the list is 0.
 	*/
 	const T&		Front() const;
 
@@ -182,6 +191,7 @@ public:
 	*	\brief		Returns the first element in the list as a
 	*				mutable object.
 	*	\return		non-const reference to the first element.
+	*	\throw std::out_of_range if the size of the list is 0.
 	*/
 	T&				Front();
 
@@ -189,6 +199,7 @@ public:
 	*	\brief		Returns the last element in the list as an
 	*				immutable object.
 	*	\return		const reference to the last element.
+	*	\throw std::out_of_range if the size of the list is 0.
 	*/
 	const T&		Back() const;
 
@@ -196,6 +207,7 @@ public:
 	*	\brief		Returns the last element in the list as a
 	*				mutable object.
 	*	\return		non-const reference to the last element.
+	*	\throw std::out_of_range if the size of the list is 0.
 	*/
 	T&				Back();
 
