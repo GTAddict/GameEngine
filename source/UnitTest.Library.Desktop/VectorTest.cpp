@@ -8,8 +8,11 @@ namespace UnitTestVectorConstants
 	const int endValue = 81;
 	const float divisor = 100.0f;
 	const unsigned int expectedNumElements = endValue - startValue + 1;
-	const uint32_t kTHIRTY = 30;
-	const uint32_t kZERO = 0;
+	const std::uint32_t kTHIRTY = 30;
+	const std::uint32_t kZERO = 0;
+
+	const std::uint32_t customCapacityDefaultSize = 50;
+	const std::uint32_t smallerCustomCapacitySize = 10;
 }
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -43,6 +46,39 @@ namespace UnitTestVector
 			Assert::AreEqual(kTHIRTY, anotherVector.Capacity());
 			anotherVector.Reserve(kZERO);
 			Assert::AreEqual(kTHIRTY, anotherVector.Capacity());
+			
+			Vector<T> aThirdVector(kTHIRTY);
+			Assert::AreEqual(kTHIRTY, aThirdVector.Capacity());
+		}
+
+		std::uint32_t GetNewCapacityCustom(std::uint32_t size, std::uint32_t capacity)
+		{
+			if (capacity == 0)
+			{
+				return customCapacityDefaultSize;
+			}
+			else
+			{
+				float fractionUsed = static_cast<float>(size / capacity);
+				return static_cast<std::uint32_t>(capacity + capacity * fractionUsed);
+			}
+		}
+
+		template <typename T>
+		void TestCustomCapacityFn_Impl()
+		{
+			Vector<T> vector(BIND_TO_GETCAPACITYFN_T(&UnitTestVector::GetNewCapacityCustom));
+			Assert::AreEqual(customCapacityDefaultSize, vector.Capacity());
+
+			Vector<T> anotherVector(BIND_TO_GETCAPACITYFN_T(&UnitTestVector::GetNewCapacityCustom), smallerCustomCapacitySize);
+			Assert::AreEqual(smallerCustomCapacitySize, anotherVector.Capacity());
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				anotherVector.PushBack(ConvertValue<T>(i));
+			}
+
+			Assert::AreEqual(smallerCustomCapacitySize * 2, anotherVector.Capacity());
 		}
 
 		template <typename T>
@@ -95,6 +131,49 @@ namespace UnitTestVector
 			}
 		}
 
+		template <typename T>
+		void TestCopySemantics_Impl()
+		{
+			Vector<T> vector;
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				vector.PushBack(ConvertValue<T>(i));
+			}
+
+			Vector<T> vectorConstruct(vector);
+			Vector<T> vectorAssign;
+			vectorAssign = vectorConstruct;
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				Assert::AreEqual(ConvertValue<T>(i), vectorConstruct.At(i - startValue));
+				Assert::AreEqual(ConvertValue<T>(i), vectorAssign.At(i - startValue));
+			}
+		}
+
+		template <typename T>
+		void TestMoveSemantics_Impl()
+		{
+			Vector<T> vector;
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				vector.PushBack(ConvertValue<T>(i));
+			}
+
+			Vector<T> vectorConstruct(std::move(vector));
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				Assert::AreEqual(ConvertValue<T>(i), vectorConstruct.At(i - startValue));
+			}
+			
+			Vector<T> vectorAssign;
+			vectorAssign = std::move(vectorConstruct);
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				Assert::AreEqual(ConvertValue<T>(i), vectorAssign.At(i - startValue));
+			}
+		}
+
 	public:
 
 		TEST_METHOD_INITIALIZE(Initialize)
@@ -128,6 +207,15 @@ namespace UnitTestVector
 			TestReserveAndCapacity_Impl<DummyStruct>();
 		}
 
+		TEST_METHOD(TestCustomCapacityFn)
+		{
+			TestCustomCapacityFn_Impl<char>();
+			TestCustomCapacityFn_Impl<bool>();
+			TestCustomCapacityFn_Impl<int>();
+			TestCustomCapacityFn_Impl<float>();
+			TestCustomCapacityFn_Impl<DummyStruct>();
+		}
+
 		TEST_METHOD(TestBack)
 		{
 			TestBack_Impl<char>();
@@ -155,38 +243,22 @@ namespace UnitTestVector
 			TestRandomAccess_Impl<DummyStruct>();
 		}
 
-		TEST_METHOD(TestIterators)
+		TEST_METHOD(TestCopySemantics)
 		{
-			Vector<int> vector;
+			TestCopySemantics_Impl<char>();
+			TestCopySemantics_Impl<bool>();
+			TestCopySemantics_Impl<int>();
+			TestCopySemantics_Impl<float>();
+			TestCopySemantics_Impl<DummyStruct>();
+		}
 
-			vector.PushBack(1);
-			vector.PushBack(2);
-			vector.PushBack(3);
-			vector.PushBack(4);
-
-			for (int& data : vector)
-			{
-				data++;
-			}
-
-			Vector<int>::Iterator it = vector.begin(), itEnd = vector.end();
-
-			it++; ++itEnd;
-			itEnd = it;
-			it == itEnd;
-
-			vector.Find(2);
-			vector.Find(10);
-
-			vector.Remove(1);
-			vector.PushBack(102);
-			vector.Remove(3);
-			vector.PushBack(2);
-			vector.Remove(4);
-			vector.Remove(2);
-			vector.Remove(10);
-			vector.PushBack(2);
-
+		TEST_METHOD(TestMoveSemantics)
+		{
+			TestMoveSemantics_Impl<char>();
+			TestMoveSemantics_Impl<bool>();
+			TestMoveSemantics_Impl<int>();
+			TestMoveSemantics_Impl<float>();
+			TestMoveSemantics_Impl<DummyStruct>();
 		}
 
 	private:

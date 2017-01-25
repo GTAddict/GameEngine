@@ -51,6 +51,7 @@ inline Vector<T>& Vector<T>::operator=(const Vector& rhs)
 	{
 		Clear();
 		Reserve(rhs.Capacity());
+
 		for (auto& value : rhs)
 		{
 			PushBack(value);
@@ -66,6 +67,7 @@ inline Vector<T>& Vector<T>::operator=(Vector&& rhs)
 	if (this != &rhs)
 	{
 		Clear();
+		free(mpBegin);
 
 		mpBegin = rhs.mpBegin;
 		mpEnd = rhs.mpEnd;
@@ -311,17 +313,17 @@ inline typename Vector<T>::Iterator Vector<T>::begin() const
 template<typename T>
 inline typename Vector<T>::Iterator Vector<T>::end() const
 {
-	return Iterator(mpEnd - 1, this);
+	return Iterator(mpEnd, this);
 }
 
 template<typename T>
-inline const T & Vector<T>::At(std::uint32_t index) const
+inline const T& Vector<T>::At(std::uint32_t index) const
 {
 	return operator[](index);
 }
 
 template<typename T>
-inline T & Vector<T>::At(std::uint32_t index)
+inline T& Vector<T>::At(std::uint32_t index)
 {
 	return operator[](index);
 }
