@@ -2,6 +2,23 @@
 
 #include "DummyStruct.h"
 
+#define TEST_METHOD_EXTENSIVE(methodName)	\
+TEST_METHOD(methodName)						\
+{											\
+	methodName<char>();						\
+	methodName<bool>();						\
+	methodName<int>();						\
+	methodName<float>();					\
+	methodName<DummyStruct>();				\
+											\
+	methodName<char*>();					\
+	methodName<bool*>();					\
+	methodName<int*>();						\
+	methodName<float*>();					\
+	methodName<DummyStruct*>();				\
+}
+
+
 static DummyStruct* sdStruct;
 static const std::string name = "Dummy";
 

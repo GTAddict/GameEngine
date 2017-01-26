@@ -19,10 +19,24 @@ namespace UnitTestVector
 {
 	TEST_CLASS(UnitTestVector)
 	{
+	public:
+
+		TEST_METHOD_EXTENSIVE(TestReserveAndCapacity)
+		TEST_METHOD_EXTENSIVE(TestCustomCapacityFn)
+		TEST_METHOD_EXTENSIVE(TestBack)
+		TEST_METHOD_EXTENSIVE(TestFront)
+		TEST_METHOD_EXTENSIVE(TestRandomAccess)
+		TEST_METHOD_EXTENSIVE(TestRemove)
+		TEST_METHOD_EXTENSIVE(TestCopySemantics)
+		TEST_METHOD_EXTENSIVE(TestMoveSemantics)
+		TEST_METHOD_EXTENSIVE(TestShrinkToFit)
+		TEST_METHOD_EXTENSIVE(TestIterators)
+		TEST_METHOD_EXTENSIVE(TestExceptions)
+
 	private:
 
 		template <typename T>
-		void TestReserveAndCapacity_Impl()
+		void TestReserveAndCapacity()
 		{
 			Vector<T> vector;
 			Assert::AreEqual(DEFAULT_CONTAINER_CAPACITY, vector.Capacity());
@@ -62,7 +76,7 @@ namespace UnitTestVector
 		}
 
 		template <typename T>
-		void TestCustomCapacityFn_Impl()
+		void TestCustomCapacityFn()
 		{
 			Vector<T> vector(BIND_TO_GETCAPACITYFN_T(&UnitTestVector::GetNewCapacityCustom));
 			Assert::AreEqual(customCapacityDefaultSize, vector.Capacity());
@@ -79,7 +93,7 @@ namespace UnitTestVector
 		}
 
 		template <typename T>
-		void TestBack_Impl()
+		void TestBack()
 		{
 			Vector<T> vector;
 
@@ -100,7 +114,7 @@ namespace UnitTestVector
 		}
 
 		template <typename T>
-		void TestFront_Impl()
+		void TestFront()
 		{
 			Vector<T> vector;
 
@@ -112,7 +126,7 @@ namespace UnitTestVector
 		}
 
 		template <typename T>
-		void TestRandomAccess_Impl()
+		void TestRandomAccess()
 		{
 			Vector<T> vector;
 
@@ -129,7 +143,38 @@ namespace UnitTestVector
 		}
 
 		template <typename T>
-		void TestCopySemantics_Impl()
+		void TestRemove()
+		{
+			Vector<T> vector;
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				vector.PushBack(ConvertValue<T>(i));
+			}
+
+			Assert::IsTrue(vector.Size() == expectedNumElements);
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				vector.Remove(ConvertValue<T>(i));
+			}
+
+			Assert::IsTrue(vector.IsEmpty());
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				vector.PushBack(ConvertValue<T>(i));
+			}
+
+			Assert::IsTrue(vector.Size() == expectedNumElements);
+			 
+			vector.Remove(vector.begin(), vector.end() - 1);
+			
+			Assert::IsTrue(vector.IsEmpty());
+		}
+
+		template <typename T>
+		void TestCopySemantics()
 		{
 			Vector<T> vector;
 			for (int i = startValue; i <= endValue; ++i)
@@ -149,7 +194,7 @@ namespace UnitTestVector
 		}
 
 		template <typename T>
-		void TestMoveSemantics_Impl()
+		void TestMoveSemantics()
 		{
 			Vector<T> vector;
 			for (int i = startValue; i <= endValue; ++i)
@@ -172,7 +217,7 @@ namespace UnitTestVector
 		}
 
 		template <typename T>
-		void TestShrinkToFit_Impl()
+		void TestShrinkToFit()
 		{
 			Vector<T> vector;
 			for (int i = startValue; i <= endValue; ++i)
@@ -197,7 +242,7 @@ namespace UnitTestVector
 		}
 
 		template <typename T>
-		void TestIterators_Impl()
+		void TestIterators()
 		{
 			Vector<T> vector;
 			vector.PushBack(ConvertValue<T>(startValue));
@@ -247,6 +292,43 @@ namespace UnitTestVector
 			Assert::IsTrue(anotherEmptyVector.end() == anotherEmptyVector.end());
 		}
 
+		template <typename T>
+		void TestExceptions()
+		{
+			Vector<T> vector;
+			Vector<T>::Iterator it;
+			
+			auto deferenceFunction = [&it] { *it; };
+			it = vector.begin();
+			auto deferenceFunctionTwo = [&it] { *it; };
+			Assert::ExpectException<std::out_of_range>(deferenceFunction);
+			Assert::ExpectException<std::out_of_range>(deferenceFunctionTwo);
+
+
+			auto popBackFunction	= [&vector] { vector.PopBack(); };
+			auto frontFunction		= [&vector] { vector.Front(); };
+			auto backFunction		= [&vector] { vector.Back(); };
+			auto operatorFunction	= [&vector] { vector[vector.Size()]; };
+			Assert::ExpectException<std::out_of_range>(popBackFunction);
+			Assert::ExpectException<std::out_of_range>(frontFunction);
+			Assert::ExpectException<std::out_of_range>(backFunction);
+			Assert::ExpectException<std::out_of_range>(operatorFunction);
+
+			vector.Find(ConvertValue<T>(startValue));				//< Should not throw any exception
+			vector.Remove(ConvertValue<T>(startValue));				//< Should not throw any exception
+
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				vector.PushBack(ConvertValue<T>(i));
+			}
+			auto removeItFunction		= [&vector] { vector.Remove(vector.end(), vector.begin()); };
+			auto removeItFunctionTwo	= [&vector] { vector.Remove(vector.end() + 1, vector.begin()); };
+			auto removeItFunctionThree	= [&vector] { vector.Remove(vector.end(), vector.begin() - 1); };
+			Assert::ExpectException<std::out_of_range>(removeItFunction);
+			Assert::ExpectException<std::out_of_range>(removeItFunctionTwo);
+			Assert::ExpectException<std::out_of_range>(removeItFunctionThree);
+		}
+
 	public:
 
 		TEST_METHOD_INITIALIZE(Initialize)
@@ -269,142 +351,6 @@ namespace UnitTestVector
 				Assert::Fail(L"Your code is leaking memory!");
 			}
 #endif
-		}
-
-		TEST_METHOD(TestReserveAndCapacity)
-		{
-			TestReserveAndCapacity_Impl<char>();
-			TestReserveAndCapacity_Impl<bool>();
-			TestReserveAndCapacity_Impl<int>();
-			TestReserveAndCapacity_Impl<float>();
-			TestReserveAndCapacity_Impl<DummyStruct>();
-
-			TestReserveAndCapacity_Impl<char*>();
-			TestReserveAndCapacity_Impl<bool*>();
-			TestReserveAndCapacity_Impl<int*>();
-			TestReserveAndCapacity_Impl<float*>();
-			TestReserveAndCapacity_Impl<DummyStruct*>();
-
-		}
-
-		TEST_METHOD(TestCustomCapacityFn)
-		{
-			TestCustomCapacityFn_Impl<char>();
-			TestCustomCapacityFn_Impl<bool>();
-			TestCustomCapacityFn_Impl<int>();
-			TestCustomCapacityFn_Impl<float>();
-			TestCustomCapacityFn_Impl<DummyStruct>();
-
-			TestCustomCapacityFn_Impl<char*>();
-			TestCustomCapacityFn_Impl<bool*>();
-			TestCustomCapacityFn_Impl<int*>();
-			TestCustomCapacityFn_Impl<float*>();
-			TestCustomCapacityFn_Impl<DummyStruct*>();
-		}
-
-		TEST_METHOD(TestBack)
-		{
-			TestBack_Impl<char>();
-			TestBack_Impl<bool>();
-			TestBack_Impl<int>();
-			TestBack_Impl<float>();
-			TestBack_Impl<DummyStruct>();
-
-			TestBack_Impl<char*>();
-			TestBack_Impl<bool*>();
-			TestBack_Impl<int*>();
-			TestBack_Impl<float*>();
-			TestBack_Impl<DummyStruct*>();
-		}
-
-		TEST_METHOD(TestFront)
-		{
-			TestFront_Impl<char>();
-			TestFront_Impl<bool>();
-			TestFront_Impl<int>();
-			TestFront_Impl<float>();
-			TestFront_Impl<DummyStruct>();
-
-			TestFront_Impl<char*>();
-			TestFront_Impl<bool*>();
-			TestFront_Impl<int*>();
-			TestFront_Impl<float*>();
-			TestFront_Impl<DummyStruct*>();
-		}
-
-		TEST_METHOD(TestRandomAccess)
-		{
-			TestRandomAccess_Impl<char>();
-			TestRandomAccess_Impl<bool>();
-			TestRandomAccess_Impl<int>();
-			TestRandomAccess_Impl<float>();
-			TestRandomAccess_Impl<DummyStruct>();
-
-			TestRandomAccess_Impl<char*>();
-			TestRandomAccess_Impl<bool*>();
-			TestRandomAccess_Impl<int*>();
-			TestRandomAccess_Impl<float*>();
-			TestRandomAccess_Impl<DummyStruct*>();
-		}
-
-		TEST_METHOD(TestCopySemantics)
-		{
-			TestCopySemantics_Impl<char>();
-			TestCopySemantics_Impl<bool>();
-			TestCopySemantics_Impl<int>();
-			TestCopySemantics_Impl<float>();
-			TestCopySemantics_Impl<DummyStruct>();
-
-			TestCopySemantics_Impl<char*>();
-			TestCopySemantics_Impl<bool*>();
-			TestCopySemantics_Impl<int*>();
-			TestCopySemantics_Impl<float*>();
-			TestCopySemantics_Impl<DummyStruct*>();
-		}
-
-		TEST_METHOD(TestMoveSemantics)
-		{
-			TestMoveSemantics_Impl<char>();
-			TestMoveSemantics_Impl<bool>();
-			TestMoveSemantics_Impl<int>();
-			TestMoveSemantics_Impl<float>();
-			TestMoveSemantics_Impl<DummyStruct>();
-
-			TestMoveSemantics_Impl<char*>();
-			TestMoveSemantics_Impl<bool*>();
-			TestMoveSemantics_Impl<int*>();
-			TestMoveSemantics_Impl<float*>();
-			TestMoveSemantics_Impl<DummyStruct*>();
-		}
-
-		TEST_METHOD(TestShrinkToFit)
-		{
-			TestShrinkToFit_Impl<char>();
-			TestShrinkToFit_Impl<bool>();
-			TestShrinkToFit_Impl<int>();
-			TestShrinkToFit_Impl<float>();
-			TestShrinkToFit_Impl<DummyStruct>();
-
-			TestShrinkToFit_Impl<char*>();
-			TestShrinkToFit_Impl<bool*>();
-			TestShrinkToFit_Impl<int*>();
-			TestShrinkToFit_Impl<float*>();
-			TestShrinkToFit_Impl<DummyStruct*>();
-		}
-
-		TEST_METHOD(TestIterators)
-		{
-			TestIterators_Impl<char>();
-			TestIterators_Impl<bool>();
-			TestIterators_Impl<int>();
-			TestIterators_Impl<float>();
-			TestIterators_Impl<DummyStruct>();
-
-			TestIterators_Impl<char*>();
-			TestIterators_Impl<bool*>();
-			TestIterators_Impl<int*>();
-			TestIterators_Impl<float*>();
-			TestIterators_Impl<DummyStruct*>();
 		}
 
 	private:
