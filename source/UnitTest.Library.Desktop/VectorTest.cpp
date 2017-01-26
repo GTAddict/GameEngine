@@ -4,10 +4,6 @@
 
 namespace UnitTestVectorConstants
 {
-	const int startValue = 65;
-	const int endValue = 81;
-	const float divisor = 100.0f;
-	const unsigned int expectedNumElements = endValue - startValue + 1;
 	const std::uint32_t kTHIRTY = 30;
 	const std::uint32_t kZERO = 0;
 
@@ -16,6 +12,7 @@ namespace UnitTestVectorConstants
 }
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+using namespace UnitTestConstants;
 using namespace UnitTestVectorConstants;
 
 namespace UnitTestVector
@@ -89,10 +86,10 @@ namespace UnitTestVector
 			for (int i = startValue; i <= endValue; ++i)
 			{
 				vector.PushBack(ConvertValue<T>(i));
-				Assert::AreEqual(ConvertValue<T>(i), vector.Back());
+				Assert::IsTrue(ConvertValue<T>(i) == vector.Back());
 			}
 
-			Assert::AreEqual(expectedNumElements, vector.Size());
+			Assert::IsTrue(expectedNumElements == vector.Size());
 
 			for (int i = startValue; i <= endValue; ++i)
 			{
@@ -110,7 +107,7 @@ namespace UnitTestVector
 			for (int i = startValue; i <= endValue; ++i)
 			{
 				vector.PushBack(ConvertValue<T>(i));
-				Assert::AreEqual(ConvertValue<T>(startValue), vector.Front());
+				Assert::IsTrue(ConvertValue<T>(startValue) == vector.Front());
 			}
 		}
 
@@ -126,8 +123,8 @@ namespace UnitTestVector
 
 			for (int i = startValue; i <= endValue; ++i)
 			{
-				Assert::AreEqual(ConvertValue<T>(i), vector[i - startValue]);
-				Assert::AreEqual(ConvertValue<T>(i), vector.At(i - startValue));
+				Assert::IsTrue(ConvertValue<T>(i) == vector[i - startValue]);
+				Assert::IsTrue(ConvertValue<T>(i) == vector.At(i - startValue));
 			}
 		}
 
@@ -146,8 +143,8 @@ namespace UnitTestVector
 
 			for (int i = startValue; i <= endValue; ++i)
 			{
-				Assert::AreEqual(ConvertValue<T>(i), vectorConstruct.At(i - startValue));
-				Assert::AreEqual(ConvertValue<T>(i), vectorAssign.At(i - startValue));
+				Assert::IsTrue(ConvertValue<T>(i) == vectorConstruct.At(i - startValue));
+				Assert::IsTrue(ConvertValue<T>(i) == vectorAssign.At(i - startValue));
 			}
 		}
 
@@ -163,15 +160,66 @@ namespace UnitTestVector
 			Vector<T> vectorConstruct(std::move(vector));
 			for (int i = startValue; i <= endValue; ++i)
 			{
-				Assert::AreEqual(ConvertValue<T>(i), vectorConstruct.At(i - startValue));
+				Assert::IsTrue(ConvertValue<T>(i) == vectorConstruct.At(i - startValue));
 			}
 			
 			Vector<T> vectorAssign;
 			vectorAssign = std::move(vectorConstruct);
 			for (int i = startValue; i <= endValue; ++i)
 			{
-				Assert::AreEqual(ConvertValue<T>(i), vectorAssign.At(i - startValue));
+				Assert::IsTrue(ConvertValue<T>(i) == vectorAssign.At(i - startValue));
 			}
+		}
+
+		template <typename T>
+		void TestIterators_Impl()
+		{
+			Vector<T> vector;
+			vector.PushBack(ConvertValue<T>(startValue));
+
+			Vector<T>::Iterator it, itEnd;
+			it		= vector.begin();
+			itEnd	= vector.end();
+
+			Assert::IsTrue(it != itEnd);
+			Assert::IsTrue(it < itEnd);
+			Assert::IsTrue(it <= itEnd);
+			Assert::IsTrue(itEnd > it);
+			Assert::IsTrue(itEnd >= it);
+
+			Assert::IsTrue(it + 1 == itEnd);
+			Assert::IsTrue(itEnd - 1 == it);
+			Assert::IsTrue(itEnd - it == 1);
+
+			Assert::IsTrue(++it == itEnd);
+			Assert::IsTrue(it++ == itEnd);
+
+			Assert::IsTrue(it == ++itEnd);
+			Assert::IsTrue(it <= itEnd);
+			Assert::IsTrue(it >= itEnd);
+
+			it = vector.begin();
+			itEnd = vector.end();
+
+			Vector<T>::Iterator copyIt = it;
+			Assert::IsTrue(copyIt == vector.begin());
+
+			copyIt = itEnd;
+			Assert::IsTrue(copyIt == vector.end());
+
+			Vector<T>::Iterator moveIt = std::move(it);
+			Assert::IsTrue(moveIt == vector.begin());
+
+			moveIt = std::move(itEnd);
+			Assert::IsTrue(moveIt == vector.end());
+
+			Vector<T> anEmptyVector, anotherEmptyVector;
+			
+			Assert::IsTrue(anEmptyVector.begin() != anotherEmptyVector.begin());
+			Assert::IsTrue(anEmptyVector.end() != anotherEmptyVector.end());
+
+			Assert::IsTrue(anEmptyVector.begin() == anEmptyVector.begin());
+			Assert::IsTrue(anotherEmptyVector.end() == anotherEmptyVector.end());
 		}
 
 	public:
@@ -205,6 +253,13 @@ namespace UnitTestVector
 			TestReserveAndCapacity_Impl<int>();
 			TestReserveAndCapacity_Impl<float>();
 			TestReserveAndCapacity_Impl<DummyStruct>();
+
+			TestReserveAndCapacity_Impl<char*>();
+			TestReserveAndCapacity_Impl<bool*>();
+			TestReserveAndCapacity_Impl<int*>();
+			TestReserveAndCapacity_Impl<float*>();
+			TestReserveAndCapacity_Impl<DummyStruct*>();
+
 		}
 
 		TEST_METHOD(TestCustomCapacityFn)
@@ -214,6 +269,12 @@ namespace UnitTestVector
 			TestCustomCapacityFn_Impl<int>();
 			TestCustomCapacityFn_Impl<float>();
 			TestCustomCapacityFn_Impl<DummyStruct>();
+
+			TestCustomCapacityFn_Impl<char*>();
+			TestCustomCapacityFn_Impl<bool*>();
+			TestCustomCapacityFn_Impl<int*>();
+			TestCustomCapacityFn_Impl<float*>();
+			TestCustomCapacityFn_Impl<DummyStruct*>();
 		}
 
 		TEST_METHOD(TestBack)
@@ -223,6 +284,12 @@ namespace UnitTestVector
 			TestBack_Impl<int>();
 			TestBack_Impl<float>();
 			TestBack_Impl<DummyStruct>();
+
+			TestBack_Impl<char*>();
+			TestBack_Impl<bool*>();
+			TestBack_Impl<int*>();
+			TestBack_Impl<float*>();
+			TestBack_Impl<DummyStruct*>();
 		}
 
 		TEST_METHOD(TestFront)
@@ -232,6 +299,12 @@ namespace UnitTestVector
 			TestFront_Impl<int>();
 			TestFront_Impl<float>();
 			TestFront_Impl<DummyStruct>();
+
+			TestFront_Impl<char*>();
+			TestFront_Impl<bool*>();
+			TestFront_Impl<int*>();
+			TestFront_Impl<float*>();
+			TestFront_Impl<DummyStruct*>();
 		}
 
 		TEST_METHOD(TestRandomAccess)
@@ -241,6 +314,12 @@ namespace UnitTestVector
 			TestRandomAccess_Impl<int>();
 			TestRandomAccess_Impl<float>();
 			TestRandomAccess_Impl<DummyStruct>();
+
+			TestRandomAccess_Impl<char*>();
+			TestRandomAccess_Impl<bool*>();
+			TestRandomAccess_Impl<int*>();
+			TestRandomAccess_Impl<float*>();
+			TestRandomAccess_Impl<DummyStruct*>();
 		}
 
 		TEST_METHOD(TestCopySemantics)
@@ -250,6 +329,12 @@ namespace UnitTestVector
 			TestCopySemantics_Impl<int>();
 			TestCopySemantics_Impl<float>();
 			TestCopySemantics_Impl<DummyStruct>();
+
+			TestCopySemantics_Impl<char*>();
+			TestCopySemantics_Impl<bool*>();
+			TestCopySemantics_Impl<int*>();
+			TestCopySemantics_Impl<float*>();
+			TestCopySemantics_Impl<DummyStruct*>();
 		}
 
 		TEST_METHOD(TestMoveSemantics)
@@ -259,6 +344,27 @@ namespace UnitTestVector
 			TestMoveSemantics_Impl<int>();
 			TestMoveSemantics_Impl<float>();
 			TestMoveSemantics_Impl<DummyStruct>();
+
+			TestMoveSemantics_Impl<char*>();
+			TestMoveSemantics_Impl<bool*>();
+			TestMoveSemantics_Impl<int*>();
+			TestMoveSemantics_Impl<float*>();
+			TestMoveSemantics_Impl<DummyStruct*>();
+		}
+
+		TEST_METHOD(TestIterators)
+		{
+			TestIterators_Impl<char>();
+			TestIterators_Impl<bool>();
+			TestIterators_Impl<int>();
+			TestIterators_Impl<float>();
+			TestIterators_Impl<DummyStruct>();
+
+			TestIterators_Impl<char*>();
+			TestIterators_Impl<bool*>();
+			TestIterators_Impl<int*>();
+			TestIterators_Impl<float*>();
+			TestIterators_Impl<DummyStruct*>();
 		}
 
 	private:

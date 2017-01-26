@@ -2,14 +2,6 @@
 #include "CppUnitTest.h"
 #include "ConvertVals.h"
 
-namespace UnitTestSlistConstants
-{
-	const int startValue	= 65;
-	const int endValue		= 81;
-	const float divisor		= 100.0f;
-	const unsigned int expectedNumElements = endValue - startValue + 1;
-}
-
 namespace Microsoft
 {
 	namespace VisualStudio
@@ -39,7 +31,7 @@ namespace Microsoft
 }
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-using namespace UnitTestSlistConstants;
+using namespace UnitTestConstants;
 
 namespace UnitTestSList
 {
