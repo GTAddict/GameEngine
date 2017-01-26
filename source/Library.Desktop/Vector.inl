@@ -66,8 +66,7 @@ inline Vector<T>& Vector<T>::operator=(Vector&& rhs)
 {
 	if (this != &rhs)
 	{
-		Clear();
-		free(mpBegin);
+		this->~Vector();
 
 		mpBegin = rhs.mpBegin;
 		mpEnd = rhs.mpEnd;
@@ -185,19 +184,19 @@ inline bool Vector<T>::Iterator::operator>=(const Iterator& rhs) const
 }
 
 template<typename T>
-inline typename Vector<T>::Iterator Vector<T>::Iterator::operator+(std::uint32_t rhs)
+inline typename Vector<T>::Iterator Vector<T>::Iterator::operator+(std::uint32_t rhs) const
 {
 	return Iterator (mpCurrent + rhs, mpOwner);
 }
 
 template<typename T>
-inline typename Vector<T>::Iterator Vector<T>::Iterator::operator-(std::uint32_t rhs)
+inline typename Vector<T>::Iterator Vector<T>::Iterator::operator-(std::uint32_t rhs) const
 {
 	return Iterator(mpCurrent - rhs, mpOwner);
 }
 
 template<typename T>
-inline std::int32_t Vector<T>::Iterator::operator-(const Iterator & rhs)
+inline std::int32_t Vector<T>::Iterator::operator-(const Iterator & rhs) const
 {
 	return static_cast<std::int32_t>(mpCurrent - rhs.mpCurrent);
 }
@@ -380,12 +379,12 @@ inline void Vector<T>::Remove(const T& data)
 template<typename T>
 inline void Vector<T>::Remove(const Iterator& rangeBegin, const Iterator& rangeEnd)
 {
-	if (!(IsValid(rangeBegin) && IsValid(rangeEnd)))
+	if (!(IsValid(rangeBegin) && IsValid(rangeEnd)) || rangeBegin > rangeEnd)
 	{
-		throw std::out_of_range("Invalid iterator.");
+		throw std::out_of_range("Invalid iterator. Check that both iterators are within array bounds and that rangeBegin is less than rangeEnd.");
 	}
 
-	for (Iterator it = rangeBegin; it != rangeEnd; ++it)
+	for (Iterator it = rangeBegin; it <= rangeEnd; ++it)
 	{
 		(*it).~T();
 	}
@@ -422,7 +421,7 @@ inline bool Vector<T>::IsValid(const Iterator& it) const
 template<typename T>
 inline std::int32_t Vector<T>::GetNewCapacity(std::uint32_t currentSize, std::uint32_t currentCapacity)
 {
-	currentSize;	// Currently unused
+	currentSize;	// Currently unused in default implementation
 
 	if (currentCapacity == 0)
 	{

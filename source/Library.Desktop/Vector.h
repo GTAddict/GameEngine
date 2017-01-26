@@ -126,14 +126,14 @@ public:
 		*	\param rhs		The offset.
 		*	\return			A new iterator pointing to the data at the specified offset.
 		*/
-		Iterator			operator+(const std::uint32_t rhs);
+		Iterator			operator+(const std::uint32_t rhs) const;
 
 		/**
 		*	\brief			Subtraction operator. Subtracts the specified offset from the Iterator.
 		*	\param rhs		The offset.
 		*	\return			A new iterator pointing to the data at the specified offset.
 		*/
-		Iterator			operator-(const std::uint32_t rhs);
+		Iterator			operator-(const std::uint32_t rhs) const;
 
 
 		/**
@@ -141,7 +141,7 @@ public:
 		*	\param rhs		The Iterator to subtract.
 		*	\return			The offset between the elements pointed at by the two Iterators.
 		*/
-		std::int32_t		operator-(const Iterator& rhs);
+		std::int32_t		operator-(const Iterator& rhs) const;
 
 		/**
 		*	\brief			Pre-increment operator. Promotes the iterator to the next element
@@ -347,7 +347,8 @@ public:
 	*						rangeEnd (both inclusive).
 	*	\param rangeBegin	The Iterator from where to start removing elements.
 	*	\param rangeEnd		The Iterator from where to end removing elements.
-	*	\throw std::out_of_range if either Iterator provided is out of bounds.
+	*	\throw std::out_of_range if either Iterator provided is out of bounds, or if
+	*	\					rangeBegin is greater than rangeEnd.
 	*/
 	void					Remove(const Iterator& rangeBegin, const Iterator& rangeEnd);
 
