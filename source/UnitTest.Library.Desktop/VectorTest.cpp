@@ -25,7 +25,7 @@ namespace UnitTestVector
 		void TestReserveAndCapacity_Impl()
 		{
 			Vector<T> vector;
-			Assert::AreEqual(DEFAULT_CONTAINER_SIZE, vector.Capacity());
+			Assert::AreEqual(DEFAULT_CONTAINER_CAPACITY, vector.Capacity());
 
 			for (int i = startValue; i <= endValue; ++i)
 			{
@@ -169,6 +169,31 @@ namespace UnitTestVector
 			{
 				Assert::IsTrue(ConvertValue<T>(i) == vectorAssign.At(i - startValue));
 			}
+		}
+
+		template <typename T>
+		void TestShrinkToFit_Impl()
+		{
+			Vector<T> vector;
+			for (int i = startValue; i <= endValue; ++i)
+			{
+				vector.PushBack(ConvertValue<T>(i));
+			}
+
+			Assert::IsTrue(vector.Size() == expectedNumElements);
+
+			vector.ShrinkToFit();
+			Assert::IsTrue(vector.Size() == expectedNumElements);
+			Assert::IsTrue(vector.Capacity() == expectedNumElements);
+
+			vector.Clear();
+			vector.ShrinkToFit();
+			Assert::IsTrue(vector.Size() == 0);
+			Assert::IsTrue(vector.Capacity() == 0);
+
+			vector.PushBack(ConvertValue<T>(startValue));
+			Assert::IsTrue(vector.Size() == 1);
+			Assert::IsTrue(vector.Capacity() == DEFAULT_CONTAINER_CAPACITY);
 		}
 
 		template <typename T>
@@ -350,6 +375,21 @@ namespace UnitTestVector
 			TestMoveSemantics_Impl<int*>();
 			TestMoveSemantics_Impl<float*>();
 			TestMoveSemantics_Impl<DummyStruct*>();
+		}
+
+		TEST_METHOD(TestShrinkToFit)
+		{
+			TestShrinkToFit_Impl<char>();
+			TestShrinkToFit_Impl<bool>();
+			TestShrinkToFit_Impl<int>();
+			TestShrinkToFit_Impl<float>();
+			TestShrinkToFit_Impl<DummyStruct>();
+
+			TestShrinkToFit_Impl<char*>();
+			TestShrinkToFit_Impl<bool*>();
+			TestShrinkToFit_Impl<int*>();
+			TestShrinkToFit_Impl<float*>();
+			TestShrinkToFit_Impl<DummyStruct*>();
 		}
 
 		TEST_METHOD(TestIterators)

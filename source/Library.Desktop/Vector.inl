@@ -1,11 +1,11 @@
 #include "Vector.h"
 #pragma once
 
-const std::uint32_t DEFAULT_CONTAINER_SIZE = 5;
+const std::uint32_t DEFAULT_CONTAINER_CAPACITY = 5;
 
 template <typename T>
 inline Vector<T>::Vector()
-	: Vector(DEFAULT_CONTAINER_SIZE)
+	: Vector(DEFAULT_CONTAINER_CAPACITY)
 {
 }
 
@@ -408,6 +408,12 @@ inline void Vector<T>::Clear()
 }
 
 template<typename T>
+inline void Vector<T>::ShrinkToFit()
+{
+	Reserve_Internal(Size());
+}
+
+template<typename T>
 inline bool Vector<T>::IsValid(const Iterator& it) const
 {
 	return Size() > 0 && it >= begin() && it < end();
@@ -420,7 +426,7 @@ inline std::int32_t Vector<T>::GetNewCapacity(std::uint32_t currentSize, std::ui
 
 	if (currentCapacity == 0)
 	{
-		return DEFAULT_CONTAINER_SIZE;
+		return DEFAULT_CONTAINER_CAPACITY;
 	}
 	else
 	{
@@ -428,15 +434,21 @@ inline std::int32_t Vector<T>::GetNewCapacity(std::uint32_t currentSize, std::ui
 	}
 }
 
+template<typename T>
+inline void Vector<T>::Reserve_Internal(std::uint32_t capacity)
+{
+	std::uint32_t size = Size();
+	mpBegin = static_cast<T*> (realloc(mpBegin, sizeof(T) * capacity));
+	mpEnd = mpBegin + size;
+	mpCapacity = mpBegin + capacity;
+}
+
 template <typename T>
 inline void Vector<T>::Reserve(std::uint32_t capacity)
 {
 	if (capacity <= 0 || capacity <= Capacity())		return;
 
-	std::uint32_t size = Size();
-	mpBegin = static_cast<T*> (realloc(mpBegin, sizeof(T) * capacity));
-	mpEnd = mpBegin + size;
-	mpCapacity = mpBegin + capacity;
+	Reserve_Internal(capacity);
 }
 
 template<typename T>

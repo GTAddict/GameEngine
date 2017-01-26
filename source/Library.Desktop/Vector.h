@@ -352,9 +352,14 @@ public:
 	void					Remove(const Iterator& rangeBegin, const Iterator& rangeEnd);
 
 	/**
-	*	\brief				Removes all elements from the list, and also calls their destructors.
-	*/
+	 *	\brief				Removes all elements from the list, and also calls their destructors.
+	 */
 	void					Clear();
+
+	/**
+	 *	\brief				Reduces the capacity of the container to its size.
+	 */
+	void					ShrinkToFit();
 
 	/**
 	*	\brief				Checks whether the provided Iterator is within the valid range of data.
@@ -373,6 +378,14 @@ private:
 	*	\return				The new capacity to reserve.
 	*/
 	std::int32_t			GetNewCapacity(std::uint32_t size, std::uint32_t oldCapacity);
+
+	/**
+	 *	\brief				Reserves any capacity requested. The exposed Reserve checks to see whether
+	 *						the requested capacity is greater than the current capacity. This does not.
+	 *						This is useful to functions of this class such as Resize or ShrinkToFit.
+	 *	\param capacity		The new capacity to reserve.
+	 */
+	void					Reserve_Internal(std::uint32_t capacity);
 
 	/**
 	*	\brief				Moves the elements to a new location after operations such as Remove.
