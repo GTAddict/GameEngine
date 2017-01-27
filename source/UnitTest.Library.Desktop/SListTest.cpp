@@ -2,6 +2,10 @@
 #include "CppUnitTest.h"
 #include "ConvertVals.h"
 
+using namespace GameEngine::Library;
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+using namespace UnitTestConstants;
+
 namespace Microsoft
 {
 	namespace VisualStudio
@@ -29,9 +33,6 @@ namespace Microsoft
 		}
 	}
 }
-
-using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-using namespace UnitTestConstants;
 
 namespace UnitTestSList
 {

@@ -11,6 +11,7 @@ namespace UnitTestVectorConstants
 	const std::uint32_t smallerCustomCapacitySize = 10;
 }
 
+using namespace GameEngine::Library;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 using namespace UnitTestConstants;
 using namespace UnitTestVectorConstants;
