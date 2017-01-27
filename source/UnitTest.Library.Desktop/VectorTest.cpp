@@ -79,10 +79,10 @@ namespace UnitTestVector
 		template <typename T>
 		void TestCustomCapacityFn()
 		{
-			Vector<T> vector(BIND_TO_GETCAPACITYFN_T(&UnitTestVector::GetNewCapacityCustom));
+			Vector<T> vector(BIND_TO_GETCAPACITYFN(&UnitTestVector::GetNewCapacityCustom));
 			Assert::AreEqual(customCapacityDefaultSize, vector.Capacity());
 
-			Vector<T> anotherVector(BIND_TO_GETCAPACITYFN_T(&UnitTestVector::GetNewCapacityCustom), smallerCustomCapacitySize);
+			Vector<T> anotherVector(BIND_TO_GETCAPACITYFN(&UnitTestVector::GetNewCapacityCustom), smallerCustomCapacitySize);
 			Assert::AreEqual(smallerCustomCapacitySize, anotherVector.Capacity());
 
 			for (int i = startValue; i <= endValue; ++i)

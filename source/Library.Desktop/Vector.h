@@ -2,7 +2,7 @@
 #include <cstdint>
 #include <functional>
 
-#define BIND_TO_GETCAPACITYFN_T(fn)		std::bind(fn, this, std::placeholders::_1, std::placeholders::_2)
+#define BIND_TO_GETCAPACITYFN(fn)		std::bind(fn, this, std::placeholders::_1, std::placeholders::_2)
 
 namespace GameEngine
 {

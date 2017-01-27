@@ -11,7 +11,7 @@ inline Vector<T>::Vector()
 
 template <typename T>
 inline Vector<T>::Vector(std::uint32_t capacity)
-	: Vector(BIND_TO_GETCAPACITYFN_T(&Vector<T>::GetNewCapacity), capacity)
+	: Vector(BIND_TO_GETCAPACITYFN(&Vector<T>::GetNewCapacity), capacity)
 {
 }
 
