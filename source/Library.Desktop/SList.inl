@@ -134,12 +134,12 @@ inline typename SList<T>::Iterator SList<T>::PushBack(const T& data)
 template<typename T>
 inline typename SList<T>::Iterator SList<T>::InsertAfter(const Iterator& it, const T& data)
 {
-	if (it.mpCurrent == nullptr)
+	if (it.mpOwner != this)
 	{
-		throw std::out_of_range("Cannot insert after end of list.");
+		throw std::invalid_argument("The iterator does not belong to this container!");
 	}
 
-	if (it.mpCurrent->mpNext == mpEnd)
+	if (it.mpCurrent == nullptr || it.mpCurrent->mpNext == mpEnd)
 	{
 		return PushBack(data);
 	}
@@ -223,14 +223,7 @@ inline typename SList<T>::Iterator SList<T>::begin() const
 template<typename T>
 inline typename SList<T>::Iterator SList<T>::end() const
 {
-	if (mpBegin == mpEnd)
-	{
-		return Iterator(mpBegin, this);
-	}
-	else
-	{
-		return Iterator(mpEnd->mpNext, this);
-	}
+	return Iterator(nullptr, this);
 }
 
 template<typename T>
@@ -246,7 +239,7 @@ inline typename SList<T>::Iterator SList<T>::Find(const T& data) const
 		}
 	}
 
-	return it;
+	return Iterator(nullptr, this);
 }
 
 template<typename T>
@@ -271,6 +264,11 @@ inline typename void SList<T>::Remove(const T& data)
 			prevIt.mpCurrent->mpNext = it.mpCurrent->mpNext;
 			delete it.mpCurrent;
 			--mSize;
+
+			if (it.mpCurrent == mpEnd)
+			{
+				mpEnd = prevIt.mpCurrent;
+			}
 		}
 	}
 }
@@ -297,7 +295,7 @@ inline SList<T>::Iterator::~Iterator()
 template<typename T>
 inline bool SList<T>::Iterator::operator==(const Iterator& rhs) const
 {
-	return mpOwner && rhs.mpOwner && ((mpOwner == rhs.mpOwner) && (mpCurrent == rhs.mpCurrent));
+	return (mpOwner == rhs.mpOwner) && (mpCurrent == rhs.mpCurrent);
 }
 
 template<typename T>
@@ -311,7 +309,7 @@ inline typename SList<T>::Iterator& SList<T>::Iterator::operator++()
 {
 	if (mpCurrent == nullptr)
 	{
-		throw std::out_of_range("Cannot increment past end of list.");
+		throw std::out_of_range("Cannot increment iterator pointing to nullptr.");
 	}
 
 	mpCurrent = mpCurrent->mpNext;

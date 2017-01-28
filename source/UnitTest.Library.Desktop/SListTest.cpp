@@ -453,6 +453,8 @@ namespace UnitTestSList
 
 			Assert::IsTrue(list.IsEmpty());
 
+			list.Remove(ConvertValue<T>(startValue));
+
 			SList<T*> ptrList;
 			T array[expectedNumElements];
 
@@ -467,6 +469,8 @@ namespace UnitTestSList
 			}
 
 			Assert::IsTrue(ptrList.IsEmpty());
+
+			ptrList.Remove(&array[0]);
 		}
 
 		template <typename T>
@@ -510,7 +514,7 @@ namespace UnitTestSList
 			SList<T> myList, anotherList;
 
 			SList<T>::Iterator itMyList, itAnotherList;
-			Assert::AreNotEqual(itMyList, itAnotherList);
+			Assert::AreEqual(itMyList, itAnotherList);
 
 			SList<T>::Iterator itMy = myList.begin(), itAnother = anotherList.begin();
 			Assert::AreNotEqual(itMy, itAnother);
@@ -554,8 +558,14 @@ namespace UnitTestSList
 			SList<T> list;
 			SList<T>::Iterator it = list.end();
 
-			auto insertAfterFunc = [this, &list, &it] { list.InsertAfter(it, ConvertValue<T>(startValue)); };
-			Assert::ExpectException<std::out_of_range>(insertAfterFunc);
+			SList<T> anotherList;
+			SList<T>::Iterator anotherIt;
+
+			auto invalidIteratorFunc = [this, &list, &anotherList] { anotherList.InsertAfter(list.begin(), ConvertValue<T>(startValue)); };
+			Assert::ExpectException<std::invalid_argument>(invalidIteratorFunc);
+
+			auto invalidIteratorFuncTwo = [this, &anotherIt, &anotherList] { anotherList.InsertAfter(anotherIt, ConvertValue<T>(startValue)); };
+			Assert::ExpectException<std::invalid_argument>(invalidIteratorFuncTwo);
 
 			auto preIncrementFunc = [&it] { ++it; };
 			Assert::ExpectException<std::out_of_range>(preIncrementFunc);
