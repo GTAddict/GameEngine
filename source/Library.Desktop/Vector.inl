@@ -162,24 +162,44 @@ inline bool Vector<T>::Iterator::operator!=(const Iterator& rhs) const
 template<typename T>
 inline bool Vector<T>::Iterator::operator<(const Iterator& rhs) const
 {
+	if (mpOwner != rhs.mpOwner)
+	{
+		throw std::invalid_argument("The two iterators do not belong to the same container.");
+	}
+
 	return mpCurrent < rhs.mpCurrent;
 }
 
 template<typename T>
 inline bool Vector<T>::Iterator::operator<=(const Iterator& rhs) const
 {
+	if (mpOwner != rhs.mpOwner)
+	{
+		throw std::invalid_argument("The two iterators do not belong to the same container.");
+	}
+
 	return mpCurrent <= rhs.mpCurrent;
 }
 
 template<typename T>
 inline bool Vector<T>::Iterator::operator>(const Iterator& rhs) const
 {
+	if (mpOwner != rhs.mpOwner)
+	{
+		throw std::invalid_argument("The two iterators do not belong to the same container.");
+	}
+
 	return mpCurrent > rhs.mpCurrent;
 }
 
 template<typename T>
 inline bool Vector<T>::Iterator::operator>=(const Iterator& rhs) const
 {
+	if (mpOwner != rhs.mpOwner)
+	{
+		throw std::invalid_argument("The two iterators do not belong to the same container.");
+	}
+
 	return mpCurrent >= rhs.mpCurrent;
 }
 
@@ -196,8 +216,13 @@ inline typename Vector<T>::Iterator Vector<T>::Iterator::operator-(std::uint32_t
 }
 
 template<typename T>
-inline std::int32_t Vector<T>::Iterator::operator-(const Iterator & rhs) const
+inline std::int32_t Vector<T>::Iterator::operator-(const Iterator& rhs) const
 {
+	if (mpOwner != rhs.mpOwner)
+	{
+		throw std::invalid_argument("The two iterators do not belong to the same container.");
+	}
+
 	return static_cast<std::int32_t>(mpCurrent - rhs.mpCurrent);
 }
 
@@ -246,7 +271,7 @@ inline bool Vector<T>::IsEmpty() const
 }
 
 template<typename T>
-inline void Vector<T>::PushBack(const T& data)
+inline typename Vector<T>::Iterator Vector<T>::PushBack(const T& data)
 {
 	if (mpEnd == mpCapacity)
 	{
@@ -254,7 +279,8 @@ inline void Vector<T>::PushBack(const T& data)
 	}
 
 	mpEnd = new (mpEnd) T(data);
-	++mpEnd;
+
+	return Iterator(mpEnd++, this);
 }
 
 template<typename T>
@@ -316,15 +342,21 @@ inline typename Vector<T>::Iterator Vector<T>::end() const
 }
 
 template<typename T>
+inline T& Vector<T>::At(std::uint32_t index)
+{
+	return operator[](index);
+}
+
+template<typename T>
 inline const T& Vector<T>::At(std::uint32_t index) const
 {
 	return operator[](index);
 }
 
 template<typename T>
-inline T& Vector<T>::At(std::uint32_t index)
+inline T& Vector<T>::operator[](std::uint32_t index)
 {
-	return operator[](index);
+	return const_cast<T&>(const_cast<const Vector<T>*>(this)->operator[](index));
 }
 
 template<typename T>
@@ -336,12 +368,6 @@ inline const T& Vector<T>::operator[](std::uint32_t index) const
 	}
 
 	return *(mpBegin + index);
-}
-
-template<typename T>
-inline T& Vector<T>::operator[](std::uint32_t index)
-{
-	return const_cast<T&>(const_cast<const Vector<T>*>(this)->operator[](index));
 }
 
 template<typename T>

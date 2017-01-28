@@ -328,6 +328,18 @@ namespace UnitTestVector
 			Assert::ExpectException<std::out_of_range>(removeItFunction);
 			Assert::ExpectException<std::out_of_range>(removeItFunctionTwo);
 			Assert::ExpectException<std::out_of_range>(removeItFunctionThree);
+
+			Vector<T> anotherVector;
+			auto lessThanFunction			= [&vector, &anotherVector] { vector.begin() < anotherVector.begin(); };
+			auto lessThanEqualFunction		= [&vector, &anotherVector] { vector.begin() <= anotherVector.begin(); };
+			auto greaterThanFunction		= [&vector, &anotherVector] { vector.begin() > anotherVector.begin(); };
+			auto greaterThanEqualFunction	= [&vector, &anotherVector] { vector.begin() >= anotherVector.begin(); };
+			auto subtractFunction			= [&vector, &anotherVector] { vector.begin() - anotherVector.begin(); };
+			Assert::ExpectException<std::invalid_argument>(lessThanFunction);
+			Assert::ExpectException<std::invalid_argument>(lessThanEqualFunction);
+			Assert::ExpectException<std::invalid_argument>(greaterThanFunction);
+			Assert::ExpectException<std::invalid_argument>(greaterThanEqualFunction);
+			Assert::ExpectException<std::invalid_argument>(subtractFunction);
 		}
 
 	public:

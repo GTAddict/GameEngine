@@ -35,7 +35,7 @@ namespace GameEngine
 				/**
 				 *	\brief			Default constructor. Does not initialize current element or owner.
 				 */
-				Iterator();
+									Iterator();
 
 				/**
 				 *	\brief			Parametrized constructor. The current element to point to and the owner
@@ -43,19 +43,19 @@ namespace GameEngine
 				 *	\param T*		The current element to point to.
 				 *	\param pOwner	The current owner Vector.
 				 */
-				Iterator(T* element, const Vector<T>* const pOwner);
+									Iterator(T* element, const Vector<T>* const pOwner);
 
 				/**
 				 *	\brief			Copy constructor. This will copy the current element and owner pointer.
 				 *	\param rhs		The Iterator to make a copy from.
 				 */
-				Iterator(const Iterator& rhs);
+									Iterator(const Iterator& rhs);
 
 				/**
 				*	\brief			Move constructor. This will transfer ownership of the data to itself.
 				*	\param rhs		The Iterator to move from.
 				*/
-				Iterator(Iterator&& rhs);
+									Iterator(Iterator&& rhs);
 
 				/**
 				 *	\brief			Copy assignment operator. This will copy the current element and owner pointer.
@@ -74,7 +74,7 @@ namespace GameEngine
 				/**
 				 *	\brief			The destructor. Does nothing.
 				 */
-				~Iterator();
+									~Iterator();
 
 				/**
 				*	\brief			Equality operator. Checks whether the two operands are equal.
@@ -84,7 +84,7 @@ namespace GameEngine
 				bool				operator==(const Iterator& rhs) const;
 
 				/**
-				*	\brief			Inequality operator. Checks whether the two operands are inequal.
+				*	\brief			Inequality operator. Checks whether the two operands are unequal.
 				*	\param rhs		The Iterator to compare to.
 				*	\return			True if both current element pointers are not the same, false otherwise.
 				*/
@@ -95,6 +95,7 @@ namespace GameEngine
 				*	\param rhs		The Iterator to compare to.
 				*	\return			True if the address of the current element pointed to is less than the one of rhs,
 				*					false otherwise.
+				*	\throw std::invalid_argument if both the iterators do not belong to the same container.
 				*/
 				bool				operator<(const Iterator& rhs) const;
 
@@ -104,6 +105,7 @@ namespace GameEngine
 				*	\param rhs		The Iterator to compare to.
 				*	\return			True if the address of the current element pointed to is greater than or equal to the
 				*					one of rhs, false otherwise.
+				*	\throw std::invalid_argument if both the iterators do not belong to the same container.
 				*/
 				bool				operator<=(const Iterator& rhs) const;
 
@@ -113,6 +115,7 @@ namespace GameEngine
 				*	\param rhs		The Iterator to compare to.
 				*	\return			True if the address of the current element pointed to is greater than the one of rhs,
 				*					false otherwise.
+				*	\throw std::invalid_argument if both the iterators do not belong to the same container.
 				*/
 				bool				operator>(const Iterator& rhs) const;
 
@@ -122,6 +125,7 @@ namespace GameEngine
 				*	\param rhs		The Iterator to compare to.
 				*	\return			True if the address of the current element pointed to is greater than or equal to the
 				*					one of rhs, false otherwise.
+				*	\throw std::invalid_argument if both the iterators do not belong to the same container.
 				*/
 				bool				operator>=(const Iterator& rhs) const;
 
@@ -144,6 +148,7 @@ namespace GameEngine
 				*	\brief			Subtraction operator. Subtracts the two Iterators.
 				*	\param rhs		The Iterator to subtract.
 				*	\return			The offset between the elements pointed at by the two Iterators.
+				*	\throw std::invalid_argument if both the iterators do not belong to the same container.
 				*/
 				std::int32_t		operator-(const Iterator& rhs) const;
 
@@ -178,13 +183,13 @@ namespace GameEngine
 			/**
 			 *	\brief				Default constructor. It will reserve DEFAULT_CONTAINER_SIZE by default.
 			 */
-			Vector();
+									Vector();
 
 			/**
 			 *	\brief				Parametrized constructor. You can pass in the capacity to reserve at instantiation.
 			 *	\param capacity		Capacity to reserve.
 			 */
-			Vector(std::uint32_t capacity);
+									Vector(std::uint32_t capacity);
 
 			/**
 			*	\brief				Parametrized constructor. You can pass in the custom capacity function to call whenever
@@ -192,19 +197,19 @@ namespace GameEngine
 			*	\param customCapacityFn The custom function to call to get the new capacity.
 			*	\param initialCapacity  This will override the value returned by customCapacityFn for the first allocation.
 			*/
-			Vector(const GetCapacityFn_t& customCapacityFn, std::int32_t initialCapacity = 0);
+									Vector(const GetCapacityFn_t& customCapacityFn, std::int32_t initialCapacity = 0);
 
 			/**
 			*	\brief				Copy constructor. Deep copies the Vector provided into itself.
 			*	\param rhs			The Vector to copy from.
 			*/
-			Vector(const Vector& rhs);
+									Vector(const Vector& rhs);
 
 			/**
 			*	\brief				Move constructor. Transfers ownership of the list to itself.
 			*	\param rhs			The Vector to move data from.
 			*/
-			Vector(Vector&& rhs);
+									Vector(Vector&& rhs);
 
 			/**
 			*	\brief				Copy assignment operator. Deep copies the Vector provided into itself.
@@ -223,7 +228,7 @@ namespace GameEngine
 			/**
 			 *	\brief				Destructor. Clears all elements and frees memory.
 			 */
-			~Vector();
+									~Vector();
 
 			/**
 			 *	\brief				Allocates memory for the capacity specified, if it hasn't already.
@@ -252,8 +257,9 @@ namespace GameEngine
 			/**
 			 *	\brief				Inserts an element at the end of the container.
 			 *	\param T			The data to be inserted.
+			 *	\return				A copy of an iterator pointing to the data just pushed.
 			 */
-			void					PushBack(const T& data);
+			Iterator				PushBack(const T& data);
 
 			/**
 			 *	\brief				Removes the element at the back of the container, and calls its destructor.
@@ -320,18 +326,18 @@ namespace GameEngine
 			/**
 			*	\brief				Returns the element at the specified index.
 			*	\param index		The index whose data to retrieve.
-			*	\return				A const reference to the data at the specified index.
-			*	\throw std::out_of_range if the index is out of bounds.
-			*/
-			const T&				operator[](const std::uint32_t index) const;
-
-			/**
-			*	\brief				Returns the element at the specified index.
-			*	\param index		The index whose data to retrieve.
 			*	\return				A non-const reference to the data at the specified index.
 			*	\throw std::out_of_range if the index is out of bounds.
 			*/
 			T&						operator[](const std::uint32_t index);
+
+			/**
+			*	\brief				Returns the element at the specified index.
+			*	\param index		The index whose data to retrieve.
+			*	\return				A const reference to the data at the specified index.
+			*	\throw std::out_of_range if the index is out of bounds.
+			*/
+			const T&				operator[](const std::uint32_t index) const;
 
 			/**
 			*	\brief				Searches for an element of specified value.
