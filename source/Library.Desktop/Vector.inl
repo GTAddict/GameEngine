@@ -167,11 +167,6 @@ inline typename Vector<T>::Iterator& Vector<T>::Iterator::operator=(Iterator&& r
 }
 
 template <typename T>
-inline Vector<T>::Iterator::~Iterator()
-{
-}
-
-template <typename T>
 inline bool Vector<T>::Iterator::operator==(const Iterator& rhs) const
 {
 	return mpOwner == rhs.mpOwner && mpCurrent == rhs.mpCurrent;

@@ -74,7 +74,7 @@ namespace GameEngine
 				/**
 				 *	\brief			The destructor. Does nothing.
 				 */
-									~Iterator();
+									~Iterator() = default;
 
 				/**
 				*	\brief			Equality operator. Checks whether the two operands are equal.
@@ -177,7 +177,7 @@ namespace GameEngine
 			private:
 
 				T*					mpCurrent;				/**< The current element pointed to	*/
-				const Vector<T>*	mpOwner;				/**< The owner Vector who owns the Iterator */
+				const Vector*		mpOwner;				/**< The owner Vector who owns the Iterator */
 			};
 
 			/**
