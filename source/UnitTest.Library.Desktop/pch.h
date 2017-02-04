@@ -3,5 +3,6 @@
 #include <sdkddkver.h>
 #include "SList.h"
 #include "Vector.h"
+#include "HashMap.h"
 #include "DummyStruct.h"
 #include <stdexcept>
