@@ -52,17 +52,15 @@ namespace GameEngine
 				*	\param node	Node that the Iterator should be initialized with.
 				*	\param list	List that the node is part of i.e. owner list.
 				*/
-				Iterator(Node* node, const SList* const list);
+								Iterator(Node* node, const SList* const list);
 
 				/**
 				*	\brief		Destructor, does nothing here.
 				*/
-				~Iterator();
+								~Iterator() = default;
 
 				/**
 				*	\brief		Equality operator, checks whether addresses pointed to are same or not.
-				*				In the STL and MS implementations, containers are not checked. This does
-				*				not either.
 				*	\param rhs	The other Iterator to be compared to.
 				*	\return		Whether the two Iterators are equal.
 				*/
@@ -71,7 +69,7 @@ namespace GameEngine
 				/**
 				*	\brief		Inequality operator. Returns the opposite of the equality operator.
 				*	\param rhs	The other Iterator to be compared to.
-				*	\return		Whether the two Iterators are inequal.
+				*	\return		Whether the two Iterators are unequal.
 				*/
 				bool			operator!=(const Iterator& rhs) const;
 
@@ -163,7 +161,18 @@ namespace GameEngine
 			*/
 			SList&			operator=(SList&& rhs);
 
+			/**
+			*	\brief		Equality operator, checks whether the SLists are equal or not.
+			*	\param rhs	The other SList to be compared to.
+			*	\return		Whether the two SLists are equal.
+			*/
 			bool			operator==(const SList& rhs);
+
+			/**
+			*	\brief		Inequality operator, checks whether the SLists are unequal or not.
+			*	\param rhs	The other SList to be compared to.
+			*	\return		Whether the two SLists are unequal.
+			*/
 			bool			operator!=(const SList& rhs);
 
 			/**

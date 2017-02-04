@@ -312,11 +312,6 @@ inline SList<T>::Iterator::Iterator(Node* node, const SList<T>* const list)
 }
 
 template<typename T>
-inline SList<T>::Iterator::~Iterator()
-{
-}
-
-template<typename T>
 inline bool SList<T>::Iterator::operator==(const Iterator& rhs) const
 {
 	return (mpOwner == rhs.mpOwner) && (mpCurrent == rhs.mpCurrent);
