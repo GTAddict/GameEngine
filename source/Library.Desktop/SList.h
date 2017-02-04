@@ -53,7 +53,7 @@ namespace GameEngine
 				*	\param node	Node that the Iterator should be initialized with.
 				*	\param list	List that the node is part of i.e. owner list.
 				*/
-				Iterator(Node* node, const SList<T>* const list);
+				Iterator(Node* node, const SList* const list);
 
 				/**
 				*	\brief		Destructor, does nothing here.
@@ -118,8 +118,8 @@ namespace GameEngine
 
 			private:
 
-				Node*				mpCurrent;			/**< Stores pointer to the current node in the list */
-				const SList<T>*		mpOwner;			/**< Stores pointer to the container on which this iterator is used */
+				Node*			mpCurrent;			/**< Stores pointer to the current node in the list */
+				const SList*	mpOwner;			/**< Stores pointer to the container on which this iterator is used */
 			};
 
 		public:
@@ -127,26 +127,26 @@ namespace GameEngine
 			/**
 			*	\brief		Default constructor, initializes the list to empty.
 			*/
-			SList();
+							SList();
 
 			/**
 			*	\brief		Destructor, clears the list.
 			*/
-			~SList();
+							~SList();
 
 			/**
 			*	\brief		Copy constructor, initializes the list
 			*				to empty and then deep copies the list passed in.
 			*	\param rhs	The list to deep copy from.
 			*/
-			SList(const SList<T>& rhs);
+							SList(const SList& rhs);
 
 			/**
 			*	\brief		Move constructor, transfers ownership of list passed
 							in to itself.
 			*	\param rhs	The list to transfer ownership from.
 			*/
-			SList(SList<T>&& rhs);
+							SList(SList&& rhs);
 
 			/**
 			*	\brief		Copy assignment operator, clears this list and deep copies
@@ -154,7 +154,7 @@ namespace GameEngine
 			*	\param rhs	The list to deep copy from.
 			*	\return		A reference to the newly created list.
 			*/
-			SList<T>&		operator=(const SList<T>& rhs);
+			SList&			operator=(const SList& rhs);
 
 			/**
 			*	\brief		Move assignment operator, transfers ownership of list passed
@@ -162,10 +162,10 @@ namespace GameEngine
 			*	\param rhs	The list to transfer ownership from.
 			*	\return		A reference to the newly created list.
 			*/
-			SList<T>&		operator=(SList<T>&& rhs);
+			SList&			operator=(SList&& rhs);
 
-			bool			operator==(const SList<T>& rhs);
-			bool			operator!=(const SList<T>& rhs);
+			bool			operator==(const SList& rhs);
+			bool			operator!=(const SList& rhs);
 
 			/**
 			*	\brief		Pushes data to the beginning of the list.
@@ -243,7 +243,7 @@ namespace GameEngine
 			*				the size is cached.
 			*	\return		The number of elements contained in the list.
 			*/
-			uint32_t		Size() const;
+			std::uint32_t	Size() const;
 
 			/**
 			*	\brief		Removes all the elements in the list.
@@ -274,8 +274,6 @@ namespace GameEngine
 			*	\param T	The data to be found and removed.
 			*/
 			void			Remove(const T& data);
-
-		protected:
 
 		private:
 
