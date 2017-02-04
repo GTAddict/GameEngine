@@ -260,14 +260,14 @@ namespace GameEngine
 			*						This is the non-const version.
 			*	\return				A non-const reference to the Vector used in implementing this HashMap.
 			*/
-			VectorType&				Vector()										{ return mData; };
+			VectorType&				Vector();
 			
 			/**
 			*	\brief				Helper function that returns the implementation Vector in this container.
 			*						This is the const version.
 			*	\return				A const reference to the Vector used in implementing this HashMap.
 			*/
-			const VectorType&		Vector() const									{ return mData; };
+			const VectorType&		Vector() const;
 
 			/**
 			*	\brief				Helper function that returns the implementation SList at a specified position
@@ -277,7 +277,7 @@ namespace GameEngine
 			*	\return				A non-const reference to the SList at a specified position of the Vector used
 			*						in implementing this HashMap.
 			*/
-			SListType&				SListAt(const std::uint32_t index)				{ return Vector().At(index); }
+			SListType&				SListAt(const std::uint32_t index);
 
 			/**
 			*	\brief				Helper function that returns the implementation SList at a specified position
@@ -287,7 +287,7 @@ namespace GameEngine
 			*	\return				A const reference to the SList at a specified position of the Vector used
 			*						in implementing this HashMap.
 			*/
-			const SListType&		SListAt(const std::uint32_t index) const		{ return Vector().At(index); }
+			const SListType&		SListAt(const std::uint32_t index) const;
 
 			/**
 			*	\brief				Helper function that returns the implementation SList at a specified iterator
@@ -297,7 +297,7 @@ namespace GameEngine
 			*	\return				A non-const reference to the SList at a specified iterator position of the Vector
 			*						used in implementing this HashMap.
 			*/
-			SListType&				SListAt(const VectorIteratorType it)			{ return Vector().At(it - Vector().begin()); }
+			SListType&				SListAt(const VectorIteratorType it);
 
 			/**
 			*	\brief				Helper function that returns the implementation SList at a specified iterator
@@ -307,7 +307,7 @@ namespace GameEngine
 			*	\return				A const reference to the SList at a specified iterator position of the Vector
 			*						used in implementing this HashMap.
 			*/
-			const SListType&		SListAt(const VectorIteratorType it) const		{ return Vector().At(it - Vector().begin()); }
+			const SListType&		SListAt(const VectorIteratorType it) const;
 
 			/**
 			*	\brief				Helper function that returns the bucket a specified key belongs to.
