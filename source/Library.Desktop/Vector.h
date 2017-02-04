@@ -189,7 +189,7 @@ namespace GameEngine
 			 *	\brief				Parametrized constructor. You can pass in the capacity to reserve at instantiation.
 			 *	\param capacity		Capacity to reserve.
 			 */
-									Vector(std::uint32_t capacity);
+									Vector(const std::uint32_t capacity);
 
 			/**
 			*	\brief				Parametrized constructor. You can pass in the custom capacity function to call whenever
@@ -197,7 +197,7 @@ namespace GameEngine
 			*	\param customCapacityFn The custom function to call to get the new capacity.
 			*	\param initialCapacity  This will override the value returned by customCapacityFn for the first allocation.
 			*/
-									Vector(const GetCapacityFn_t& customCapacityFn, std::int32_t initialCapacity = 0);
+									Vector(const GetCapacityFn_t& customCapacityFn, const std::int32_t initialCapacity = 0);
 
 			/**
 			*	\brief				Copy constructor. Deep copies the Vector provided into itself.
@@ -235,20 +235,20 @@ namespace GameEngine
 			 *	\param rhs			The Vector to compare to.
 			 *	\return				True if the two Vectors are equal, false otherwise.
 			 */
-			bool					operator==(const Vector& rhs);
+			bool					operator==(const Vector& rhs) const;
 
 			/**
 			*	\brief				Inequality operator. Checks whether the two operands are inequal.
 			*	\param rhs			The Vector to compare to.
 			*	\return				True if the two Vectors are inequal, false otherwise.
 			*/
-			bool					operator!=(const Vector& rhs);
+			bool					operator!=(const Vector& rhs) const;
 
 			/**
 			 *	\brief				Allocates memory for the capacity specified, if it hasn't already.
 			 *	\param capacity		The number of elements for which to allocate memory.
 			 */
-			void					Reserve(std::uint32_t capacity);
+			void					Reserve(const std::uint32_t capacity);
 
 			/**
 			 *	\brief				Returns max elements that can be stored in the current container.
@@ -327,7 +327,7 @@ namespace GameEngine
 			*	\return				A non-const reference to the data at the specified index.
 			*	\throw std::out_of_range if the index is out of bounds.
 			*/
-			T&						At(std::uint32_t index);
+			T&						At(const std::uint32_t index);
 
 			/**
 			*	\brief				Returns the element at the specified index.
@@ -335,7 +335,7 @@ namespace GameEngine
 			*	\return				A const reference to the data at the specified index.
 			*	\throw std::out_of_range if the index is out of bounds.
 			*/
-			const T&				At(std::uint32_t index) const;
+			const T&				At(const std::uint32_t index) const;
 
 			/**
 			*	\brief				Returns the element at the specified index.
@@ -402,7 +402,7 @@ namespace GameEngine
 			*	\param oldCapacity	Where to move the elements from
 			*	\return				The new capacity to reserve.
 			*/
-			std::int32_t			GetNewCapacity(std::uint32_t size, std::uint32_t oldCapacity);
+			std::int32_t			GetNewCapacity(const std::uint32_t size, const std::uint32_t oldCapacity) const;
 
 			/**
 			 *	\brief				Reserves any capacity requested. The exposed Reserve checks to see whether
@@ -410,7 +410,7 @@ namespace GameEngine
 			 *						This is useful to functions of this class such as Resize or ShrinkToFit.
 			 *	\param capacity		The new capacity to reserve.
 			 */
-			void					Reserve_Internal(std::uint32_t capacity);
+			void					Reserve_Internal(const std::uint32_t capacity);
 
 			/**
 			*	\brief				Moves the elements to a new location after operations such as Remove.
@@ -418,7 +418,7 @@ namespace GameEngine
 			*	\param source		Where to move the elements from
 			*	\param count		How many elements to move
 			*/
-			void					MoveElements(Iterator destination, Iterator source, std::uint32_t count);
+			void					MoveElements(Iterator destination, Iterator source, const std::uint32_t count);
 
 			T*		mpBegin;		/**< Points to the beginning of the vector. */
 			T*		mpEnd;			/**< Points to the position after the last element of the vector. */

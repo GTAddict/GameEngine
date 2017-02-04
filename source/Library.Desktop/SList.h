@@ -166,14 +166,14 @@ namespace GameEngine
 			*	\param rhs	The other SList to be compared to.
 			*	\return		Whether the two SLists are equal.
 			*/
-			bool			operator==(const SList& rhs);
+			bool			operator==(const SList& rhs) const;
 
 			/**
 			*	\brief		Inequality operator, checks whether the SLists are unequal or not.
 			*	\param rhs	The other SList to be compared to.
 			*	\return		Whether the two SLists are unequal.
 			*/
-			bool			operator!=(const SList& rhs);
+			bool			operator!=(const SList& rhs) const;
 
 			/**
 			*	\brief		Pushes data to the beginning of the list.

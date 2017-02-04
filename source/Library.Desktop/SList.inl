@@ -65,7 +65,7 @@ inline SList<T>& SList<T>::operator=(SList<T>&& rhs)
 }
 
 template<typename T>
-inline bool SList<T>::operator==(const SList<T>& rhs)
+inline bool SList<T>::operator==(const SList<T>& rhs) const
 {
 	if (mSize != rhs.mSize)		return false;
 
@@ -83,7 +83,7 @@ inline bool SList<T>::operator==(const SList<T>& rhs)
 }
 
 template<typename T>
-inline bool SList<T>::operator!=(const SList<T>& rhs)
+inline bool SList<T>::operator!=(const SList<T>& rhs) const
 {
 	return !(*this == rhs);
 }

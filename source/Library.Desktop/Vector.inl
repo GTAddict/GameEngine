@@ -10,13 +10,13 @@ inline Vector<T>::Vector()
 }
 
 template <typename T>
-inline Vector<T>::Vector(std::uint32_t capacity)
+inline Vector<T>::Vector(const std::uint32_t capacity)
 	: Vector(BIND_TO_GETCAPACITYFN(&Vector<T>::GetNewCapacity), capacity)
 {
 }
 
 template<typename T>
-inline Vector<T>::Vector(const GetCapacityFn_t& customCapacityFn, std::int32_t initialCapacity)
+inline Vector<T>::Vector(const GetCapacityFn_t& customCapacityFn, const std::int32_t initialCapacity)
 	: mpBegin(nullptr)
 	, mpEnd(nullptr)
 	, mpCapacity(nullptr)
@@ -90,7 +90,7 @@ inline Vector<T>::~Vector()
 }
 
 template<typename T>
-inline bool Vector<T>::operator==(const Vector& rhs)
+inline bool Vector<T>::operator==(const Vector& rhs) const
 {
 	if (Size() != rhs.Size())	return false;
 	
@@ -108,7 +108,7 @@ inline bool Vector<T>::operator==(const Vector& rhs)
 }
 
 template<typename T>
-inline bool Vector<T>::operator!=(const Vector & rhs)
+inline bool Vector<T>::operator!=(const Vector& rhs) const
 {
 	return !(*this == rhs);
 }
@@ -223,13 +223,13 @@ inline bool Vector<T>::Iterator::operator>=(const Iterator& rhs) const
 }
 
 template<typename T>
-inline typename Vector<T>::Iterator Vector<T>::Iterator::operator+(std::uint32_t rhs) const
+inline typename Vector<T>::Iterator Vector<T>::Iterator::operator+(const std::uint32_t rhs) const
 {
 	return Iterator (mpCurrent + rhs, mpOwner);
 }
 
 template<typename T>
-inline typename Vector<T>::Iterator Vector<T>::Iterator::operator-(std::uint32_t rhs) const
+inline typename Vector<T>::Iterator Vector<T>::Iterator::operator-(const std::uint32_t rhs) const
 {
 	return Iterator(mpCurrent - rhs, mpOwner);
 }
@@ -361,25 +361,25 @@ inline typename Vector<T>::Iterator Vector<T>::end() const
 }
 
 template<typename T>
-inline T& Vector<T>::At(std::uint32_t index)
+inline T& Vector<T>::At(const std::uint32_t index)
 {
 	return operator[](index);
 }
 
 template<typename T>
-inline const T& Vector<T>::At(std::uint32_t index) const
+inline const T& Vector<T>::At(const std::uint32_t index) const
 {
 	return operator[](index);
 }
 
 template<typename T>
-inline T& Vector<T>::operator[](std::uint32_t index)
+inline T& Vector<T>::operator[](const std::uint32_t index)
 {
 	return const_cast<T&>(const_cast<const Vector<T>*>(this)->operator[](index));
 }
 
 template<typename T>
-inline const T& Vector<T>::operator[](std::uint32_t index) const
+inline const T& Vector<T>::operator[](const std::uint32_t index) const
 {
 	if (index >= Size())
 	{
@@ -464,7 +464,7 @@ inline bool Vector<T>::IsValid(const Iterator& it) const
 }
 
 template<typename T>
-inline std::int32_t Vector<T>::GetNewCapacity(std::uint32_t currentSize, std::uint32_t currentCapacity)
+inline std::int32_t Vector<T>::GetNewCapacity(const std::uint32_t currentSize, const std::uint32_t currentCapacity) const
 {
 	currentSize;	// Currently unused in default implementation
 
@@ -479,7 +479,7 @@ inline std::int32_t Vector<T>::GetNewCapacity(std::uint32_t currentSize, std::ui
 }
 
 template<typename T>
-inline void Vector<T>::Reserve_Internal(std::uint32_t capacity)
+inline void Vector<T>::Reserve_Internal(const std::uint32_t capacity)
 {
 	std::uint32_t size = Size();
 	mpBegin = static_cast<T*> (realloc(mpBegin, sizeof(T) * capacity));
@@ -488,7 +488,7 @@ inline void Vector<T>::Reserve_Internal(std::uint32_t capacity)
 }
 
 template <typename T>
-inline void Vector<T>::Reserve(std::uint32_t capacity)
+inline void Vector<T>::Reserve(const std::uint32_t capacity)
 {
 	if (capacity <= 0 || capacity <= Capacity())		return;
 
@@ -496,7 +496,7 @@ inline void Vector<T>::Reserve(std::uint32_t capacity)
 }
 
 template<typename T>
-inline void Vector<T>::MoveElements(Iterator destination, Iterator source, std::uint32_t count)
+inline void Vector<T>::MoveElements(Iterator destination, Iterator source, const std::uint32_t count)
 {
 	memmove(destination.mpCurrent, source.mpCurrent, count * sizeof(T));
 }
