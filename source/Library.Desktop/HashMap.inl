@@ -1,8 +1,7 @@
-#include "HashMap.h"
 #pragma once
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline HashMap<TKey, TValue, HashFunctor>::Iterator::Iterator(HashMap* owner, VectorIteratorType vectorIt, SListIteratorType slistIt)
+inline HashMap<TKey, TValue, HashFunctor>::Iterator::Iterator(const HashMap* const owner, VectorIteratorType vectorIt, SListIteratorType slistIt)
 	: mpOwner(owner)
 	, mItVector(vectorIt)
 	, mItSlist(slistIt)
@@ -52,13 +51,13 @@ inline typename HashMap<TKey, TValue, HashFunctor>::Iterator& HashMap<TKey, TVal
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline bool HashMap<TKey, TValue, HashFunctor>::Iterator::operator==(const Iterator& rhs)
+inline bool HashMap<TKey, TValue, HashFunctor>::Iterator::operator==(const Iterator& rhs) const
 {
 	return mpOwner == rhs.mpOwner && mItSlist == rhs.mItSlist;
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline bool HashMap<TKey, TValue, HashFunctor>::Iterator::operator!=(const Iterator& rhs)
+inline bool HashMap<TKey, TValue, HashFunctor>::Iterator::operator!=(const Iterator& rhs) const
 {
 	return !(*this == rhs);
 }
@@ -109,7 +108,7 @@ inline std::pair<TKey, TValue>* HashMap<TKey, TValue, HashFunctor>::Iterator::op
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline HashMap<TKey, TValue, HashFunctor>::HashMap(std::uint32_t numBuckets)
+inline HashMap<TKey, TValue, HashFunctor>::HashMap(const std::uint32_t numBuckets)
 	: mData(numBuckets)
 	, mSize(0)
 {
@@ -156,13 +155,13 @@ inline HashMap<TKey, TValue, HashFunctor> HashMap<TKey, TValue, HashFunctor>::op
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline bool HashMap<TKey, TValue, HashFunctor>::operator==(const HashMap& rhs)
+inline bool HashMap<TKey, TValue, HashFunctor>::operator==(const HashMap& rhs) const
 {
 	return mSize == rhs.mSize && mData == rhs.mData;
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline bool HashMap<TKey, TValue, HashFunctor>::operator!=(const HashMap& rhs)
+inline bool HashMap<TKey, TValue, HashFunctor>::operator!=(const HashMap& rhs) const
 {
 	return !(*this == rhs);
 }
@@ -185,7 +184,7 @@ inline typename HashMap<TKey, TValue, HashFunctor>::Iterator HashMap<TKey, TValu
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline typename HashMap<TKey, TValue, HashFunctor>::Iterator HashMap<TKey, TValue, HashFunctor>::Find(const TKey& key)
+inline typename HashMap<TKey, TValue, HashFunctor>::Iterator HashMap<TKey, TValue, HashFunctor>::Find(const TKey& key) const
 {
 	std::uint32_t bucketNumber = GetBucketNumber(key);
 	SListIteratorType it = SListAt(bucketNumber).begin(), itEnd = SListAt(bucketNumber).end();
@@ -210,7 +209,7 @@ inline typename HashMap<TKey, TValue, HashFunctor>::Iterator HashMap<TKey, TValu
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline bool GameEngine::Library::HashMap<TKey, TValue, HashFunctor>::Remove(const TKey & key)
+inline bool GameEngine::Library::HashMap<TKey, TValue, HashFunctor>::Remove(const TKey& key)
 {
 	Iterator foundIt = Find(key);
 
@@ -225,13 +224,13 @@ inline bool GameEngine::Library::HashMap<TKey, TValue, HashFunctor>::Remove(cons
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline TValue& HashMap<TKey, TValue, HashFunctor>::operator[](TKey& key)
+inline TValue& HashMap<TKey, TValue, HashFunctor>::operator[](const TKey& key)
 {
 	return (*Insert(std::pair<TKey, TValue>(key, TValue()))).second;
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline bool HashMap<TKey, TValue, HashFunctor>::ContainsKey(const TKey & key)
+inline bool HashMap<TKey, TValue, HashFunctor>::ContainsKey(const TKey& key) const
 {
 	return Find(key) != end();
 }
@@ -244,7 +243,7 @@ inline void HashMap<TKey, TValue, HashFunctor>::Clear()
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline typename HashMap<TKey, TValue, HashFunctor>::Iterator HashMap<TKey, TValue, HashFunctor>::begin()
+inline typename HashMap<TKey, TValue, HashFunctor>::Iterator HashMap<TKey, TValue, HashFunctor>::begin() const
 {
 	VectorIteratorType it = Vector().begin(), itEnd = Vector().end();
 
@@ -267,7 +266,7 @@ inline typename HashMap<TKey, TValue, HashFunctor>::Iterator HashMap<TKey, TValu
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline typename HashMap<TKey, TValue, HashFunctor>::Iterator HashMap<TKey, TValue, HashFunctor>::end()
+inline typename HashMap<TKey, TValue, HashFunctor>::Iterator HashMap<TKey, TValue, HashFunctor>::end() const
 {
 	return Iterator(this, Vector().end(), SListIteratorType());
 }
@@ -279,13 +278,13 @@ inline std::uint32_t GameEngine::Library::HashMap<TKey, TValue, HashFunctor>::Si
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline std::uint32_t GameEngine::Library::HashMap<TKey, TValue, HashFunctor>::GetBucketNumber(const TKey & key)
+inline std::uint32_t GameEngine::Library::HashMap<TKey, TValue, HashFunctor>::GetBucketNumber(const TKey& key) const
 {
 	return mHashFunctor(key) % GetBucketSize();
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline std::uint32_t HashMap<TKey, TValue, HashFunctor>::GetBucketSize()
+inline std::uint32_t HashMap<TKey, TValue, HashFunctor>::GetBucketSize() const
 {
 	return Vector().Size();
 }

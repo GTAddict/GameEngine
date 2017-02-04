@@ -26,33 +26,33 @@ namespace GameEngine
 			public:
 
 				Iterator() = delete;
-				Iterator(HashMap* owner, VectorIteratorType vectorIt, SListIteratorType slistIt);
+				Iterator(const HashMap* const pOwner, VectorIteratorType vectorIt, SListIteratorType slistIt);
 				Iterator(const Iterator& rhs);
 				Iterator(Iterator&& rhs);
 				~Iterator() = default;
 
-				Iterator& operator=(const Iterator& rhs);
-				Iterator& operator=(Iterator&& rhs);
+				Iterator&	operator=(const Iterator& rhs);
+				Iterator&	operator=(Iterator&& rhs);
 
-				bool operator==(const Iterator& rhs);
-				bool operator!=(const Iterator& rhs);
+				bool		operator==(const Iterator& rhs) const;
+				bool		operator!=(const Iterator& rhs) const;
 
-				Iterator& operator++();
-				Iterator operator++(int);
+				Iterator&	operator++();
+				Iterator	operator++(int);
 
-				PairType& operator*();
-				PairType* operator->();
+				PairType&	operator*();
+				PairType*	operator->();
 					
 			private:
 
-				HashMap*							mpOwner;
+				const HashMap*						mpOwner;
 				VectorIteratorType					mItVector;
 				SListIteratorType					mItSlist;
 
 			};
 
 			HashMap() = delete;
-			HashMap(std::uint32_t numBuckets);
+			HashMap(const std::uint32_t numBuckets);
 			HashMap(const HashMap& rhs);
 			HashMap(HashMap&& rhs);
 			~HashMap() = default;
@@ -60,35 +60,37 @@ namespace GameEngine
 			HashMap& operator=(const HashMap& rhs);
 			HashMap operator=(HashMap&& rhs);
 
-			bool operator==(const HashMap& rhs);
-			bool operator!=(const HashMap& rhs);
+			bool operator==(const HashMap& rhs) const;
+			bool operator!=(const HashMap& rhs) const;
 
-			Iterator	Insert(const PairType& entry);
-			Iterator	Find(const TKey& key);
-			bool		Remove(const TKey& key);
-			TValue&		operator[](TKey& key);
+			Iterator			Insert(const PairType& entry);
+			Iterator			Find(const TKey& key) const;
+			bool				Remove(const TKey& key);
+			TValue&				operator[](const TKey& key);
 
-			bool		ContainsKey(const TKey& key);
+			bool				ContainsKey(const TKey& key) const;
 
-			void		Clear();
+			void				Clear();
 
-			Iterator	begin();
-			Iterator	end();
+			Iterator			begin() const;
+			Iterator			end() const;
 
-			std::uint32_t	Size() const;
+			std::uint32_t		Size() const;
 
 		private:
 
-			VectorType&		Vector() { return mData; };
-			SListType&		SListAt(std::uint32_t index) { return Vector().At(index); }
-			SListType&		SListAt(VectorIteratorType it) { return Vector().At(it - Vector().begin()); }
+			VectorType&			Vector()									{ return mData; };
+			const VectorType&	Vector() const								{ return mData; };
+			SListType&			SListAt(const std::uint32_t index)			{ return Vector().At(index); }
+			const SListType&	SListAt(const std::uint32_t index) const	{ return Vector().At(index); }
+			SListType&			SListAt(VectorIteratorType it)				{ return Vector().At(it - Vector().begin()); }
 
-			std::uint32_t	GetBucketNumber(const TKey& key);
-			std::uint32_t	GetBucketSize();
+			std::uint32_t		GetBucketNumber(const TKey& key) const;
+			std::uint32_t		GetBucketSize() const;
 
-			VectorType		mData;
-			HashFunctor		mHashFunctor;
-			std::uint32_t	mSize;
+			VectorType			mData;
+			std::uint32_t		mSize;
+			const HashFunctor	mHashFunctor;
 		};
 
 #include "HashMap.inl"
