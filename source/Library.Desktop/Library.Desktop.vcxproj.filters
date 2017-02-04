@@ -27,6 +27,12 @@
     <ClInclude Include="Vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HashMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HashMapFunctors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils.cpp">
@@ -41,6 +47,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="Vector.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="HashMap.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

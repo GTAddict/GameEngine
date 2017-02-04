@@ -148,6 +148,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="HashMap.h" />
+    <ClInclude Include="HashMapFunctors.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SList.h" />
     <ClInclude Include="Utils.h" />
@@ -163,6 +165,7 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="HashMap.inl" />
     <None Include="SList.inl" />
     <None Include="Vector.inl" />
   </ItemGroup>
