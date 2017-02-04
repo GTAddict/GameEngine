@@ -33,14 +33,14 @@ namespace GameEngine
 			public:
 
 				/**
-				 *	\brief			Default constructor. Does not initialize current element or owner.
+				 *	\brief			Default constructor. Initializes current element and owner to nullptr.
 				 */
 									Iterator();
 
 				/**
 				 *	\brief			Parametrized constructor. The current element to point to and the owner
 				 *					Vector can be passed in.
-				 *	\param T*		The current element to point to.
+				 *	\param element	The current element to point to.
 				 *	\param pOwner	The current owner Vector.
 				 */
 									Iterator(T* element, const Vector* const pOwner);
@@ -167,9 +167,9 @@ namespace GameEngine
 				Iterator			operator++(int rhs);
 
 				/**
-				*	\brief			Dereference operator. Returns a copy of the data at the location it is
+				*	\brief			Dereference operator. Returns a reference to the data at the location it is
 				*					pointing to.
-				*	\return			A copy of the data at the location pointer to by the iterator.
+				*	\return			A reference to the data at the location pointer to by the iterator.
 				*	\throw std::out_of_range if the owner is empty or if the iterator is out of bounds.
 				*/
 				T&					operator*();
@@ -238,9 +238,9 @@ namespace GameEngine
 			bool					operator==(const Vector& rhs) const;
 
 			/**
-			*	\brief				Inequality operator. Checks whether the two operands are inequal.
+			*	\brief				Inequality operator. Checks whether the two operands are unequal.
 			*	\param rhs			The Vector to compare to.
-			*	\return				True if the two Vectors are inequal, false otherwise.
+			*	\return				True if the two Vectors are unequal, false otherwise.
 			*/
 			bool					operator!=(const Vector& rhs) const;
 
@@ -270,7 +270,7 @@ namespace GameEngine
 
 			/**
 			 *	\brief				Inserts an element at the end of the container.
-			 *	\param T			The data to be inserted.
+			 *	\param data			The data to be inserted.
 			 *	\return				A copy of an iterator pointing to the data just pushed.
 			 */
 			Iterator				PushBack(const T& data);
@@ -355,14 +355,14 @@ namespace GameEngine
 
 			/**
 			*	\brief				Searches for an element of specified value.
-			*	\param T			The data to search for.
+			*	\param data			The data to search for.
 			*	\return				An Iterator pointing to the found data, or end() if it is not found.
 			*/
 			Iterator				Find(const T& data) const;
 
 			/**
 			*	\brief				Searches for and removes an element of specified value.
-			*	\param T			The data to be searched for and removed.
+			*	\param data			The data to be searched for and removed.
 			*/
 			void					Remove(const T& data);
 
