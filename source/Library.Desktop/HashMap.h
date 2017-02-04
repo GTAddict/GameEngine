@@ -8,6 +8,12 @@ namespace GameEngine
 {
 	namespace Library
 	{
+		/**
+		*	\class	Hash Map
+		*	\brief	An unordered map that stores key-value pairs. Bucket size is to be
+		*			allocated by the user. Collisions are resolved by chaining. The
+		*			implementation is a Vector of fixed size containing SLists.
+		*/
 		template <typename TKey, typename TValue, typename HashFunctor = DefaultHashFunctor>
 		class HashMap
 		{
@@ -19,78 +25,307 @@ namespace GameEngine
 			typedef typename SListType::Iterator	SListIteratorType;
 			typedef typename VectorType::Iterator	VectorIteratorType;
 
+			/**
+			*	\class	Iterator
+			*	\brief	Iterator implementation. This helps walk the HashMap and wraps pointer
+			*			implementation inside.
+			*/
 			class Iterator
 			{
 				friend class HashMap;
 
 			public:
+				
+				/**
+				*	\brief			Default constructor. Deleted because we don't need an empty Iterator.
+				*/
+									Iterator() = delete;
 
-				Iterator() = delete;
-				Iterator(const HashMap* const pOwner, VectorIteratorType vectorIt, SListIteratorType slistIt);
-				Iterator(const Iterator& rhs);
-				Iterator(Iterator&& rhs);
-				~Iterator() = default;
+				/**
+				*	\brief			Parametrized constructor. The owner HashMap, bucket iterator and
+				*					chain iterator are to be passed in.
+				*	\param pOwner	The current owner HashMap.
+				*	\param vectorIt	The bucket iterator, whose SList contains slistIt.
+				*	\param slistIt	The chain iterator to point to.
+				*/
+									Iterator(const HashMap* const pOwner, VectorIteratorType vectorIt, SListIteratorType slistIt);
 
-				Iterator&	operator=(const Iterator& rhs);
-				Iterator&	operator=(Iterator&& rhs);
+				/**
+				*	\brief			Copy constructor.
+				*	\param rhs		The iterator to copy from.
+				*/
+									Iterator(const Iterator& rhs);
 
-				bool		operator==(const Iterator& rhs) const;
-				bool		operator!=(const Iterator& rhs) const;
+				/**
+				*	\brief			Move constructor.
+				*	\param rhs		The iterator to move from.
+				*/
+									Iterator(Iterator&& rhs);
 
-				Iterator&	operator++();
-				Iterator	operator++(int);
+				/**
+				*	\brief			Destructor, does nothing.
+				*/
+									~Iterator() = default;
 
-				PairType&	operator*();
-				PairType*	operator->();
+				/**
+				*	\brief			Copy assignment operator.
+				*	\param rhs		The Iterator to make a copy from.
+				*	\return			A reference to this newly created Iterator.
+				*/
+				Iterator&			operator=(const Iterator& rhs);
+
+				/**
+				*	\brief			Move assignment operator. This transfer ownership of the data to itself.
+				*	\param rhs		The Iterator to move from.
+				*	\return			A reference to this newly created Iterator.
+				*/
+				Iterator&			operator=(Iterator&& rhs);
+
+				/**
+				*	\brief			Equality operator. Checks whether the two operands are equal.
+				*	\param rhs		The Iterator to compare to.
+				*	\return			True if both current element pointers are the same, false otherwise.
+				*/
+				bool				operator==(const Iterator& rhs) const;
+
+				/**
+				*	\brief			Inequality operator. Checks whether the two operands are unequal.
+				*	\param rhs		The Iterator to compare to.
+				*	\return			True if both current element pointers are not the same, false otherwise.
+				*/
+				bool				operator!=(const Iterator& rhs) const;
+
+				/**
+				*	\brief			Pre-increment operator. Promotes the iterator to the next element
+				*					and returns a reference to itself.
+				*	\return			A reference to itself.
+				*	\throw std::out_of_range if the iterator is out of bounds.
+				*/
+				Iterator&			operator++();
+
+				/**
+				*	\brief			Post-increment operator. Promotes the iterator to the next element
+				*					and returns a previously saved (and thus unmodified) copy of itself.
+				*	\return			A copy of its state before this function was called.
+				*	\throw std::out_of_range if the iterator is out of bounds.
+				*/
+				Iterator			operator++(int);
+
+				/**
+				*	\brief			Dereference operator. Returns a reference to the data at the location it is
+				*					pointing to.
+				*	\return			A reference to the data at the location pointer to by the iterator.
+				*	\throw			Refer to SList::Iterator as this function deferences that internally.
+				*/
+				PairType&			operator*();
+
+				/**
+				*	\brief			Arrow operator. Returns the address of the data at the location it is
+				*					pointing to.
+				*	\return			A copy of the data at the location pointer to by the iterator.
+				*	\throw			Refer to SList::Iterator as this function deferences that internally.
+				*/
+				PairType*			operator->();
 					
 			private:
 
-				const HashMap*						mpOwner;
-				VectorIteratorType					mItVector;
-				SListIteratorType					mItSlist;
+				const HashMap*		mpOwner;				/**< The owner HashMap who owns this Iterator */
+				VectorIteratorType	mItVector;				/**< The bucket iterator which contains the mItSlist stored */
+				SListIteratorType	mItSlist;				/**< The current element iterator pointed to */
 
 			};
 
-			HashMap() = delete;
-			HashMap(const std::uint32_t numBuckets);
-			HashMap(const HashMap& rhs);
-			HashMap(HashMap&& rhs);
-			~HashMap() = default;
+			/**
+			*	\brief				Default constructor. Deleted because user is required to
+			*						specify bucket size at construction.
+			*/
+									HashMap() = delete;
 
-			HashMap& operator=(const HashMap& rhs);
-			HashMap operator=(HashMap&& rhs);
+			/**
+			*	\brief				Parametrized constructor. You should pass in the bucket size at instantiation.
+			*	\param numBuckets	Bucket size of the HashMap.
+			*/
+									HashMap(const std::uint32_t numBuckets);
 
-			bool operator==(const HashMap& rhs) const;
-			bool operator!=(const HashMap& rhs) const;
+			/**
+			*	\brief				Copy constructor. Deep copies the HashMap provided into itself.
+			*	\param rhs			The HashMap to copy from.
+			*/
+									HashMap(const HashMap& rhs);
 
-			Iterator			Insert(const PairType& entry);
-			Iterator			Find(const TKey& key) const;
-			bool				Remove(const TKey& key);
-			TValue&				operator[](const TKey& key);
+			/**
+			*	\brief				Move constructor. Transfers ownership of the list to itself.
+			*	\param rhs			The Vector to move data from.
+			*/
+									HashMap(HashMap&& rhs);
 
-			bool				ContainsKey(const TKey& key) const;
+			/**
+			*	\brief				Destructor, does nothing.
+			*/
+									~HashMap() = default;
 
-			void				Clear();
+			/**
+			*	\brief				Copy assignment operator. Deep copies the HashMap provided into itself.
+			*	\param rhs			The HashMap to copy from.
+			*	\return				A reference to this newly created HashMap.
+			*/
+			HashMap&				operator=(const HashMap& rhs);
 
-			Iterator			begin() const;
-			Iterator			end() const;
+			/**
+			*	\brief				Move assignment operator. Transfers ownership of the HashMap to itself.
+			*	\param rhs			The HashMap to move data from.
+			*	\return				A reference to this newly created HashMap.
+			*/
+			HashMap					operator=(HashMap&& rhs);
 
-			std::uint32_t		Size() const;
+			/**
+			*	\brief				Equality operator. Checks whether the two operands are equal.
+			*	\param rhs			The HashMap to compare to.
+			*	\return				True if the two HashMaps are equal, false otherwise.
+			*/
+			bool					operator==(const HashMap& rhs) const;
+
+			/**
+			*	\brief				Inequality operator. Checks whether the two operands are uequal.
+			*	\param rhs			The HashMap to compare to.
+			*	\return				True if the two HashMaps are unequal, false otherwise.
+			*/
+			bool					operator!=(const HashMap& rhs) const;
+
+			/**
+			*	\brief				Inserts an key-value pair based on the hash of the key. You
+			*						may provide your own hashing function as a template during
+									object declaration, or you may use the default.
+			*	\param entry		A key-value std::pair.
+			*	\return				A copy of an iterator pointing to the pair just inserted.
+			*/
+			Iterator				Insert(const PairType& entry);
+
+			/**
+			*	\brief				Searches for specified key.
+			*	\param key			The key to search for.
+			*	\return				An Iterator pointing to the found pair, or end() if it is not found.
+			*/
+			Iterator				Find(const TKey& key) const;
+
+			/**
+			*	\brief				Searches for and removes an pair of specified key.
+			*	\param key			The key whose entry is to be removed.
+			*	\return				True if the key was found and removed, false otherwise.
+			*/
+			bool					Remove(const TKey& key);
+
+			/**
+			*	\brief				Returns a reference to the pair with the specified key.
+			*						If no entry is found, one is created.
+			*	\param key			The key whose pair to retrieve.
+			*	\return				A non-const reference to the pair with the specified key.
+			*/
+			TValue&					operator[](const TKey& key);
+
+			/**
+			*	\brief				Reports whether a specified key exists in the HashMap.
+			*	\param key			The key to search for.
+			*	\return				True if the key exists, false otherwise.
+			*/
+			bool					ContainsKey(const TKey& key) const;
+
+			/**
+			*	\brief				Removes all elements from the HashMap, and also calls their destructors.
+			*/
+			void					Clear();
+
+			/**
+			*	\brief				Returns an Iterator to the first non-empty element in the container.
+			*	\return				An Iterator to the first non-empty element in the container.
+			*/
+			Iterator				begin() const;
+
+			/**
+			*	\brief				Returns an Iterator to the element after the last element in the container.
+			*	\return				An Iterator to the element after the last element in the container.
+			*/
+			Iterator				end() const;
+
+			/**
+			*	\brief				Returns number of non-empty elements currently stored in the container.
+			*	\return				Number of non-empty elements in the container.
+			*/
+			std::uint32_t			Size() const;
 
 		private:
 
-			VectorType&			Vector()									{ return mData; };
-			const VectorType&	Vector() const								{ return mData; };
-			SListType&			SListAt(const std::uint32_t index)			{ return Vector().At(index); }
-			const SListType&	SListAt(const std::uint32_t index) const	{ return Vector().At(index); }
-			SListType&			SListAt(VectorIteratorType it)				{ return Vector().At(it - Vector().begin()); }
+			/**
+			*	\brief				Helper function that returns the implementation Vector in this container.
+			*						This is the non-const version.
+			*	\return				A non-const reference to the Vector used in implementing this HashMap.
+			*/
+			VectorType&				Vector()										{ return mData; };
+			
+			/**
+			*	\brief				Helper function that returns the implementation Vector in this container.
+			*						This is the const version.
+			*	\return				A const reference to the Vector used in implementing this HashMap.
+			*/
+			const VectorType&		Vector() const									{ return mData; };
 
-			std::uint32_t		GetBucketNumber(const TKey& key) const;
-			std::uint32_t		GetBucketSize() const;
+			/**
+			*	\brief				Helper function that returns the implementation SList at a specified position
+			*						in the implementation Vector, for this HashMap.
+			*						This is the non-const version.
+			*	\param index		The position of the Vector to retrieve the SList from.
+			*	\return				A non-const reference to the SList at a specified position of the Vector used
+			*						in implementing this HashMap.
+			*/
+			SListType&				SListAt(const std::uint32_t index)				{ return Vector().At(index); }
 
-			VectorType			mData;
-			std::uint32_t		mSize;
-			const HashFunctor	mHashFunctor;
+			/**
+			*	\brief				Helper function that returns the implementation SList at a specified position
+			*						in the implementation Vector, for this HashMap.
+			*						This is the const version.
+			*	\param index		The position of the Vector to retrieve the SList from.
+			*	\return				A const reference to the SList at a specified position of the Vector used
+			*						in implementing this HashMap.
+			*/
+			const SListType&		SListAt(const std::uint32_t index) const		{ return Vector().At(index); }
+
+			/**
+			*	\brief				Helper function that returns the implementation SList at a specified iterator
+			*						position in the implementation Vector, for this HashMap.
+			*						This is the non-const version.
+			*	\param it			The iterator of the Vector to retrieve the SList from.
+			*	\return				A non-const reference to the SList at a specified iterator position of the Vector
+			*						used in implementing this HashMap.
+			*/
+			SListType&				SListAt(const VectorIteratorType it)			{ return Vector().At(it - Vector().begin()); }
+
+			/**
+			*	\brief				Helper function that returns the implementation SList at a specified iterator
+			*						position in the implementation Vector, for this HashMap.
+			*						This is the const version.
+			*	\param it			The iterator of the Vector to retrieve the SList from.
+			*	\return				A const reference to the SList at a specified iterator position of the Vector
+			*						used in implementing this HashMap.
+			*/
+			const SListType&		SListAt(const VectorIteratorType it) const		{ return Vector().At(it - Vector().begin()); }
+
+			/**
+			*	\brief				Helper function that returns the bucket a specified key belongs to.
+			*						This is determined internally by calling the hash functor.
+			*	\param key			The key whose bucket is to be found.
+			*	\return				The bucket the specified key belongs to.
+			*/
+			std::uint32_t			GetBucketNumber(const TKey& key) const;
+
+			/**
+			*	\brief				Helper function that returns the number of buckets in the HashMap.
+			*	\return				The number of buckets in the HashMap.
+			*/
+			std::uint32_t			GetBucketSize() const;
+
+			VectorType				mData;									/**< The implementation Vector that is used */
+			std::uint32_t			mSize;									/**< Stores the current number of non-empty elements in the container */
+			const HashFunctor		mHashFunctor;							/**< Instance of the templated hash functor to be used in hashing elements */
 		};
 
 #include "HashMap.inl"
