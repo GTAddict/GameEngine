@@ -177,7 +177,7 @@ namespace GameEngine
 
 			/**
 			*	\brief		Pushes data to the beginning of the list.
-			*	\param T	Data to push.
+			*	\param data	Data to push.
 			*	\return		An iterator to the front of the list.
 			*/
 			Iterator		PushFront(const T& data);
@@ -191,7 +191,7 @@ namespace GameEngine
 
 			/**
 			*	\brief		Pushes data to the end of the list.
-			*	\param T	Data  to push.
+			*	\param data	Data  to push.
 			*	\return		An iterator to the end of the list.
 			*/
 			Iterator		PushBack(const T& data);
@@ -199,7 +199,7 @@ namespace GameEngine
 			/**
 			*	\brief		Inserts data after the given iterator.
 			*	\param it	Iterator to insert after
-			*	\param T	Data  to push.
+			*	\param data	Data  to push.
 			*	\return		An iterator to the element just pushed.
 			*	\throw std::out_of_range if an element is inserted after end().
 			*/
@@ -272,14 +272,14 @@ namespace GameEngine
 
 			/**
 			*	\brief		Returns an iterator to the Node that contains the search element.
-			*	\param T	The data to find.
+			*	\param data	The data to find.
 			*	\return		An iterator to the found data.
 			*/
 			Iterator		Find(const T& data) const;
 
 			/**
 			*	\brief		Removes the Node that contains the provided data.
-			*	\param T	The data to be found and removed.
+			*	\param data	The data to be found and removed.
 			*/
 			void			Remove(const T& data);
 
