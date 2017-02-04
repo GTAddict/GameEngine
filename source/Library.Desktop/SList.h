@@ -36,9 +36,8 @@ namespace GameEngine
 			*/
 			class Iterator
 			{
-				template <typename A>
-				friend class SList;
-				template <typename P, typename Q, typename R>
+				friend class SList<T>;
+				template <typename A, typename B, typename C>
 				friend class HashMap;
 
 			public:

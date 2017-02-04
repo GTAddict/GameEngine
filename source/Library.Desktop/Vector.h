@@ -43,7 +43,7 @@ namespace GameEngine
 				 *	\param T*		The current element to point to.
 				 *	\param pOwner	The current owner Vector.
 				 */
-									Iterator(T* element, const Vector<T>* const pOwner);
+									Iterator(T* element, const Vector* const pOwner);
 
 				/**
 				 *	\brief			Copy constructor. This will copy the current element and owner pointer.
