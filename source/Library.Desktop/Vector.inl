@@ -89,6 +89,30 @@ inline Vector<T>::~Vector()
 	free(mpBegin);
 }
 
+template<typename T>
+inline bool Vector<T>::operator==(const Vector& rhs)
+{
+	if (Size() != rhs.Size())	return false;
+	
+	Iterator thisIt = begin(), thisEnd = end(), rhsIt = rhs.begin();
+
+	for (; thisIt != thisEnd; ++thisIt, ++rhsIt)
+	{
+		if (*thisIt != *rhsIt)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+template<typename T>
+inline bool Vector<T>::operator!=(const Vector & rhs)
+{
+	return !(*this == rhs);
+}
+
 template <typename T>
 inline Vector<T>::Iterator::Iterator()
 	: mpCurrent(nullptr)

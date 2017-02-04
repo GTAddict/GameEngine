@@ -231,6 +231,20 @@ namespace GameEngine
 									~Vector();
 
 			/**
+			 *	\brief				Equality operator. Checks whether the two operands are equal.
+			 *	\param rhs			The Vector to compare to.
+			 *	\return				True if the two Vectors are equal, false otherwise.
+			 */
+			bool					operator==(const Vector& rhs);
+
+			/**
+			*	\brief				Inequality operator. Checks whether the two operands are inequal.
+			*	\param rhs			The Vector to compare to.
+			*	\return				True if the two Vectors are inequal, false otherwise.
+			*/
+			bool					operator!=(const Vector& rhs);
+
+			/**
 			 *	\brief				Allocates memory for the capacity specified, if it hasn't already.
 			 *	\param capacity		The number of elements for which to allocate memory.
 			 */
