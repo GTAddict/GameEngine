@@ -36,7 +36,10 @@ namespace GameEngine
 			*/
 			class Iterator
 			{
+				template <typename A>
 				friend class SList;
+				template <typename P, typename Q, typename R>
+				friend class HashMap;
 
 			public:
 
@@ -160,6 +163,9 @@ namespace GameEngine
 			*	\return		A reference to the newly created list.
 			*/
 			SList<T>&		operator=(SList<T>&& rhs);
+
+			bool			operator==(const SList<T>& rhs);
+			bool			operator!=(const SList<T>& rhs);
 
 			/**
 			*	\brief		Pushes data to the beginning of the list.

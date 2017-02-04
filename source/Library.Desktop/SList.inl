@@ -64,6 +64,30 @@ inline SList<T>& SList<T>::operator=(SList<T>&& rhs)
 	return *this;
 }
 
+template<typename T>
+inline bool SList<T>::operator==(const SList<T>& rhs)
+{
+	if (mSize != rhs.mSize)		return false;
+
+	Iterator thisIt = begin(), thisEnd = end(), rhsIt = rhs.begin();
+
+	for (; thisIt != thisEnd; ++thisIt, ++rhsIt)
+	{
+		if (*thisIt != *rhsIt)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+template<typename T>
+inline bool SList<T>::operator!=(const SList<T>& rhs)
+{
+	return !(*this == rhs);
+}
+
 template <typename T>
 inline typename SList<T>::Iterator SList<T>::PushFront(const T& data)
 {
