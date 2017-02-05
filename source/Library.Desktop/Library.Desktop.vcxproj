@@ -148,9 +148,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Datum.h" />
     <ClInclude Include="HashMap.h" />
     <ClInclude Include="HashMapFunctors.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="RTTI.h" />
     <ClInclude Include="SList.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Vector.h" />
