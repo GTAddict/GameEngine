@@ -26,9 +26,9 @@ inline typename HashMap<TKey, TValue, HashFunctor>::Iterator& HashMap<TKey, TVal
 {
 	if (this != &rhs)
 	{
-		mpOwner = rhs.mpOwner;
-		mItSlist = rhs.mItSlist;
-		mItVector = rhs.mItVector;
+		mpOwner		= rhs.mpOwner;
+		mItSlist	= rhs.mItSlist;
+		mItVector	= rhs.mItVector;
 	}
 
 	return *this;

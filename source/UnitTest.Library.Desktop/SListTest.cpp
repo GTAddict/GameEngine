@@ -19,6 +19,8 @@ namespace Microsoft
 				s << "Current node pointer: ";
 #if _DEBUG
 				s << t.GetCurrentNodePtr() << "\n";
+#else
+				t;
 #endif
 				s << "Current list owner: ";
 #if _DEBUG
