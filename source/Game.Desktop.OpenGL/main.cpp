@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "glfw3.h"
+#include <GLFW/glfw3.h>
 
 ///<summary>
 /// Entry point of application.
