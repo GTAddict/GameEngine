@@ -3,7 +3,8 @@
 #include <string>
 #include <sstream>
 #define GLM_FORCE_CXX98
-#include <glm/glm.hpp>
+#include <glm/vec4.hpp>
+#include <glm/mat4x4.hpp>
 #include "RTTI.h"
 
 namespace GameEngine
@@ -355,7 +356,7 @@ namespace GameEngine
 		inline std::string Datum::ToString<float>(const std::uint32_t index)
 		{
 			std::stringstream s;
-			s << Get<float>(index);
+			s << "Float " << Get<float>(index);
 			return s.str();
 		}
 
@@ -363,7 +364,7 @@ namespace GameEngine
 		inline std::string Datum::ToString<std::int32_t>(const std::uint32_t index)
 		{
 			std::stringstream s;
-			s << Get<std::int32_t>(index);
+			s << "Integer " << Get<std::int32_t>(index);
 			return s.str();
 		}
 
@@ -371,7 +372,17 @@ namespace GameEngine
 		inline std::string Datum::ToString<glm::mat4x4>(const std::uint32_t index)
 		{
 			std::stringstream s;
-			s << "Length: " << Get<glm::mat4x4>(index).length();
+			s << "Matrix";
+			glm::mat4x4& matrix = Get<glm::mat4x4>(index);
+
+			for (int i = 0; i < 4; ++i)
+			{
+				for (int j = 0; j < 4; ++j)
+				{
+					s << " " << matrix[i][j];
+				}
+			}
+
 			return s.str();
 		}
 
@@ -379,14 +390,23 @@ namespace GameEngine
 		inline std::string Datum::ToString<glm::vec4>(const std::uint32_t index)
 		{
 			std::stringstream s;
-			s << "Length: " << Get<glm::vec4>(index).length();
+			s << "Vector";
+			glm::vec4& vector = Get<glm::vec4>(index);
+
+			for (int i = 0; i < 4; ++i)
+			{
+				s << " " << vector[i];
+			}
+			
 			return s.str();
 		}
 
 		template <>
 		inline std::string Datum::ToString<std::string>(const std::uint32_t index)
 		{
-			return Get<std::string>(index);
+			std::stringstream s;
+			s << "String " << Get<std::string>(index);
+			return s.str();
 		}
 
 		template <>

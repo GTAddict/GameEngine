@@ -6,7 +6,7 @@ namespace GameEngine
 	namespace Library
 	{
 		Datum::Datum()
-			: mData{ nullptr }
+			: mData { nullptr }
 			, mType(DatumType::Unknown)
 			, mSize(0)
 			, mCapacity(0)
@@ -127,8 +127,8 @@ namespace GameEngine
 		{
 			switch (mType)
 			{
-			case DatumType::Float:		SetSize_Imp<float>(size);		break;
-			case DatumType::Integer:	SetSize_Imp<std::int32_t>(size);		break;
+			case DatumType::Float:		SetSize_Imp<float>(size);			break;
+			case DatumType::Integer:	SetSize_Imp<std::int32_t>(size);	break;
 			case DatumType::Matrix:		SetSize_Imp<glm::mat4x4>(size);		break;
 			case DatumType::Pointer:	SetSize_Imp<RTTIPointer>(size);		break;
 			case DatumType::String:		SetSize_Imp<std::string>(size);		break;
@@ -147,7 +147,7 @@ namespace GameEngine
 			case DatumType::Vector:		Clear_Imp<glm::vec4>();		break;
 			case DatumType::Matrix:		Clear_Imp<glm::mat4x4>();	break;
 			case DatumType::String:		Clear_Imp<std::string>();	break;
-			case DatumType::Pointer:	Clear_Imp<RTTIPointer>();			break;
+			case DatumType::Pointer:	Clear_Imp<RTTIPointer>();	break;
 			case DatumType::Table:		throw new std::domain_error("Unimplemented.");
 			default:					throw new std::domain_error("Unimplemented.");
 			}
@@ -168,71 +168,52 @@ namespace GameEngine
 
 			char dataType[11];
 			sscanf_s(inputString.c_str(), "%s", dataType, sizeof(dataType));
-
 			std::string dataTypeString(dataType);
 
-			if (dataTypeString == "Integer")
+			if (dataTypeString == "Integer" && mType == DatumType::Integer)
 			{
-				if (mType != DatumType::Integer)
-				{
-					throw std::invalid_argument("Trying to assign Integer to Datum of different type.");
-				}
-
 				std::int32_t data;
 				sscanf_s(inputString.c_str(), "%*s %d", &data);
-
 				Set(data, index);
 			}
-			else if (dataTypeString == "Float")
+			else if (dataTypeString == "Float" && mType == DatumType::Float)
 			{
-				if (mType != DatumType::Float)
-				{
-					throw std::invalid_argument("Trying to assign Float to Datum of different type.");
-				}
-
 				float data;
 				sscanf_s(inputString.c_str(), "%*s %f", &data);
-
 				Set(data, index);
 			}
-			else if (dataTypeString == "Vector")
+			else if (dataTypeString == "Vector" && mType == DatumType::Vector)
 			{
-				if (mType != DatumType::Vector)
-				{
-					throw std::invalid_argument("Trying to assign Vector to Datum of different type.");
-				}
-
-				throw std::domain_error("Unimplemented");
+				glm::vec4 data;
+				sscanf_s(inputString.c_str(), "%*s %f %f %f %f", &data[0], &data[1], &data[2], &data[3]);
+				Set(data, index);
 			}
-			else if (dataTypeString == "Matrix")
+			else if (dataTypeString == "Matrix" && mType == DatumType::Matrix)
 			{
-				if (mType != DatumType::Matrix)
-				{
-					throw std::invalid_argument("Trying to assign Matrix to Datum of different type.");
-				}
-
-				throw std::domain_error("Unimplmented");
+				glm::mat4x4 data;
+				sscanf_s(
+					inputString.c_str(),
+					"%*s %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f",
+					&data[0][0],	&data[0][1],	&data[0][2],	&data[0][3],
+					&data[1][0],	&data[1][1],	&data[1][2],	&data[1][3],
+					&data[2][0],	&data[2][1],	&data[2][2],	&data[2][3],
+					&data[3][0],	&data[3][1],	&data[3][2],	&data[3][3]
+				);
+				Set(data, index);
 			}
-			else if (dataTypeString == "String")
+			else if (dataTypeString == "String" && mType == DatumType::String)
 			{
-				if (mType != DatumType::String)
-				{
-					throw std::invalid_argument("Trying to assign String to Datum of different type.");
-				}
-
 				char data[255];
 				sscanf_s(inputString.c_str(), "%*s %s", &data, sizeof(data));
-
 				Set(std::string(data), index);
 			}
-			else if (dataTypeString == "Pointer")
+			else if (dataTypeString == "Pointer" && mType == DatumType::Pointer)
 			{
-				if (mType != DatumType::Pointer)
-				{
-					throw std::invalid_argument("Trying to assign Pointer to Datum of different type.");
-				}
-
 				throw std::domain_error("Unimplemented.");
+			}
+			else
+			{
+				throw std::invalid_argument("Unknown datatype, parse error, or invalid assignment to datum of different type.");
 			}
 		}
 
@@ -240,9 +221,9 @@ namespace GameEngine
 		{
 			switch (mType)
 			{
-			case DatumType::Integer:	Reserve_Imp<int>(capacity);		break;
-			case DatumType::Float:		Reserve_Imp<float>(capacity);		break;
-			case DatumType::Vector:		Reserve_Imp<glm::vec4>(capacity);		break;
+			case DatumType::Integer:	Reserve_Imp<int>		(capacity);		break;
+			case DatumType::Float:		Reserve_Imp<float>		(capacity);		break;
+			case DatumType::Vector:		Reserve_Imp<glm::vec4>	(capacity);		break;
 			case DatumType::Matrix:		Reserve_Imp<glm::mat4x4>(capacity);		break;
 			case DatumType::String:		Reserve_Imp<std::string>(capacity);		break;
 			case DatumType::Pointer:	Reserve_Imp<RTTIPointer>(capacity);		break;
@@ -294,7 +275,7 @@ namespace GameEngine
 				currentElement->~T();
 				--mSize;
 				currentElement;		// Destructor cannot be invoke on built-in types
-									// so "local variable not referenced warning pops up
+									// so "local variable not referenced" warning pops up
 			}
 		}
 
