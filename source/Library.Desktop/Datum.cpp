@@ -167,7 +167,7 @@ namespace GameEngine
 			}
 
 			char dataType[11];
-			sscanf_s(inputString.c_str(), "%s", dataType, sizeof(dataType));
+			sscanf_s(inputString.c_str(), "%s", dataType, static_cast<unsigned int>(sizeof(dataType)));
 			std::string dataTypeString(dataType);
 
 			if (dataTypeString == "Integer" && mType == DatumType::Integer)
@@ -204,7 +204,7 @@ namespace GameEngine
 			else if (dataTypeString == "String" && mType == DatumType::String)
 			{
 				char data[255];
-				sscanf_s(inputString.c_str(), "%*s %s", &data, sizeof(data));
+				sscanf_s(inputString.c_str(), "%*s %s", &data, static_cast<unsigned int>(sizeof(data)));
 				Set(std::string(data), index);
 			}
 			else if (dataTypeString == "Pointer" && mType == DatumType::Pointer)
