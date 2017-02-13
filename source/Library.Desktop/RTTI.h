@@ -4,54 +4,56 @@
 #include <string>
 #include <cstdint>
 
-namespace Library
+namespace GameEngine
 {
-	class RTTI
+	namespace Library
 	{
-	public:
-		virtual ~RTTI() = default;
-		
-		virtual std::uint64_t TypeIdInstance() const = 0;
-		
-		virtual RTTI* QueryInterface(const std::uint64_t id) const
+		class RTTI
 		{
-			UNREFERENCED_PARAMETER(id);
-			return nullptr;
-		}
+		public:
+			virtual ~RTTI() = default;
 
-		virtual bool Is(std::uint64_t id) const
-		{
-			UNREFERENCED_PARAMETER(id);
-			return false;
-		}
+			virtual std::uint64_t TypeIdInstance() const = 0;
 
-		virtual bool Is(const std::string& name) const
-		{
-			UNREFERENCED_PARAMETER(name);
-			return false;
-		}
-
-		template <typename T>
-		T* As() const
-		{
-			if (Is(T::TypeIdClass()))
+			virtual RTTI* QueryInterface(const std::uint64_t id) const
 			{
-				return (T*)this;
+				UNREFERENCED_PARAMETER(id);
+				return nullptr;
 			}
 
-			return nullptr;
-		}
+			virtual bool Is(std::uint64_t id) const
+			{
+				UNREFERENCED_PARAMETER(id);
+				return false;
+			}
 
-		virtual std::string ToString() const
-		{
-			return "RTTI";
-		}
+			virtual bool Is(const std::string& name) const
+			{
+				UNREFERENCED_PARAMETER(name);
+				return false;
+			}
 
-		virtual bool Equals(const RTTI* rhs) const
-		{
-			return this == rhs;
-		}
-	};
+			template <typename T>
+			T* As() const
+			{
+				if (Is(T::TypeIdClass()))
+				{
+					return (T*)this;
+				}
+
+				return nullptr;
+			}
+
+			virtual std::string ToString() const
+			{
+				return "RTTI";
+			}
+
+			virtual bool Equals(const RTTI* rhs) const
+			{
+				return this == rhs;
+			}
+		};
 
 #define RTTI_DECLARATIONS(Type, ParentType)																	 \
 		public:                                                                                              \
@@ -84,4 +86,5 @@ namespace Library
 				static std::uint64_t sRunTimeTypeId;
 
 #define RTTI_DEFINITIONS(Type) std::uint64_t Type::sRunTimeTypeId = reinterpret_cast<std::uint64_t>(&Type::sRunTimeTypeId);
+	}
 }
