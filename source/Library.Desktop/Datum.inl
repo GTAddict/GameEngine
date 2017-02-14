@@ -22,36 +22,66 @@ inline T* GameEngine::Library::Datum::GetDataPointer() const
 template <>
 inline std::int32_t* GameEngine::Library::Datum::GetDataPointer() const
 {
+	if (mType != DatumType::Integer)
+	{
+		throw std::invalid_argument("Trying to access data as integer when data is not an integer!");
+	}
+
 	return mData.pInt;
 }
 
 template <>
 inline float* GameEngine::Library::Datum::GetDataPointer() const
 {
+	if (mType != DatumType::Float)
+	{
+		throw std::invalid_argument("Trying to access data as float when data is not a float!");
+	}
+
 	return mData.pFloat;
 }
 
 template <>
 inline glm::vec4* GameEngine::Library::Datum::GetDataPointer() const
 {
+	if (mType != DatumType::Vector)
+	{
+		throw std::invalid_argument("Trying to access data as vector when data is not a vector!");
+	}
+
 	return mData.pVec4;
 }
 
 template <>
 inline glm::mat4x4* GameEngine::Library::Datum::GetDataPointer() const
 {
+	if (mType != DatumType::Matrix)
+	{
+		throw std::invalid_argument("Trying to access data as matrix when data is not a matrix!");
+	}
+
 	return mData.pMat4;
 }
 
 template <>
 inline std::string* GameEngine::Library::Datum::GetDataPointer() const
 {
+	if (mType != DatumType::String)
+	{
+		throw std::invalid_argument("Trying to access data as string when data is not a string!");
+	}
+
 	return mData.pString;
 }
 
 template <>
 inline GameEngine::Library::Datum::RTTIPointer* GameEngine::Library::Datum::GetDataPointer() const
 {
+	if (mType != DatumType::Pointer)
+	{
+		throw std::invalid_argument("Trying to access data as RTTI pointer when data is not an RTTI pointer!");
+	}
+
 	return mData.ppRTTI;
 }
 
@@ -101,14 +131,14 @@ inline void GameEngine::Library::Datum::SetDataPointer(RTTIPointer* dataPointer)
 template <typename T>
 GameEngine::Library::Datum& GameEngine::Library::Datum::operator=(const T& rhs)
 {
-	Set(T);
+	Set(rhs);
 	return *this;
 }
 
 template <typename T>
 inline void GameEngine::Library::Datum::Set(const T& value, const std::uint32_t index)
 {
-	static_assert("Not implemented.");
+	static_assert(false, "Not implemented.");
 }
 
 template <>
@@ -243,13 +273,13 @@ inline T& GameEngine::Library::Datum::Get(const std::uint32_t index) const
 }
 
 template <typename T>
-inline std::string GameEngine::Library::Datum::ToString(const std::uint32_t index)
+inline std::string GameEngine::Library::Datum::ToString(const std::uint32_t index) const
 {
 	static_assert("Provide implementation for your class.");
 }
 
 template <>
-inline std::string GameEngine::Library::Datum::ToString<float>(const std::uint32_t index)
+inline std::string GameEngine::Library::Datum::ToString<float>(const std::uint32_t index) const
 {
 	std::stringstream s;
 	s << "Float " << Get<float>(index);
@@ -257,7 +287,7 @@ inline std::string GameEngine::Library::Datum::ToString<float>(const std::uint32
 }
 
 template <>
-inline std::string GameEngine::Library::Datum::ToString<std::int32_t>(const std::uint32_t index)
+inline std::string GameEngine::Library::Datum::ToString<std::int32_t>(const std::uint32_t index) const
 {
 	std::stringstream s;
 	s << "Integer " << Get<std::int32_t>(index);
@@ -265,7 +295,7 @@ inline std::string GameEngine::Library::Datum::ToString<std::int32_t>(const std:
 }
 
 template <>
-inline std::string GameEngine::Library::Datum::ToString<glm::mat4x4>(const std::uint32_t index)
+inline std::string GameEngine::Library::Datum::ToString<glm::mat4x4>(const std::uint32_t index) const
 {
 	std::stringstream s;
 	s << "Matrix";
@@ -283,7 +313,7 @@ inline std::string GameEngine::Library::Datum::ToString<glm::mat4x4>(const std::
 }
 
 template <>
-inline std::string GameEngine::Library::Datum::ToString<glm::vec4>(const std::uint32_t index)
+inline std::string GameEngine::Library::Datum::ToString<glm::vec4>(const std::uint32_t index) const
 {
 	std::stringstream s;
 	s << "Vector";
@@ -298,7 +328,7 @@ inline std::string GameEngine::Library::Datum::ToString<glm::vec4>(const std::ui
 }
 
 template <>
-inline std::string GameEngine::Library::Datum::ToString<std::string>(const std::uint32_t index)
+inline std::string GameEngine::Library::Datum::ToString<std::string>(const std::uint32_t index) const
 {
 	std::stringstream s;
 	s << "String " << Get<std::string>(index);
@@ -306,7 +336,7 @@ inline std::string GameEngine::Library::Datum::ToString<std::string>(const std::
 }
 
 template <>
-inline std::string GameEngine::Library::Datum::ToString<GameEngine::Library::Datum::RTTIPointer>(const std::uint32_t index)
+inline std::string GameEngine::Library::Datum::ToString<GameEngine::Library::Datum::RTTIPointer>(const std::uint32_t index) const
 {
 	return Get<GameEngine::Library::Datum::RTTIPointer>(index)->ToString();
 }

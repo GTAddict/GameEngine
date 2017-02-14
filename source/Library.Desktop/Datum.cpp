@@ -53,8 +53,8 @@ namespace GameEngine
 				case DatumType::Pointer:	for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<RTTIPointer>	(i));	}	break;
 				case DatumType::String:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<std::string>	(i));	}	break;
 				case DatumType::Vector:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<glm::vec4>		(i));	}	break;
-				case DatumType::Table:		throw new std::domain_error("Unimplemented.");
-				default:					throw new std::domain_error("Unimplemented.");
+				case DatumType::Table:		throw std::domain_error("Unimplemented.");
+				default:					throw std::domain_error("Unimplemented.");
 				}
 			}
 
@@ -63,15 +63,18 @@ namespace GameEngine
 
 		Datum& Datum::operator=(Datum&& rhs)
 		{
-			mData			= rhs.mData;
-			mType			= rhs.mType;
-			mSize			= rhs.mSize;
-			mCapacity		= rhs.mCapacity;
+			if (this != &rhs)
+			{
+				mData = rhs.mData;
+				mType = rhs.mType;
+				mSize = rhs.mSize;
+				mCapacity = rhs.mCapacity;
 
-			rhs.mData		= { nullptr };
-			rhs.mType		= DatumType::Unknown;
-			rhs.mSize		= 0;
-			rhs.mCapacity	= 0;
+				rhs.mData = { nullptr };
+				rhs.mType = DatumType::Unknown;
+				rhs.mSize = 0;
+				rhs.mCapacity = 0;
+			}
 
 			return *this;
 		}
@@ -88,8 +91,8 @@ namespace GameEngine
 				case DatumType::Pointer:	for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<RTTIPointer>	(i) != rhs.Get<RTTIPointer>		(i)) { return false; } }	break;
 				case DatumType::String:		for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<std::string>	(i) != rhs.Get<std::string>		(i)) { return false; } }	break;
 				case DatumType::Vector:		for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<glm::vec4>		(i) != rhs.Get<glm::vec4>		(i)) { return false; } }	break;
-				case DatumType::Table:		throw new std::domain_error("Unimplemented.");
-				default:					throw new std::domain_error("Unimplemented.");
+				case DatumType::Table:		throw std::domain_error("Unimplemented.");
+				default:					throw std::domain_error("Unimplemented.");
 				}
 				
 				return true;
@@ -127,14 +130,14 @@ namespace GameEngine
 		{
 			switch (mType)
 			{
-			case DatumType::Float:		SetSize_Imp<float>(size);			break;
-			case DatumType::Integer:	SetSize_Imp<std::int32_t>(size);	break;
-			case DatumType::Matrix:		SetSize_Imp<glm::mat4x4>(size);		break;
-			case DatumType::Pointer:	SetSize_Imp<RTTIPointer>(size);		break;
-			case DatumType::String:		SetSize_Imp<std::string>(size);		break;
-			case DatumType::Vector:		SetSize_Imp<glm::vec4>(size);		break;
-			case DatumType::Table:		throw new std::domain_error("Unimplemented.");
-			default:					throw new std::domain_error("Unimplemented.");
+			case DatumType::Float:		SetSize_Imp<float>			(size);		break;
+			case DatumType::Integer:	SetSize_Imp<std::int32_t>	(size);		break;
+			case DatumType::Matrix:		SetSize_Imp<glm::mat4x4>	(size);		break;
+			case DatumType::Pointer:	SetSize_Imp<RTTIPointer>	(size);		break;
+			case DatumType::String:		SetSize_Imp<std::string>	(size);		break;
+			case DatumType::Vector:		SetSize_Imp<glm::vec4>		(size);		break;
+			case DatumType::Table:		throw std::domain_error("Unimplemented.");
+			default:					throw std::domain_error("Type has not been set.");
 			}
 		}
 
@@ -148,12 +151,12 @@ namespace GameEngine
 			case DatumType::Matrix:		Clear_Imp<glm::mat4x4>();	break;
 			case DatumType::String:		Clear_Imp<std::string>();	break;
 			case DatumType::Pointer:	Clear_Imp<RTTIPointer>();	break;
-			case DatumType::Table:		throw new std::domain_error("Unimplemented.");
-			default:					throw new std::domain_error("Unimplemented.");
+			case DatumType::Table:		throw std::domain_error("Unimplemented.");
+			default:												break;
 			}
 		}
 
-		void Datum::SetFromString(std::string& inputString, const std::uint32_t index)
+		void Datum::SetFromString(const std::string& inputString, const std::uint32_t index)
 		{
 			// Data format:
 			// Type Value
@@ -227,8 +230,8 @@ namespace GameEngine
 			case DatumType::Matrix:		Reserve_Imp<glm::mat4x4>(capacity);		break;
 			case DatumType::String:		Reserve_Imp<std::string>(capacity);		break;
 			case DatumType::Pointer:	Reserve_Imp<RTTIPointer>(capacity);		break;
-			case DatumType::Table:		throw new std::domain_error("Unimplemented.");
-			default:					throw new std::domain_error("Unimplemented.");
+			case DatumType::Table:		throw std::domain_error("Unimplemented.");
+			default:					throw std::domain_error("Unimplemented.");
 			}
 
 		}
@@ -271,7 +274,7 @@ namespace GameEngine
 
 			while (mSize > size)
 			{
-				T* currentElement = GetDataPointer<T>() + mSize;
+				T* currentElement = GetDataPointer<T>() + mSize - 1;
 				currentElement->~T();
 				--mSize;
 				currentElement;		// Destructor cannot be invoke on built-in types
