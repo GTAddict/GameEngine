@@ -1,14 +1,6 @@
 #include "Vector.h"
 #pragma once
 
-const std::uint32_t DEFAULT_CONTAINER_CAPACITY = 5;
-
-template <typename T>
-inline Vector<T>::Vector()
-	: Vector(DEFAULT_CONTAINER_CAPACITY)
-{
-}
-
 template <typename T>
 inline Vector<T>::Vector(const std::uint32_t capacity)
 	: Vector(BIND_TO_GETCAPACITYFN(&Vector<T>::GetNewCapacity), capacity)
@@ -66,7 +58,8 @@ inline Vector<T>& Vector<T>::operator=(Vector&& rhs)
 {
 	if (this != &rhs)
 	{
-		this->~Vector();
+		Clear();
+		free(mpBegin);
 
 		mpBegin = rhs.mpBegin;
 		mpEnd = rhs.mpEnd;
@@ -225,12 +218,22 @@ inline bool Vector<T>::Iterator::operator>=(const Iterator& rhs) const
 template<typename T>
 inline typename Vector<T>::Iterator Vector<T>::Iterator::operator+(const std::uint32_t rhs) const
 {
+	if (mpCurrent == nullptr)
+	{
+		throw std::out_of_range("Cannot add to iterator pointing to nullptr.");
+	}
+
 	return Iterator (mpCurrent + rhs, mpOwner);
 }
 
 template<typename T>
 inline typename Vector<T>::Iterator Vector<T>::Iterator::operator-(const std::uint32_t rhs) const
 {
+	if (mpCurrent == nullptr)
+	{
+		throw std::out_of_range("Cannot subtract from iterator pointing to nullptr.");
+	}
+
 	return Iterator(mpCurrent - rhs, mpOwner);
 }
 
@@ -248,6 +251,11 @@ inline std::int32_t Vector<T>::Iterator::operator-(const Iterator& rhs) const
 template <typename T>
 inline typename Vector<T>::Iterator& Vector<T>::Iterator::operator++()
 {
+	if (mpCurrent == nullptr)
+	{
+		throw std::out_of_range("Cannot increment iterator pointing to nullptr.");
+	}
+
 	++mpCurrent;
 	return *this;
 }
@@ -263,7 +271,7 @@ inline typename Vector<T>::Iterator Vector<T>::Iterator::operator++(int)
 template <typename T>
 inline T& Vector<T>::Iterator::operator*()
 {
-	if (mpOwner->IsEmpty() || !mpOwner->IsValid(*this))
+	if (!mpOwner || mpOwner->IsEmpty() || !mpOwner->IsValid(*this))
 	{
 		throw std::out_of_range("Out of bounds.");
 	}
@@ -496,7 +504,7 @@ inline void Vector<T>::Reserve(const std::uint32_t capacity)
 }
 
 template<typename T>
-inline void Vector<T>::MoveElements(Iterator destination, Iterator source, const std::uint32_t count)
+inline void Vector<T>::MoveElements(const Iterator& destination, const Iterator& source, const std::uint32_t count)
 {
 	memmove(destination.mpCurrent, source.mpCurrent, count * sizeof(T));
 }

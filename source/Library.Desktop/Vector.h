@@ -20,6 +20,7 @@ namespace GameEngine
 		public:
 
 			typedef std::function<std::uint32_t(std::uint32_t, std::uint32_t)>	GetCapacityFn_t;
+			static const std::uint32_t DEFAULT_CONTAINER_CAPACITY = 5;
 
 			/**
 			 *	\class	Iterator
@@ -30,20 +31,22 @@ namespace GameEngine
 			{
 				friend class Vector<T>;
 
+			private:
+
+				/**
+				*	\brief			Parametrized constructor. The current element to point to and the owner
+				*					Vector can be passed in.
+				*	\param element	The current element to point to.
+				*	\param pOwner	The current owner Vector.
+				*/
+									Iterator(T* element, const Vector* const pOwner);
+
 			public:
 
 				/**
 				 *	\brief			Default constructor. Initializes current element and owner to nullptr.
 				 */
 									Iterator();
-
-				/**
-				 *	\brief			Parametrized constructor. The current element to point to and the owner
-				 *					Vector can be passed in.
-				 *	\param element	The current element to point to.
-				 *	\param pOwner	The current owner Vector.
-				 */
-									Iterator(T* element, const Vector* const pOwner);
 
 				/**
 				 *	\brief			Copy constructor. This will copy the current element and owner pointer.
@@ -74,7 +77,7 @@ namespace GameEngine
 				/**
 				 *	\brief			The destructor. Does nothing.
 				 */
-									~Iterator() = default;
+				virtual				~Iterator() = default;
 
 				/**
 				*	\brief			Equality operator. Checks whether the two operands are equal.
@@ -181,15 +184,10 @@ namespace GameEngine
 			};
 
 			/**
-			 *	\brief				Default constructor. It will reserve DEFAULT_CONTAINER_SIZE by default.
-			 */
-									Vector();
-
-			/**
 			 *	\brief				Parametrized constructor. You can pass in the capacity to reserve at instantiation.
 			 *	\param capacity		Capacity to reserve.
 			 */
-									Vector(const std::uint32_t capacity);
+			explicit				Vector(const std::uint32_t capacity = DEFAULT_CONTAINER_CAPACITY);
 
 			/**
 			*	\brief				Parametrized constructor. You can pass in the custom capacity function to call whenever
@@ -228,7 +226,7 @@ namespace GameEngine
 			/**
 			 *	\brief				Destructor. Clears all elements and frees memory.
 			 */
-									~Vector();
+			virtual					~Vector();
 
 			/**
 			 *	\brief				Equality operator. Checks whether the two operands are equal.
@@ -418,7 +416,7 @@ namespace GameEngine
 			*	\param source		Where to move the elements from
 			*	\param count		How many elements to move
 			*/
-			void					MoveElements(Iterator destination, Iterator source, const std::uint32_t count);
+			void					MoveElements(const Iterator& destination, const Iterator& source, const std::uint32_t count);
 
 			T*		mpBegin;		/**< Points to the beginning of the vector. */
 			T*		mpEnd;			/**< Points to the position after the last element of the vector. */

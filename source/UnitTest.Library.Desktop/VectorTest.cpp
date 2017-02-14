@@ -40,7 +40,7 @@ namespace UnitTestVector
 		void TestReserveAndCapacity()
 		{
 			Vector<T> vector;
-			Assert::AreEqual(DEFAULT_CONTAINER_CAPACITY, vector.Capacity());
+			Assert::AreEqual(Vector<T>::DEFAULT_CONTAINER_CAPACITY, vector.Capacity());
 
 			for (int i = startValue; i <= endValue; ++i)
 			{
@@ -239,7 +239,7 @@ namespace UnitTestVector
 
 			vector.PushBack(ConvertValue<T>(startValue));
 			Assert::IsTrue(vector.Size() == 1);
-			Assert::IsTrue(vector.Capacity() == DEFAULT_CONTAINER_CAPACITY);
+			Assert::IsTrue(vector.Capacity() == Vector<T>::DEFAULT_CONTAINER_CAPACITY);
 		}
 
 		template <typename T>

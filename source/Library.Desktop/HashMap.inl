@@ -1,8 +1,16 @@
 #include "HashMap.h"
 #pragma once
 
+template <typename TKey, typename TValue, typename HashFunctor>
+HashMap<TKey, TValue, HashFunctor>::Iterator::Iterator()
+	: mpOwner(nullptr)
+	, mItVector(nullptr)
+	, mItSlist(nullptr)
+{
+}
+
 template<typename TKey, typename TValue, typename HashFunctor>
-inline HashMap<TKey, TValue, HashFunctor>::Iterator::Iterator(const HashMap* const owner, VectorIteratorType vectorIt, SListIteratorType slistIt)
+inline HashMap<TKey, TValue, HashFunctor>::Iterator::Iterator(const HashMap* const owner, const VectorIteratorType& vectorIt, const SListIteratorType& slistIt)
 	: mpOwner(owner)
 	, mItVector(vectorIt)
 	, mItSlist(slistIt)
@@ -66,16 +74,21 @@ inline bool HashMap<TKey, TValue, HashFunctor>::Iterator::operator!=(const Itera
 template<typename TKey, typename TValue, typename HashFunctor>
 inline typename HashMap<TKey, TValue, HashFunctor>::Iterator& HashMap<TKey, TValue, HashFunctor>::Iterator::operator++()
 {
-	if (mItVector == mpOwner->Vector().end())
+	if (!mpOwner)
+	{
+		throw std::out_of_range("Cannot increment iterator pointing to nullptr.");
+	}
+
+	if (mItVector == mpOwner->mVector.end())
 	{
 		throw std::out_of_range("Trying to increment past end of hashmap!");
 	}
 
 	if (mItSlist == mpOwner->SListAt(mItVector).end() || ++mItSlist == mpOwner->SListAt(mItVector).end())
 	{
-		while (++mItVector != mpOwner->Vector().end() && mpOwner->SListAt(mItVector).IsEmpty());
+		while (++mItVector != mpOwner->mVector.end() && mpOwner->SListAt(mItVector).IsEmpty());
 		
-		if (mItVector != mpOwner->Vector().end())
+		if (mItVector != mpOwner->mVector.end())
 		{
 			mItSlist = mpOwner->SListAt(mItVector).begin();
 		}
@@ -110,12 +123,17 @@ inline typename HashMap<TKey, TValue, HashFunctor>::PairType* HashMap<TKey, TVal
 
 template<typename TKey, typename TValue, typename HashFunctor>
 inline HashMap<TKey, TValue, HashFunctor>::HashMap(const std::uint32_t numBuckets)
-	: mData(numBuckets)
+	: mVector(numBuckets)
 	, mSize(0)
 {
+	if (numBuckets == 0)
+	{
+		throw std::out_of_range("Bucket size needs to be greater than 0.");
+	}
+
 	for (std::uint32_t i = 0; i < numBuckets; ++i)
 	{
-		Vector().PushBack(SList<PairType>());
+		mVector.PushBack(SList<PairType>());
 	}
 }
 
@@ -136,7 +154,7 @@ inline HashMap<TKey, TValue, HashFunctor>& HashMap<TKey, TValue, HashFunctor>::o
 {
 	if (this != &rhs)
 	{
-		mData = rhs.mData;
+		mVector = rhs.mVector;
 		mSize = rhs.mSize;
 	}
 
@@ -148,7 +166,7 @@ inline HashMap<TKey, TValue, HashFunctor> HashMap<TKey, TValue, HashFunctor>::op
 {
 	if (this != &rhs)
 	{
-		mData = std::move(rhs.mData);
+		mVector = std::move(rhs.mVector);
 		mSize = std::move(rhs.mSize);
 	}
 
@@ -158,7 +176,7 @@ inline HashMap<TKey, TValue, HashFunctor> HashMap<TKey, TValue, HashFunctor>::op
 template<typename TKey, typename TValue, typename HashFunctor>
 inline bool HashMap<TKey, TValue, HashFunctor>::operator==(const HashMap& rhs) const
 {
-	return mSize == rhs.mSize && mData == rhs.mData;
+	return mSize == rhs.mSize && mVector == rhs.mVector;
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
@@ -176,7 +194,7 @@ inline typename HashMap<TKey, TValue, HashFunctor>::Iterator HashMap<TKey, TValu
 	{
 		++mSize;
 		std::uint32_t bucketNumber = GetBucketNumber(entry.first);
-		return Iterator(this, Vector().begin() + bucketNumber, SListAt(bucketNumber).PushBack(entry));
+		return Iterator(this, mVector.begin() + bucketNumber, SListAt(bucketNumber).PushBack(entry));
 	}
 	else
 	{
@@ -204,7 +222,7 @@ inline typename HashMap<TKey, TValue, HashFunctor>::Iterator HashMap<TKey, TValu
 	}
 	else
 	{
-		return Iterator(this, Vector().begin() + bucketNumber, it);
+		return Iterator(this, mVector.begin() + bucketNumber, it);
 	}
 
 }
@@ -240,13 +258,16 @@ template<typename TKey, typename TValue, typename HashFunctor>
 inline void HashMap<TKey, TValue, HashFunctor>::Clear()
 {
 	mSize = 0;
-	Vector().Clear();
+	for (SList<PairType>& slist : mVector)
+	{
+		slist.Clear();
+	}
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
 inline typename HashMap<TKey, TValue, HashFunctor>::Iterator HashMap<TKey, TValue, HashFunctor>::begin() const
 {
-	VectorIteratorType it = Vector().begin(), itEnd = Vector().end();
+	VectorIteratorType it = mVector.begin(), itEnd = mVector.end();
 
 	for (; it != itEnd; ++it)
 	{
@@ -269,7 +290,7 @@ inline typename HashMap<TKey, TValue, HashFunctor>::Iterator HashMap<TKey, TValu
 template<typename TKey, typename TValue, typename HashFunctor>
 inline typename HashMap<TKey, TValue, HashFunctor>::Iterator HashMap<TKey, TValue, HashFunctor>::end() const
 {
-	return Iterator(this, Vector().end(), SListIteratorType());
+	return Iterator(this, mVector.end(), SListIteratorType());
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
@@ -279,50 +300,31 @@ inline std::uint32_t HashMap<TKey, TValue, HashFunctor>::Size() const
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline typename HashMap<TKey, TValue, HashFunctor>::VectorType& HashMap<TKey, TValue, HashFunctor>::Vector()
-{
-	return mData;
-}
-
-template<typename TKey, typename TValue, typename HashFunctor>
-inline const typename HashMap<TKey, TValue, HashFunctor>::VectorType& HashMap<TKey, TValue, HashFunctor>::Vector() const
-{
-	return mData;
-}
-
-template<typename TKey, typename TValue, typename HashFunctor>
 inline typename HashMap<TKey, TValue, HashFunctor>::SListType& HashMap<TKey, TValue, HashFunctor>::SListAt(const std::uint32_t index)
 {
-	return Vector().At(index);
+	return mVector.At(index);
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
 inline const typename HashMap<TKey, TValue, HashFunctor>::SListType& HashMap<TKey, TValue, HashFunctor>::SListAt(const std::uint32_t index) const
 {
-	return Vector().At(index);
+	return mVector.At(index);
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
 inline typename HashMap<TKey, TValue, HashFunctor>::SListType& HashMap<TKey, TValue, HashFunctor>::SListAt(const VectorIteratorType it)
 {
-	return Vector().At(it - Vector().begin());
+	return mVector.At(it - mVector.begin());
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
 inline const typename HashMap<TKey, TValue, HashFunctor>::SListType& HashMap<TKey, TValue, HashFunctor>::SListAt(const VectorIteratorType it) const
 {
-	return Vector().At(it - Vector().begin());
+	return mVector.At(it - mVector.begin());
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
 inline std::uint32_t HashMap<TKey, TValue, HashFunctor>::GetBucketNumber(const TKey& key) const
 {
-	return mHashFunctor(key) % GetBucketSize();
+	return mHashFunctor(key) % mVector.Size();
 }
-
-template<typename TKey, typename TValue, typename HashFunctor>
-inline std::uint32_t HashMap<TKey, TValue, HashFunctor>::GetBucketSize() const
-{
-	return Vector().Size();
-}
-

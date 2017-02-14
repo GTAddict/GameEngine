@@ -25,6 +25,8 @@ namespace GameEngine
 			typedef typename SListType::Iterator	SListIteratorType;
 			typedef typename VectorType::Iterator	VectorIteratorType;
 
+			static const std::uint32_t DEFAULT_BUCKET_SIZE = 10;
+
 			/**
 			*	\class	Iterator
 			*	\brief	Iterator implementation. This helps walk the HashMap and wraps pointer
@@ -34,12 +36,7 @@ namespace GameEngine
 			{
 				friend class HashMap;
 
-			public:
-				
-				/**
-				*	\brief			Default constructor. Deleted because we don't need an empty Iterator.
-				*/
-									Iterator() = delete;
+			private:
 
 				/**
 				*	\brief			Parametrized constructor. The owner HashMap, bucket iterator and
@@ -48,7 +45,14 @@ namespace GameEngine
 				*	\param vectorIt	The bucket iterator, whose SList contains slistIt.
 				*	\param slistIt	The chain iterator to point to.
 				*/
-									Iterator(const HashMap* const pOwner, VectorIteratorType vectorIt, SListIteratorType slistIt);
+				Iterator(const HashMap* const pOwner, const VectorIteratorType& vectorIt, const SListIteratorType& slistIt);
+
+			public:
+
+				/**
+				*	\brief			Default constructor.
+				*/
+									Iterator();
 
 				/**
 				*	\brief			Copy constructor.
@@ -65,7 +69,7 @@ namespace GameEngine
 				/**
 				*	\brief			Destructor, does nothing.
 				*/
-									~Iterator() = default;
+				virtual				~Iterator() = default;
 
 				/**
 				*	\brief			Copy assignment operator.
@@ -136,16 +140,10 @@ namespace GameEngine
 			};
 
 			/**
-			*	\brief				Default constructor. Deleted because user is required to
-			*						specify bucket size at construction.
-			*/
-									HashMap() = delete;
-
-			/**
-			*	\brief				Parametrized constructor. You should pass in the bucket size at instantiation.
+			*	\brief				Parametrized constructor. You can pass in the bucket size at instantiation.
 			*	\param numBuckets	Bucket size of the HashMap.
 			*/
-									HashMap(const std::uint32_t numBuckets);
+			explicit				HashMap(const std::uint32_t numBuckets = DEFAULT_BUCKET_SIZE);
 
 			/**
 			*	\brief				Copy constructor. Deep copies the HashMap provided into itself.
@@ -162,7 +160,7 @@ namespace GameEngine
 			/**
 			*	\brief				Destructor, does nothing.
 			*/
-									~HashMap() = default;
+			virtual					~HashMap() = default;
 
 			/**
 			*	\brief				Copy assignment operator. Deep copies the HashMap provided into itself.
@@ -256,20 +254,6 @@ namespace GameEngine
 		private:
 
 			/**
-			*	\brief				Helper function that returns the implementation Vector in this container.
-			*						This is the non-const version.
-			*	\return				A non-const reference to the Vector used in implementing this HashMap.
-			*/
-			VectorType&				Vector();
-			
-			/**
-			*	\brief				Helper function that returns the implementation Vector in this container.
-			*						This is the const version.
-			*	\return				A const reference to the Vector used in implementing this HashMap.
-			*/
-			const VectorType&		Vector() const;
-
-			/**
 			*	\brief				Helper function that returns the implementation SList at a specified position
 			*						in the implementation Vector, for this HashMap.
 			*						This is the non-const version.
@@ -317,13 +301,7 @@ namespace GameEngine
 			*/
 			std::uint32_t			GetBucketNumber(const TKey& key) const;
 
-			/**
-			*	\brief				Helper function that returns the number of buckets in the HashMap.
-			*	\return				The number of buckets in the HashMap.
-			*/
-			std::uint32_t			GetBucketSize() const;
-
-			VectorType				mData;									/**< The implementation Vector that is used */
+			VectorType				mVector;								/**< The implementation Vector that is used */
 			std::uint32_t			mSize;									/**< Stores the current number of non-empty elements in the container */
 			const HashFunctor		mHashFunctor;							/**< Instance of the templated hash functor to be used in hashing elements */
 		};

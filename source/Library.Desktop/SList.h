@@ -40,12 +40,7 @@ namespace GameEngine
 				template <typename A, typename B, typename C>
 				friend class HashMap;
 
-			public:
-
-				/**
-				*	\brief		Default constructor, initializes current pointer to nullptr.
-				*/
-				Iterator();
+			private:
 
 				/**
 				*	\brief		Parametrized constructor, initializes current pointer to Node passed in.
@@ -54,10 +49,17 @@ namespace GameEngine
 				*/
 								Iterator(Node* node, const SList* const list);
 
+			public:
+
+				/**
+				*	\brief		Default constructor, initializes current pointer to nullptr.
+				*/
+								Iterator();
+
 				/**
 				*	\brief		Destructor, does nothing here.
 				*/
-								~Iterator() = default;
+				virtual			~Iterator() = default;
 
 				/**
 				*	\brief		Equality operator, checks whether addresses pointed to are same or not.
@@ -129,7 +131,7 @@ namespace GameEngine
 			/**
 			*	\brief		Destructor, clears the list.
 			*/
-							~SList();
+			virtual			~SList();
 
 			/**
 			*	\brief		Copy constructor, initializes the list
