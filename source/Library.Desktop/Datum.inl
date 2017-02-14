@@ -1,3 +1,4 @@
+#include "Datum.h"
 #pragma once
 
 template<typename T>
@@ -133,6 +134,15 @@ GameEngine::Library::Datum& GameEngine::Library::Datum::operator=(const T& rhs)
 {
 	Set(rhs);
 	return *this;
+}
+
+template<typename T>
+inline void GameEngine::Library::Datum::SetStorage(T* dataBlock, const std::uint32_t size)
+{
+	Clear();
+	SetDataPointer<T>(dataBlock);
+	mSize = size;
+	mExternalStorage = true;
 }
 
 template <typename T>

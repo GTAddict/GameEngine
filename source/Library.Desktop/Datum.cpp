@@ -10,6 +10,7 @@ namespace GameEngine
 			, mType(DatumType::Unknown)
 			, mSize(0)
 			, mCapacity(0)
+			, mExternalStorage(false)
 		{
 		}
 
@@ -24,11 +25,13 @@ namespace GameEngine
 			, mType(rhs.mType)
 			, mSize(rhs.mSize)
 			, mCapacity(rhs.mCapacity)
+			, mExternalStorage(rhs.mExternalStorage)
 		{
 			rhs.mData = { nullptr };
 			rhs.mType = DatumType::Unknown;
 			rhs.mSize = 0;
 			rhs.mCapacity = 0;
+			rhs.mExternalStorage = false;
 		}
 
 		Datum::~Datum()
@@ -42,19 +45,30 @@ namespace GameEngine
 			{
 				Clear();
 				mType = rhs.mType;
-				Reserve(rhs.mCapacity);
-				SetSize(rhs.mSize);
+				mExternalStorage = rhs.mExternalStorage;
 
-				switch (mType)
+				if (mExternalStorage)
 				{
-				case DatumType::Float:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<float>			(i));	}	break;
-				case DatumType::Integer:	for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<std::int32_t>	(i));	}	break;
-				case DatumType::Matrix:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<glm::mat4x4>	(i));	}	break;
-				case DatumType::Pointer:	for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<RTTIPointer>	(i));	}	break;
-				case DatumType::String:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<std::string>	(i));	}	break;
-				case DatumType::Vector:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<glm::vec4>		(i));	}	break;
-				case DatumType::Table:		throw std::domain_error("Unimplemented.");
-				default:					throw std::domain_error("Unimplemented.");
+					mSize		= rhs.mSize;
+					mCapacity	= rhs.mCapacity;
+					mData		= rhs.mData;
+				}
+				else
+				{
+					Reserve(rhs.mCapacity);
+					SetSize(rhs.mSize);
+
+					switch (mType)
+					{
+					case DatumType::Float:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<float>(i)); }	break;
+					case DatumType::Integer:	for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<std::int32_t>(i)); }	break;
+					case DatumType::Matrix:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<glm::mat4x4>(i)); }	break;
+					case DatumType::Pointer:	for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<RTTIPointer>(i)); }	break;
+					case DatumType::String:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<std::string>(i)); }	break;
+					case DatumType::Vector:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<glm::vec4>(i)); }	break;
+					case DatumType::Table:		throw std::domain_error("Unimplemented.");
+					default:					throw std::domain_error("Unimplemented.");
+					}
 				}
 			}
 
@@ -65,15 +79,17 @@ namespace GameEngine
 		{
 			if (this != &rhs)
 			{
-				mData = rhs.mData;
-				mType = rhs.mType;
-				mSize = rhs.mSize;
-				mCapacity = rhs.mCapacity;
+				mData					= rhs.mData;
+				mType					= rhs.mType;
+				mSize					= rhs.mSize;
+				mCapacity				= rhs.mCapacity;
+				mExternalStorage		= rhs.mExternalStorage;
 
-				rhs.mData = { nullptr };
-				rhs.mType = DatumType::Unknown;
-				rhs.mSize = 0;
-				rhs.mCapacity = 0;
+				rhs.mData				= { nullptr };
+				rhs.mType				= DatumType::Unknown;
+				rhs.mSize				= 0;
+				rhs.mCapacity			= 0;
+				rhs.mExternalStorage	= false;
 			}
 
 			return *this;
@@ -81,7 +97,13 @@ namespace GameEngine
 
 		bool Datum::operator==(const Datum& rhs) const
 		{
-			if (mType == rhs.mType && mSize == rhs.mSize && mCapacity == rhs.mCapacity)
+			// It doesn't really matter which entries in mData we
+			// compare, as they'll all point to the same value
+			if (mExternalStorage && rhs.mExternalStorage && mData.pInt == rhs.mData.pInt)
+			{
+				return true;
+			}
+			else if (mType == rhs.mType && mSize == rhs.mSize)
 			{
 				switch (mType)
 				{
@@ -128,6 +150,16 @@ namespace GameEngine
 
 		void Datum::SetSize(const std::uint32_t size)
 		{
+			if (mExternalStorage)
+			{
+				throw std::domain_error("You cannot resize external storage.");
+			}
+
+			if (mType == DatumType::Unknown)
+			{
+				throw std::domain_error("Type has not been set yet, do not know how much size to allocate.");
+			}
+
 			switch (mType)
 			{
 			case DatumType::Float:		SetSize_Imp<float>			(size);		break;
@@ -143,6 +175,11 @@ namespace GameEngine
 
 		void Datum::Clear()
 		{
+			if (mExternalStorage)
+			{
+				return;
+			}
+
 			switch (mType)
 			{
 			case DatumType::Integer:	Clear_Imp<int>();			break;
@@ -158,12 +195,6 @@ namespace GameEngine
 
 		void Datum::SetFromString(const std::string& inputString, const std::uint32_t index)
 		{
-			// Data format:
-			// Type Value
-			// Examples:
-			// Integer 21
-			// Float 6.5
-
 			if (mType == DatumType::Unknown)
 			{
 				throw std::domain_error("Datum type needs to be set.");
@@ -222,6 +253,11 @@ namespace GameEngine
 
 		void Datum::Reserve(const std::uint32_t capacity)
 		{
+			if (mExternalStorage)
+			{
+				throw std::domain_error("You cannot reserve external storage.");
+			}
+
 			switch (mType)
 			{
 			case DatumType::Integer:	Reserve_Imp<int>		(capacity);		break;
@@ -255,11 +291,6 @@ namespace GameEngine
 		template<typename T>
 		void Datum::SetSize_Imp(const std::uint32_t size)
 		{
-			if (mType == DatumType::Unknown)
-			{
-				throw std::domain_error("Type has not been set yet, do not know how much size to allocate.");
-			}
-
 			if (size > mCapacity)
 			{
 				Reserve(size);
@@ -285,10 +316,13 @@ namespace GameEngine
 		template<typename T>
 		void Library::Datum::Reserve_Imp(const std::uint32_t capacity)
 		{
-			T* dataPointer = GetDataPointer<T>();
-			dataPointer = static_cast<T*>(realloc(dataPointer, sizeof(T) * capacity));
-			SetDataPointer(dataPointer);
-			mCapacity = capacity;
+			if (capacity > 0)
+			{
+				T* dataPointer = GetDataPointer<T>();
+				dataPointer = static_cast<T*>(realloc(dataPointer, sizeof(T) * capacity));
+				SetDataPointer(dataPointer);
+				mCapacity = capacity;
+			}
 		}
 	}
 }
