@@ -11,13 +11,17 @@ namespace GameEngine
 {
 	namespace Library
 	{
+		class Scope;
+		class RTTI;
+
 		/**
 		 *	\class	Datum
 		 *	\brief	Datum is a homogeneous Vector whose type is defined at runtime.
 		 */
 		class Datum
 		{
-			typedef GameEngine::Library::RTTI* RTTIPointer;
+			typedef RTTI*	RTTIPointer;
+			typedef Scope*	ScopePointer;
 
 			/**
 			 *	\union	DatumValues
@@ -32,6 +36,7 @@ namespace GameEngine
 				glm::vec4*		pVec4;						/**< Pointer to the array treated as vectors */
 				glm::mat4x4*	pMat4;						/**< Pointer to the array treated as matrices */
 				std::string*	pString;					/**< Pointer to the array treated as strings */
+				ScopePointer*	ppScope;					/**< Pointer to the array treated as Scope pointers */
 				RTTIPointer*	ppRTTI;						/**< Pointer to the array treated as RTTI pointers */
 			};
 
@@ -130,6 +135,8 @@ namespace GameEngine
 			 */
 			template <typename T>
 			bool					operator!=(const T& rhs) const;
+
+			Scope&					operator[](const std::uint32_t index);
 
 			/**
 			 *	\brief				Returns the type of data currently stored in the Datum.

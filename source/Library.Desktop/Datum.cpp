@@ -128,6 +128,11 @@ namespace GameEngine
 			return !(*this == rhs);
 		}
 
+		Scope& Datum::operator[](const std::uint32_t index)
+		{
+			return *Get<ScopePointer>(index);
+		}
+
 		const Datum::DatumType& Datum::Type() const
 		{
 			return mType;

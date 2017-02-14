@@ -86,6 +86,17 @@ inline GameEngine::Library::Datum::RTTIPointer* GameEngine::Library::Datum::GetD
 	return mData.ppRTTI;
 }
 
+template <>
+inline GameEngine::Library::Datum::ScopePointer* GameEngine::Library::Datum::GetDataPointer() const
+{
+	if (mType != DatumType::Table)
+	{
+		throw std::invalid_argument("Trying to access data as Scope pointer when data is not a Scope pointer!");
+	}
+
+	return mData.ppScope;
+}
+
 template<typename T>
 inline void GameEngine::Library::Datum::SetDataPointer(T* dataPointer)
 {
@@ -229,6 +240,26 @@ inline void GameEngine::Library::Datum::Set(const RTTIPointer& value, const std:
 	}
 
 	*(GetDataPointer<RTTIPointer>() + index) = value;
+}
+
+template <>
+inline void GameEngine::Library::Datum::Set(const ScopePointer& value, const std::uint32_t index)
+{
+	if (mType == DatumType::Unknown)
+	{
+		mType = DatumType::Table;
+	}
+	else if (mType != DatumType::Table)
+	{
+		throw std::invalid_argument("Trying to assign Table to GameEngine::Library::Datum of different type.");
+	}
+
+	if (index >= Size())
+	{
+		SetSize(index + 1);
+	}
+
+	*(GetDataPointer<ScopePointer>() + index) = value;
 }
 
 template <>
