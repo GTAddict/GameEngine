@@ -136,6 +136,11 @@ namespace GameEngine
 			template <typename T>
 			bool					operator!=(const T& rhs) const;
 
+			/**
+			*	\brief				Operator to simplify access to nested scopes.
+			*	\param index		The index offset to retrieve the scope from.
+			*	\return				A reference to the Scope at the specified index.
+			*/
 			Scope&					operator[](const std::uint32_t index);
 
 			/**
@@ -176,6 +181,21 @@ namespace GameEngine
 			 */
 			template <typename T>
 			void					SetStorage(T* dataBlock, const std::uint32_t size);
+
+			/**
+			*	\brief				Pushes data to the end of the Datum.
+			*	\param value		Data to push.
+			*/
+			template <typename T>
+			void					PushBack(const T& value);
+
+			/**
+			*	\brief				Removes the element that contains the provided data and calls its destructor.
+			*	\param value		The data to be found and removed.
+			*	\param return		True if the element is found and removed, false otherwise.
+			*/
+			template <typename T>
+			bool					Remove(const T& value);
 
 			/**
 			*	\brief				Assigns value to element at index. Checks type compatibility

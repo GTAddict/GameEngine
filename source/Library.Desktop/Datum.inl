@@ -135,6 +135,12 @@ inline void GameEngine::Library::Datum::SetDataPointer(std::string* dataPointer)
 }
 
 template <>
+inline void GameEngine::Library::Datum::SetDataPointer(ScopePointer* dataPointer)
+{
+	mData.ppScope = dataPointer;
+}
+
+template <>
 inline void GameEngine::Library::Datum::SetDataPointer(RTTIPointer* dataPointer)
 {
 	mData.ppRTTI = dataPointer;
@@ -154,6 +160,36 @@ inline void GameEngine::Library::Datum::SetStorage(T* dataBlock, const std::uint
 	SetDataPointer<T>(dataBlock);
 	mSize = size;
 	mExternalStorage = true;
+}
+
+template<typename T>
+inline void GameEngine::Library::Datum::PushBack(const T& value)
+{
+	Set<T>(value, Size());
+}
+
+template<typename T>
+inline bool GameEngine::Library::Datum::Remove(const T& value)
+{
+	T* dataStart = GetDataPointer<T>();
+
+	for (std::uint32_t i = 0; i < Size(); ++i)
+	{
+		T& data = *(dataStart + i);
+		if (data == value)
+		{
+			(dataStart + i)->~T();
+			if (i + 1 != Size())
+			{
+				memmove(dataStart + i, dataStart + i + 1, (Size() - i + 1) * sizeof(T));
+			}
+			--mSize;
+
+			return true;
+		}
+	}
+
+	return false;
 }
 
 template <typename T>
@@ -380,4 +416,10 @@ template <>
 inline std::string GameEngine::Library::Datum::ToString<GameEngine::Library::Datum::RTTIPointer>(const std::uint32_t index) const
 {
 	return Get<GameEngine::Library::Datum::RTTIPointer>(index)->ToString();
+}
+
+template <>
+inline std::string GameEngine::Library::Datum::ToString<GameEngine::Library::Datum::ScopePointer>(const std::uint32_t index) const
+{
+	return ToString<RTTIPointer>(index);
 }
