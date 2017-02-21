@@ -301,12 +301,6 @@ inline std::uint32_t HashMap<TKey, TValue, HashFunctor>::Size() const
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline std::uint32_t GameEngine::Library::HashMap<TKey, TValue, HashFunctor>::Capacity() const
-{
-	return mVector.Capacity();
-}
-
-template<typename TKey, typename TValue, typename HashFunctor>
 inline typename HashMap<TKey, TValue, HashFunctor>::SListType& HashMap<TKey, TValue, HashFunctor>::SListAt(const std::uint32_t index)
 {
 	return mVector.At(index);

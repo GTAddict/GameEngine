@@ -252,12 +252,6 @@ namespace GameEngine
 			*/
 			std::uint32_t			Size() const;
 
-			/**
-			*	\brief				Returns the bucket number, or capacity of the contained vector.
-			*	\return				The capacity of the contained vector.
-			*/
-			std::uint32_t			Capacity() const;
-
 		private:
 
 			/**
