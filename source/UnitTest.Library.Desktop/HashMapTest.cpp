@@ -33,9 +33,10 @@ namespace UnitTestHashMap
 		{
 			{
 				HashMap<int, int> firstHashMap(10);
+				HashMap<int, int>::Iterator it;
 				for (int i = startValue; i <= endValue; ++i)
 				{
-					firstHashMap.Insert(std::pair<int, int>(i, i));
+					firstHashMap.Insert(std::pair<int, int>(i, i), it);
 				}
 
 				HashMap<int, int> secondHashMap(5);
@@ -47,8 +48,9 @@ namespace UnitTestHashMap
 			{
 				int one = 1, two = 2;
 				HashMap<int*, int> firstHashMap(10);
-				firstHashMap.Insert(std::pair<int*, int>(&one, one));
-				firstHashMap.Insert(std::pair<int*, int>(&two, two));
+				HashMap<int*, int>::Iterator it;
+				firstHashMap.Insert(std::pair<int*, int>(&one, one), it);
+				firstHashMap.Insert(std::pair<int*, int>(&two, two), it);
 
 				HashMap<int*, int> secondHashMap(5);
 				secondHashMap = firstHashMap;
@@ -62,8 +64,9 @@ namespace UnitTestHashMap
 				std::string hi = "Hi";
 				std::string there = "there";
 				HashMap<std::string, std::string> firstHashMap(10);
-				firstHashMap.Insert(std::pair<std::string, std::string>(hello, you));
-				firstHashMap.Insert(std::pair<std::string, std::string>(hi, there));
+				HashMap<std::string, std::string>::Iterator it;
+				firstHashMap.Insert(std::pair<std::string, std::string>(hello, you), it);
+				firstHashMap.Insert(std::pair<std::string, std::string>(hi, there), it);
 
 				HashMap<std::string, std::string> secondHashMap(5);
 				secondHashMap = firstHashMap;
@@ -75,7 +78,8 @@ namespace UnitTestHashMap
 				DummyStruct d;
 				int a = 5;
 				HashMap<DummyStruct*, int> firstHashMap(10);
-				firstHashMap.Insert(std::pair<DummyStruct*, int>(&d, a));
+				HashMap<DummyStruct*, int>::Iterator it;
+				firstHashMap.Insert(std::pair<DummyStruct*, int>(&d, a), it);
 
 				HashMap<DummyStruct*, int> secondHashMap(5);
 				secondHashMap = firstHashMap;
@@ -89,9 +93,10 @@ namespace UnitTestHashMap
 		{
 			{
 				HashMap<int, int> firstHashMap(10);
+				HashMap<int, int>::Iterator it;
 				for (int i = startValue; i <= endValue; ++i)
 				{
-					firstHashMap.Insert(std::pair<int, int>(i, i));
+					firstHashMap.Insert(std::pair<int, int>(i, i), it);
 				}
 				HashMap<int, int> copyOfFirst = firstHashMap;
 
@@ -104,9 +109,10 @@ namespace UnitTestHashMap
 			}
 			{
 				HashMap<int*, int> firstHashMap(10);
+				HashMap<int*, int>::Iterator it;
 				int a = 10, b = 20;
-				firstHashMap.Insert(std::pair<int*, int>(&a, a));
-				firstHashMap.Insert(std::pair<int*, int>(&b, b));
+				firstHashMap.Insert(std::pair<int*, int>(&a, a), it);
+				firstHashMap.Insert(std::pair<int*, int>(&b, b), it);
 
 				HashMap<int*, int> copyOfFirst = firstHashMap;
 
@@ -119,10 +125,11 @@ namespace UnitTestHashMap
 			}
 			{
 				HashMap<std::string, int> firstHashMap(10);
+				HashMap<std::string, int>::Iterator it;
 				int a = 10, b = 20;
 				std::string x = "Hello", y = "Hi";
-				firstHashMap.Insert(std::pair<std::string, int>(x, a));
-				firstHashMap.Insert(std::pair<std::string, int>(y, b));
+				firstHashMap.Insert(std::pair<std::string, int>(x, a), it);
+				firstHashMap.Insert(std::pair<std::string, int>(y, b), it);
 
 				HashMap<std::string, int> copyOfFirst = firstHashMap;
 
@@ -135,10 +142,11 @@ namespace UnitTestHashMap
 			}
 			{
 				HashMap<DummyStruct*, int> firstHashMap(10);
+				HashMap<DummyStruct*, int>::Iterator it;
 				int a = 10, b = 20;
 				DummyStruct x, y;
-				firstHashMap.Insert(std::pair<DummyStruct*, int>(&x, a));
-				firstHashMap.Insert(std::pair<DummyStruct*, int>(&y, b));
+				firstHashMap.Insert(std::pair<DummyStruct*, int>(&x, a), it);
+				firstHashMap.Insert(std::pair<DummyStruct*, int>(&y, b), it);
 
 				HashMap<DummyStruct*, int> copyOfFirst = firstHashMap;
 
@@ -156,6 +164,7 @@ namespace UnitTestHashMap
 		{
 			{
 				HashMap<int, int> hashMap(10);
+				HashMap<int, int>::Iterator it;
 
 				for (int i = startValue; i <= endValue; ++i)
 				{
@@ -164,12 +173,12 @@ namespace UnitTestHashMap
 
 				for (int i = startValue; i <= endValue; ++i)
 				{
-					hashMap.Insert(std::pair<int, int>(i, i));
+					hashMap.Insert(std::pair<int, int>(i, i), it);
 				}
 
 				for (int i = startValue; i <= endValue; ++i)
 				{
-					hashMap.Insert(std::pair<int, int>(i, i));
+					hashMap.Insert(std::pair<int, int>(i, i), it);
 				}
 
 				for (int i = startValue; i <= endValue; ++i)
@@ -185,16 +194,17 @@ namespace UnitTestHashMap
 
 			{
 				HashMap<int*, int> hashMap(10);
+				HashMap<int*, int>::Iterator it;
 				int a = 1, b = 2;
 
 				hashMap.Find(&a);
 				hashMap.Find(&b);
 
-				hashMap.Insert(std::pair<int*, int>(&a, a));
-				hashMap.Insert(std::pair<int*, int>(&b, b));
+				hashMap.Insert(std::pair<int*, int>(&a, a), it);
+				hashMap.Insert(std::pair<int*, int>(&b, b), it);
 
-				hashMap.Insert(std::pair<int*, int>(&a, a));
-				hashMap.Insert(std::pair<int*, int>(&b, b));
+				hashMap.Insert(std::pair<int*, int>(&a, a), it);
+				hashMap.Insert(std::pair<int*, int>(&b, b), it);
 
 				Assert::IsTrue(hashMap.Find(&a) != hashMap.end());
 				Assert::IsTrue(hashMap.Find(&b) != hashMap.end());
@@ -205,17 +215,18 @@ namespace UnitTestHashMap
 
 			{
 				HashMap<std::string, int> hashMap(10);
+				HashMap<std::string, int>::Iterator it;
 				int a = 1, b = 2;
 				std::string x = "Heloo", y = "WJU";
 
 				hashMap.Find(x);
 				hashMap.Find(y);
 
-				hashMap.Insert(std::pair<std::string, int>(x, a));
-				hashMap.Insert(std::pair<std::string, int>(y, b));
+				hashMap.Insert(std::pair<std::string, int>(x, a), it);
+				hashMap.Insert(std::pair<std::string, int>(y, b), it);
 
-				hashMap.Insert(std::pair<std::string, int>(x, a));
-				hashMap.Insert(std::pair<std::string, int>(y, b));
+				hashMap.Insert(std::pair<std::string, int>(x, a), it);
+				hashMap.Insert(std::pair<std::string, int>(y, b), it);
 
 				Assert::IsTrue(hashMap.Find(x) != hashMap.end());
 				Assert::IsTrue(hashMap.Find(y) != hashMap.end());
@@ -225,17 +236,18 @@ namespace UnitTestHashMap
 			}
 			{
 				HashMap<DummyStruct*, int> hashMap(10);
+				HashMap<DummyStruct*, int>::Iterator it;
 				int a = 1, b = 2;
 				DummyStruct x, y;
 
 				hashMap.Find(&x);
 				hashMap.Find(&y);
 
-				hashMap.Insert(std::pair<DummyStruct*, int>(&x, a));
-				hashMap.Insert(std::pair<DummyStruct*, int>(&y, b));
+				hashMap.Insert(std::pair<DummyStruct*, int>(&x, a), it);
+				hashMap.Insert(std::pair<DummyStruct*, int>(&y, b), it);
 										 
-				hashMap.Insert(std::pair<DummyStruct*, int>(&x, a));
-				hashMap.Insert(std::pair<DummyStruct*, int>(&y, b));
+				hashMap.Insert(std::pair<DummyStruct*, int>(&x, a), it);
+				hashMap.Insert(std::pair<DummyStruct*, int>(&y, b), it);
 
 				Assert::IsTrue(hashMap.Find(&x) != hashMap.end());
 				Assert::IsTrue(hashMap.Find(&y) != hashMap.end());
@@ -250,10 +262,11 @@ namespace UnitTestHashMap
 		{
 			{
 				HashMap<int, int> hashMap(5);
+				HashMap<int, int>::Iterator it;
 
 				for (int i = startValue; i <= endValue; ++i)
 				{
-					hashMap.Insert(std::pair<int, int>(i, i));
+					hashMap.Insert(std::pair<int, int>(i, i), it);
 				}
 
 				for (int i = startValue; i <= endValue; ++i)
@@ -268,10 +281,11 @@ namespace UnitTestHashMap
 			}
 			{
 				HashMap<int*, int> hashMap(5);
+				HashMap<int*, int>::Iterator it;
 				int a = 5, b = 6;
 
-				hashMap.Insert(std::pair<int*, int>(&a, a));
-				hashMap.Insert(std::pair<int*, int>(&b, b));
+				hashMap.Insert(std::pair<int*, int>(&a, a), it);
+				hashMap.Insert(std::pair<int*, int>(&b, b), it);
 
 				Assert::IsTrue(hashMap.Remove(&a));
 				Assert::IsTrue(hashMap.Remove(&b));
@@ -280,11 +294,12 @@ namespace UnitTestHashMap
 			}
 			{
 				HashMap<std::string, int> hashMap(5);
+				HashMap<std::string, int>::Iterator it;
 				int a = 5, b = 6;
 				std::string x = "hello", y = "hi";
 
-				hashMap.Insert(std::pair<std::string, int>(x, a));
-				hashMap.Insert(std::pair<std::string, int>(y, b));
+				hashMap.Insert(std::pair<std::string, int>(x, a), it);
+				hashMap.Insert(std::pair<std::string, int>(y, b), it);
 
 				Assert::IsTrue(hashMap.Remove(x));
 				Assert::IsTrue(hashMap.Remove(y));
@@ -293,11 +308,12 @@ namespace UnitTestHashMap
 			}
 			{
 				HashMap<DummyStruct*, int> hashMap(5);
+				HashMap<DummyStruct*, int>::Iterator it;
 				int a = 5, b = 6;
 				DummyStruct x, y;
 
-				hashMap.Insert(std::pair<DummyStruct*, int>(&x, a));
-				hashMap.Insert(std::pair<DummyStruct*, int>(&y, b));
+				hashMap.Insert(std::pair<DummyStruct*, int>(&x, a), it);
+				hashMap.Insert(std::pair<DummyStruct*, int>(&y, b), it);
 
 				Assert::IsTrue(hashMap.Remove(&x));
 				Assert::IsTrue(hashMap.Remove(&y));
@@ -417,11 +433,12 @@ namespace UnitTestHashMap
 		{
 			HashMap<int, int> firstHashMap(5);
 			HashMap<int, int> secondHashMap(10);
+			HashMap<int, int>::Iterator it;
 
 			for (int i = startValue; i <= endValue; ++i)
 			{
-				firstHashMap.Insert(std::pair<int, int>(i, i));
-				secondHashMap.Insert(std::pair<int, int>(i, i));
+				firstHashMap.Insert(std::pair<int, int>(i, i), it);
+				secondHashMap.Insert(std::pair<int, int>(i, i), it);
 			}
 
 			HashMap<int, int>::Iterator firstIt = firstHashMap.begin(), secondIt = secondHashMap.begin();
@@ -445,10 +462,11 @@ namespace UnitTestHashMap
 		TEST_METHOD(TestIteratorsMore)
 		{
 			HashMap<int, int> hashMap(10);
+			HashMap<int, int>::Iterator it;
 
 			for (int i = startValue; i <= endValue; ++i)
 			{
-				hashMap.Insert(std::pair<int, int>(i, i));
+				hashMap.Insert(std::pair<int, int>(i, i), it);
 			}
 
 			HashMap<int, int>::Iterator itBegin = hashMap.begin(), itEnd = hashMap.end();
