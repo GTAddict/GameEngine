@@ -4,8 +4,6 @@
 template <typename TKey, typename TValue, typename HashFunctor>
 HashMap<TKey, TValue, HashFunctor>::Iterator::Iterator()
 	: mpOwner(nullptr)
-	, mItVector(nullptr)
-	, mItSlist(nullptr)
 {
 }
 
@@ -186,19 +184,20 @@ inline bool HashMap<TKey, TValue, HashFunctor>::operator!=(const HashMap& rhs) c
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
-inline typename HashMap<TKey, TValue, HashFunctor>::Iterator HashMap<TKey, TValue, HashFunctor>::Insert(const PairType& entry)
+inline bool HashMap<TKey, TValue, HashFunctor>::Insert(const PairType& entry, Iterator& outIterator)
 {
-	Iterator foundIt = Find(entry.first);
+	outIterator = Find(entry.first);
 
-	if (foundIt == end())
+	if (outIterator == end())
 	{
 		++mSize;
 		std::uint32_t bucketNumber = GetBucketNumber(entry.first);
-		return Iterator(this, mVector.begin() + bucketNumber, SListAt(bucketNumber).PushBack(entry));
+		outIterator = Iterator(this, mVector.begin() + bucketNumber, SListAt(bucketNumber).PushBack(entry));
+		return true;
 	}
 	else
 	{
-		return foundIt;
+		return false;
 	}
 }
 
@@ -245,7 +244,9 @@ inline bool HashMap<TKey, TValue, HashFunctor>::Remove(const TKey& key)
 template<typename TKey, typename TValue, typename HashFunctor>
 inline TValue& HashMap<TKey, TValue, HashFunctor>::operator[](const TKey& key)
 {
-	return (*Insert(std::pair<TKey, TValue>(key, TValue()))).second;
+	Iterator it;
+	Insert(std::pair<TKey, TValue>(key, TValue()), it);
+	return it->second;
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>

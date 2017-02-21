@@ -195,9 +195,10 @@ namespace GameEngine
 			*						may provide your own hashing function as a template during
 									object declaration, or you may use the default.
 			*	\param entry		A key-value std::pair.
-			*	\return				A copy of an iterator pointing to the pair just inserted.
+			*	\param entry		An iterator to the pair just inserted, or the existing pair.
+			*	\return				True if a new pair was inserted, false if it already existed.
 			*/
-			Iterator				Insert(const PairType& entry);
+			bool					Insert(const PairType& entry, Iterator& outIterator);
 
 			/**
 			*	\brief				Searches for specified key.
