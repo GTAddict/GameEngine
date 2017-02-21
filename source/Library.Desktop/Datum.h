@@ -114,7 +114,7 @@ namespace GameEngine
 			/**
 			 *	\brief				Inequality operator. Checks whether the two operands are unequal.
 			 *	\param rhs			The Datum to compare to.
-			 *	\return				True if the two Vectors are unequal, false otherwise.
+			 *	\return				True if the two Datums are unequal, false otherwise.
 			 */
 			bool					operator!=(const Datum& rhs) const;
 
