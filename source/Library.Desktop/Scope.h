@@ -49,6 +49,7 @@ namespace GameEngine
 			*						it will allocate memory and copy its internal data.
 			*	\param rhs			The Scope to copy from.
 			*	\return				A reference to the Scope assigned to.
+			*	\throw std::runtime_error if it tries to copy into a Datum a type that is not.
 			*/
 			Scope&					operator=(const Scope& rhs);
 
@@ -97,6 +98,7 @@ namespace GameEngine
 			*	\brief				Returns a reference to the Datum with the specified name.
 			*	\param name			The name whose Datum to retrieve.
 			*	\return				A const reference to the Datum with the specified name.
+			*	\throw std::out_of_range if an invalid name is specified.
 			*/
 			const Datum&			operator[](const std::string& name) const;
 
