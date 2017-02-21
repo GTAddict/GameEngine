@@ -85,6 +85,7 @@ namespace GameEngine
 			 *	\brief				Copy assignment operator. Deep copies the Datum provided into itself.
 			 *	\param rhs			The Datum to copy from.
 			 *	\return				A reference to the Datum assigned to.
+			 *	\throw std::domain_error if a type not defined in the enum is used.
 			 */
 			Datum&					operator=(const Datum& rhs);
 
@@ -108,6 +109,7 @@ namespace GameEngine
 			 *	\brief				Equality operator. Checks whether the two operands are equal.
 			 *	\param rhs			The Datum to compare to.
 			 *	\return				True if the two Datums are equal, false otherwise.
+			 *	\throw std::domain_error if a type not defined in the enum is used.
 			 */
 			bool					operator==(const Datum& rhs) const;
 
@@ -151,7 +153,10 @@ namespace GameEngine
 			
 			/**
 			 *	\brief				Sets the type of data to be stored in the Datum.
+			 *						You cannot manually change the type once it is set.
 			 *	\param type			The type of data to be stored in the Datum.
+			 *	\throw std::domain_error if an attempt to change the type is made after
+			 *						setting the type.
 			 */
 			void					SetType(const DatumType& type);
 
@@ -163,8 +168,13 @@ namespace GameEngine
 
 			/**
 			 *	\brief				Sets the size of the Datum. Reserves capacity
-			 *						if needed.
+			 *						if needed. You cannot change the size of external
+			 *						storage. The type needs to be set for this function
+			 *						to succeed.
 			 *	\param size			The size to increase the Datum to.
+			 *	\throw std::domain_error if you call this function on external storage.
+			 *	\throw std::domain_error if a type is not set.
+			 *	\throw std::domain_error if a type not defined in the enum is used.
 			 */
 			void					SetSize(const std::uint32_t size);
 
@@ -228,6 +238,10 @@ namespace GameEngine
 			*						for this function to be called.
 			*	\param inputString	The string to parse.
 			*	\param index		The location to be set at.
+			*	\throw std::domain_error if the type is not set.
+			*	\throw std::invalid_argument if a type not defined in the enum is used,
+			*						if there was a parse error, or if there was an invalid
+			*						assignment to a Datum of a different type.
 			*/
 			void					SetFromString(const std::string& inputString, const std::uint32_t index = 0);
 
@@ -241,7 +255,10 @@ namespace GameEngine
 
 			/**
 			*	\brief				Reserves the specified capacity by calling realloc.
+			*						You cannot call this function on external storage.
 			*	\param capacity		The capacity to be reserved.
+			*	\throw std::domain_error if this function is called on external storage.
+			*	\throw std::domain_error if a type not defined in the enum is used.
 			*/
 			void					Reserve(const std::uint32_t capacity);
 

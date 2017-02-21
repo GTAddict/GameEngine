@@ -174,7 +174,7 @@ namespace GameEngine
 			case DatumType::String:		SetSize_Imp<std::string>	(size);		break;
 			case DatumType::Vector:		SetSize_Imp<glm::vec4>		(size);		break;
 			case DatumType::Table:		SetSize_Imp<ScopePointer>	(size);		break;
-			default:					throw std::domain_error("Type has not been set.");
+			default:					throw std::domain_error("Unimplemented.");
 			}
 		}
 
