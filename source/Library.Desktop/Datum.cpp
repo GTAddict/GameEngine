@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Datum.h"
+#include "Scope.h"
 
 namespace GameEngine
 {
@@ -53,7 +54,7 @@ namespace GameEngine
 					mCapacity	= rhs.mCapacity;
 					mData		= rhs.mData;
 				}
-				else
+				else if (mType != DatumType::Unknown)
 				{
 					Reserve(rhs.mCapacity);
 					SetSize(rhs.mSize);
@@ -113,7 +114,8 @@ namespace GameEngine
 				case DatumType::Pointer:	for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<RTTIPointer>	(i) != rhs.Get<RTTIPointer>		(i)) { return false; } }	break;
 				case DatumType::String:		for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<std::string>	(i) != rhs.Get<std::string>		(i)) { return false; } }	break;
 				case DatumType::Vector:		for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<glm::vec4>		(i) != rhs.Get<glm::vec4>		(i)) { return false; } }	break;
-				case DatumType::Table:		for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<ScopePointer>	(i) != rhs.Get<ScopePointer>	(i)) { return false; } }	break;
+				case DatumType::Table:		for (std::uint32_t i = 0; i < Size(); ++i) { if (*Get<ScopePointer>	(i) != *rhs.Get<ScopePointer>	(i)) { return false; } }	break;
+				case DatumType::Unknown:	break; // Don't check data.
 				default:					throw std::domain_error("Unimplemented.");
 				}
 				
