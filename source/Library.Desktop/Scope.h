@@ -123,6 +123,7 @@ namespace GameEngine
 			*	\param name			The name to search for.
 			*	\param outScope		The scope the Datum was found in if at all, nullptr otherwise.
 			*	\return				A pointer to the Datum with the specified name if it exists, nullptr otherwise.
+			*	\throw std::runtime_error if the passed double pointer is a nullptr.
 			*/
 			Datum*					Search(const std::string& name, Scope** outScope);
 			
@@ -178,9 +179,9 @@ namespace GameEngine
 			*/
 			void					Orphan();
 
-			VectorType		mVector;			//*< The internal Vector used to keep track of the insertion order of Datums. */
-			HashMapType		mHashMap;			//*< The internal Vector used to keep track of the table i.e. Scope. */
-			Scope*			mpParent;			//*< The parent of this Scope. */
+			VectorType				mVector;			//*< The internal Vector used to keep track of the insertion order of Datums. */
+			HashMapType				mHashMap;			//*< The internal Vector used to keep track of the table i.e. Scope. */
+			Scope*					mpParent;			//*< The parent of this Scope. */
 		};
 	}
 }
