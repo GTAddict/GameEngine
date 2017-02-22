@@ -103,7 +103,7 @@ namespace GameEngine
 			{
 				for (std::uint32_t i = 0; i < size; ++i)
 				{
-					if (mVector[i] != rhs.mVector[i])
+					if (*mVector[i] != *rhs.mVector[i])
 					{
 						return false;
 					}
@@ -165,6 +165,11 @@ namespace GameEngine
 
 			if (foundDatum != nullptr)
 			{
+				if (outScope == nullptr)
+				{
+					throw std::runtime_error("outScope is nullptr");
+				}
+
 				*outScope = this;
 				return foundDatum;
 			}
@@ -238,7 +243,7 @@ namespace GameEngine
 
 		void Scope::Clear()
 		{
-			for (VectorType::Iterator it = mpParent->mVector.begin(); it != mpParent->mVector.end(); ++it)
+			for (VectorType::Iterator it = mVector.begin(); it != mVector.end(); ++it)
 			{
 				Datum& datum = (*it)->second;
 
@@ -259,18 +264,21 @@ namespace GameEngine
 
 		void Scope::Orphan()
 		{
-			for (VectorType::Iterator it = mpParent->mVector.begin(); it != mpParent->mVector.end(); ++it)
-			{ 
-				if ((*it)->second.Type() == Datum::DatumType::Table)
+			if (mpParent)
+			{
+				for (VectorType::Iterator it = mpParent->mVector.begin(); it != mpParent->mVector.end(); ++it)
 				{
-					if ((*it)->second.Remove(this))
+					if ((*it)->second.Type() == Datum::DatumType::Table)
 					{
-						break;
+						if ((*it)->second.Remove(this))
+						{
+							break;
+						}
 					}
 				}
-			}
 
-			mpParent = nullptr;
+				mpParent = nullptr;
+			}
 		}
 	}
 }
