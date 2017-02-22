@@ -31,20 +31,28 @@ namespace UnitTestScope
 			Scope mainScope;
 			Scope& nestedScope = mainScope.AppendScope("nestedScope");
 			Scope& deeperScope = nestedScope.AppendScope("deeperScope");
+			Scope& deeperScopeAgain = nestedScope.AppendScope("deeperScope");
+			deeperScopeAgain;
 
 			Datum* pDeeperScopeDatum = nestedScope.Find("deeperScope");
 			Assert::IsNotNull(pDeeperScopeDatum);
+			Datum* pShouldBeNull = nestedScope.Find("bumpkis");
+			Assert::IsNull(pShouldBeNull);
 			Scope* pMainScope;
 			Datum* pNestedScopeDatum = deeperScope.Search("nestedScope", &pMainScope);
 			Assert::IsNotNull(pMainScope);
 			Assert::IsNotNull(pNestedScopeDatum);
 			Assert::IsTrue(&mainScope == pMainScope);
 			Assert::IsTrue(mainScope == *pMainScope);
+			Scope* shouldBeNullAgain = nullptr;
+			Datum* pShouldAlsoBeNull = nestedScope.Search("bleep!", &shouldBeNullAgain);
+			Assert::IsNull(shouldBeNullAgain);
+			Assert::IsNull(pShouldAlsoBeNull);
 
 			Assert::IsTrue(std::string("nestedScope") == mainScope.FindName(&nestedScope));
 		}
 
-		TEST_METHOD(TestOrphan)
+		TEST_METHOD(TestAdoptOrphan)
 		{
 			Scope mainScope;
 			Scope& nestedScope = mainScope.AppendScope("nestedScope");
@@ -58,7 +66,6 @@ namespace UnitTestScope
 			deeperScope.Append("deeperScopeString") = std::string("Are");
 
 			mainScope.Adopt(deeperScope, "nestedScope");
-
 		}
 
 		TEST_METHOD(TestCopyMoveSemantics)
@@ -76,15 +83,47 @@ namespace UnitTestScope
 
 			Scope anotherScope = mainScope;
 			Assert::IsTrue(anotherScope == mainScope);
+			mainScope = mainScope;
 			Scope oneMoreScope;
 			oneMoreScope = mainScope;
 			Assert::IsTrue(oneMoreScope == mainScope);
 
 			Scope moveConstructorScope(anotherScope);
 			Assert::IsTrue(moveConstructorScope == mainScope);
+			mainScope = std::move(mainScope);
 			Scope moveAssignmentScope;
 			moveAssignmentScope = std::move(oneMoreScope);
 			Assert::IsTrue(moveAssignmentScope == mainScope);
+		}
+
+		TEST_METHOD(TestInequalityFind)
+		{
+			Scope firstScope, secondScope;
+			Assert::IsTrue(firstScope.Append("Hello") == firstScope["Hello"]);
+			Assert::IsTrue(firstScope != secondScope);
+			Assert::IsTrue(firstScope.FindName(&secondScope) == std::string());
+		}
+
+		TEST_METHOD(TestExceptions)
+		{
+			Scope scope;
+			scope.AppendScope("SomeScope");
+			auto func = [&scope]
+			{
+				const Scope& s = scope;
+				s["exception"];
+			};
+			Assert::ExpectException<std::out_of_range>(func);
+			auto func2 = [&scope] {scope.Search("SomeScope", nullptr); };
+			Assert::ExpectException<std::runtime_error>(func2);
+			auto func3 = [&scope]
+			{
+				scope.Append("anInteger").SetType(Datum::DatumType::Integer);
+				scope.AppendScope("anInteger");
+			};
+			Assert::ExpectException<std::runtime_error>(func3);
+			auto func4 = [&scope] { scope.Adopt(scope, "wtf"); };
+			Assert::ExpectException<std::runtime_error>(func4);
 		}
 
 	public:

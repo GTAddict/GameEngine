@@ -226,7 +226,7 @@ namespace GameEngine
 		{
 			for (auto entry : mVector)
 			{
-				if (entry->second.Get<Scope*>() == scope)
+				if (entry->second.Type() == Datum::DatumType::Table && entry->second.Get<Scope*>() == scope)
 				{
 					return entry->first;
 				}
@@ -237,6 +237,11 @@ namespace GameEngine
 
 		void Scope::Adopt(Scope& child, const std::string& name)
 		{
+			if (&child == this)
+			{
+				throw std::runtime_error("A scope instance cannot adopt itself.");
+			}
+
 			child.Orphan();
 			AppendScope(name, &child);
 		}
