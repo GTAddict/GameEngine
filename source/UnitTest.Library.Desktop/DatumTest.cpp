@@ -2,19 +2,11 @@
 
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "ConvertVals.h"
 #include <windows.h>
 #include "Foo.h"
 
-namespace UnitTestDatumConstants
-{
-	// ...
-}
-
 using namespace GameEngine::Library;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-using namespace UnitTestConstants;
-using namespace UnitTestDatumConstants;
 
 namespace UnitTestDatum
 {
