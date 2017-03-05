@@ -165,12 +165,11 @@ namespace GameEngine
 
 			if (foundDatum != nullptr)
 			{
-				if (outScope == nullptr)
+				if (outScope != nullptr)
 				{
-					throw std::runtime_error("outScope is nullptr");
+					*outScope = this;
 				}
 
-				*outScope = this;
 				return foundDatum;
 			}
 
