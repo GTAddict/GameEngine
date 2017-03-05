@@ -221,13 +221,19 @@ namespace GameEngine
 			return mpParent;
 		}
 
-		std::string Scope::FindName(const Scope* scope) const
+		std::string Scope::FindName(const Scope& scope) const
 		{
 			for (auto entry : mVector)
 			{
-				if (entry->second.Type() == Datum::DatumType::Table && entry->second.Get<Scope*>() == scope)
+				if (entry->second.Type() == Datum::DatumType::Table)
 				{
-					return entry->first;
+					for (std::uint32_t i = 0; i < entry->second.Size(); ++i)
+					{
+						if (entry->second.Get<Scope*>(i) == &scope)
+						{
+							return entry->first;
+						}
+					}
 				}
 			}
 

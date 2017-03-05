@@ -155,7 +155,7 @@ namespace GameEngine
 			*	\param scope		The Scope whose name is to be found.
 			*	\return				The name of the Scope passed in.
 			*/
-			std::string				FindName(const Scope* scope) const;
+			std::string				FindName(const Scope& scope) const;
 
 			/**
 			*	\brief				Orphans the Scope from its parent and adds it to itself.

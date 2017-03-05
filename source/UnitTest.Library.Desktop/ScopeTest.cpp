@@ -49,7 +49,7 @@ namespace UnitTestScope
 			Assert::IsNull(shouldBeNullAgain);
 			Assert::IsNull(pShouldAlsoBeNull);
 
-			Assert::IsTrue(std::string("nestedScope") == mainScope.FindName(&nestedScope));
+			Assert::IsTrue(std::string("nestedScope") == mainScope.FindName(nestedScope));
 		}
 
 		TEST_METHOD(TestAdoptOrphan)
@@ -101,7 +101,7 @@ namespace UnitTestScope
 			Scope firstScope, secondScope;
 			Assert::IsTrue(firstScope.Append("Hello") == firstScope["Hello"]);
 			Assert::IsTrue(firstScope != secondScope);
-			Assert::IsTrue(firstScope.FindName(&secondScope) == std::string());
+			Assert::IsTrue(firstScope.FindName(secondScope) == std::string());
 		}
 
 		TEST_METHOD(TestExceptions)
@@ -114,8 +114,7 @@ namespace UnitTestScope
 				s["exception"];
 			};
 			Assert::ExpectException<std::out_of_range>(func);
-			auto func2 = [&scope] {scope.Search("SomeScope", nullptr); };
-			Assert::ExpectException<std::runtime_error>(func2);
+			auto func2 = [&scope] {scope.Search("SomeScope", nullptr); };	// should not throw any exception
 			auto func3 = [&scope]
 			{
 				scope.Append("anInteger").SetType(Datum::DatumType::Integer);
