@@ -84,6 +84,30 @@ namespace GameEngine
 				mpParent = rhs.mpParent;
 
 				rhs.mpParent = nullptr;
+
+				// You could FindName on the right scope, orphan
+				// it, and adopt it back into mpParent. That would
+				// be shorter code and code that's reused, but
+				// that would do 2 searches. This is more optimized.
+				if (mpParent)
+				{
+					for (auto entry : mpParent->mVector)
+					{
+						Datum& datum = entry->second;
+
+						if (datum.Type() == Datum::DatumType::Table)
+						{
+							for (std::uint32_t i = 0; i < datum.Size(); ++i)
+							{
+								if (datum.Get<Scope*>(i) == &rhs)
+								{
+									datum.Set(this, i);
+									break;
+								}
+							}
+						}
+					}
+				}
 			}
 
 			return *this;
