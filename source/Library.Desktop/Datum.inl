@@ -101,7 +101,6 @@ template<typename T>
 inline void GameEngine::Library::Datum::SetDataPointer(T* dataPointer)
 {
 	static_assert(false, "You need to provide implementation for your class.");
-	return nullptr;
 }
 
 template <>
@@ -192,150 +191,30 @@ inline bool GameEngine::Library::Datum::Remove(const T& value)
 	return false;
 }
 
+template<typename T>
+inline void GameEngine::Library::Datum::SetType(const T& data)
+{
+	mType = DeduceType(data);
+}
+
 template <typename T>
 inline void GameEngine::Library::Datum::Set(const T& value, const std::uint32_t index)
 {
-	static_assert(false, "Not implemented.");
-}
-
-template <>
-inline void GameEngine::Library::Datum::Set(const std::int32_t& value, const std::uint32_t index)
-{
 	if (mType == DatumType::Unknown)
 	{
-		mType = DatumType::Integer;
+		mType = DeduceType(value);
 	}
-	else if (mType != DatumType::Integer)
+	else if (mType != DeduceType(value))
 	{
-		throw std::invalid_argument("Trying to assign std::int32_t to GameEngine::Library::Datum of different type.");
+		throw std::invalid_argument("Trying to assign value to Datum of different type.");
 	}
-
+	
 	if (index >= Size())
 	{
 		SetSize(index + 1);
 	}
 
-	*(GetDataPointer<std::int32_t>() + index) = value;
-}
-
-template <>
-inline void GameEngine::Library::Datum::Set(const float& value, const std::uint32_t index)
-{
-	if (mType == DatumType::Unknown)
-	{
-		mType =DatumType::Float;
-	}
-	else if (mType != DatumType::Float)
-	{
-		throw std::invalid_argument("Trying to assign float to GameEngine::Library::Datum of different type.");
-	}
-
-	if (index >= Size())
-	{
-		SetSize(index + 1);
-	}
-
-	*(GetDataPointer<float>() + index) = value;
-}
-
-template <>
-inline void GameEngine::Library::Datum::Set(const glm::mat4x4& value, const std::uint32_t index)
-{
-	if (mType == DatumType::Unknown)
-	{
-		mType = DatumType::Matrix;
-	}
-	else if (mType != DatumType::Matrix)
-	{
-		throw std::invalid_argument("Trying to assign Matrix to GameEngine::Library::Datum of different type.");
-	}
-
-	if (index >= Size())
-	{
-		SetSize(index + 1);
-	}
-
-	*(GetDataPointer<glm::mat4x4>() + index) = value;
-}
-
-template <>
-inline void GameEngine::Library::Datum::Set(const RTTIPointer& value, const std::uint32_t index)
-{
-	if (mType == DatumType::Unknown)
-	{
-		mType = DatumType::Pointer;
-	}
-	else if (mType != DatumType::Pointer)
-	{
-		throw std::invalid_argument("Trying to assign Pointer to GameEngine::Library::Datum of different type.");
-	}
-
-	if (index >= Size())
-	{
-		SetSize(index + 1);
-	}
-
-	*(GetDataPointer<RTTIPointer>() + index) = value;
-}
-
-template <>
-inline void GameEngine::Library::Datum::Set(const ScopePointer& value, const std::uint32_t index)
-{
-	if (mType == DatumType::Unknown)
-	{
-		mType = DatumType::Table;
-	}
-	else if (mType != DatumType::Table)
-	{
-		throw std::invalid_argument("Trying to assign Table to GameEngine::Library::Datum of different type.");
-	}
-
-	if (index >= Size())
-	{
-		SetSize(index + 1);
-	}
-
-	*(GetDataPointer<ScopePointer>() + index) = value;
-}
-
-template <>
-inline void GameEngine::Library::Datum::Set(const std::string& value, const std::uint32_t index)
-{
-	if (mType == DatumType::Unknown)
-	{
-		mType = DatumType::String;
-	}
-	else if (mType != DatumType::String)
-	{
-		throw std::invalid_argument("Trying to assign String to GameEngine::Library::Datum of different type.");
-	}
-
-	if (index >= Size())
-	{
-		SetSize(index + 1);
-	}
-
-	*(GetDataPointer<std::string>() + index) = value;
-}
-
-template <>
-inline void GameEngine::Library::Datum::Set(const glm::vec4& value, const std::uint32_t index)
-{
-	if (mType == DatumType::Unknown)
-	{
-		mType = DatumType::Vector;
-	}
-	else if (mType != DatumType::Vector)
-	{
-		throw std::invalid_argument("Trying to assign Vector to GameEngine::Library::Datum of different type.");
-	}
-
-	if (index >= Size())
-	{
-		SetSize(index + 1);
-	}
-
-	*(GetDataPointer<glm::vec4>() + index) = value;
+	*(GetDataPointer<T>() + index) = value;
 }
 
 template<typename T>
@@ -422,4 +301,60 @@ template <>
 inline std::string GameEngine::Library::Datum::ToString<GameEngine::Library::Datum::ScopePointer>(const std::uint32_t index) const
 {
 	return ToString<RTTIPointer>(index);
+}
+
+template <typename T>
+inline GameEngine::Library::Datum::DatumType GameEngine::Library::Datum::DeduceType(const T& data) const
+{
+	data;
+	return DatumType::Unknown;
+}
+
+template <>
+inline GameEngine::Library::Datum::DatumType GameEngine::Library::Datum::DeduceType(const std::int32_t& data) const
+{
+	data;
+	return DatumType::Integer;
+}
+
+template <>
+inline GameEngine::Library::Datum::DatumType GameEngine::Library::Datum::DeduceType(const float& data) const
+{
+	data;
+	return DatumType::Float;
+}
+
+template <>
+inline GameEngine::Library::Datum::DatumType GameEngine::Library::Datum::DeduceType(const glm::vec4& data) const
+{
+	data;
+	return DatumType::Vector;
+}
+
+template <>
+inline GameEngine::Library::Datum::DatumType GameEngine::Library::Datum::DeduceType(const glm::mat4x4& data) const
+{
+	data;
+	return DatumType::Matrix;
+}
+
+template <>
+inline GameEngine::Library::Datum::DatumType GameEngine::Library::Datum::DeduceType(const std::string& data) const
+{
+	data;
+	return DatumType::String;
+}
+
+template <>
+inline GameEngine::Library::Datum::DatumType GameEngine::Library::Datum::DeduceType(const ScopePointer& data) const
+{
+	data;
+	return DatumType::Table;
+}
+
+template <>
+inline GameEngine::Library::Datum::DatumType GameEngine::Library::Datum::DeduceType(const RTTIPointer& data) const
+{
+	data;
+	return DatumType::Pointer;
 }

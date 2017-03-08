@@ -161,6 +161,19 @@ namespace GameEngine
 			void					SetType(const DatumType& type);
 
 			/**
+			*	\brief				Sets the type of data to be stored in the Datum.
+			*						You cannot manually change the type once it is set.
+			*						Sometimes, it is useful to set the type based on the
+			*						input data, without setting the data itself, for e.g.
+			*						external storage.
+			*	\param data			The data whose type is to be deduced.
+			*	\throw std::domain_error if an attempt to change the type is made after
+			*						setting the type.
+			*/
+			template <typename T>
+			void					SetType(const T& data);
+
+			/**
 			 *	\brief				Returns the population of elements in the Datum.
 			 *	\return				The population of elements in the Datum.
 			 */ 
@@ -244,6 +257,9 @@ namespace GameEngine
 			*						assignment to a Datum of a different type.
 			*/
 			void					SetFromString(const std::string& inputString, const std::uint32_t index = 0);
+
+			template <typename T>
+			DatumType				DeduceType(const T& data) const;
 
 		private:
 
