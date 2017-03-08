@@ -2,6 +2,7 @@
 #include "Vector.h"
 #include "HashMap.h"
 #include "Datum.h"
+#include "RTTI.h"
 
 namespace GameEngine
 {
@@ -13,12 +14,14 @@ namespace GameEngine
 		*			itself can contain any type of data, including
 		*			more Scopes.
 		*/
-		class Scope
+		class Scope : public RTTI
 		{
 			typedef			std::pair<std::string, Datum>		ElementType;
 			typedef			Vector<ElementType*>				VectorType;
 			typedef			HashMap<std::string, Datum>			HashMapType;
 			static const	std::uint32_t						DEFAULT_SIZE = 10;
+
+			RTTI_DECLARATIONS(Scope, RTTI);
 
 		public:
 

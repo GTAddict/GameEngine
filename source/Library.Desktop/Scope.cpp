@@ -6,6 +6,8 @@ namespace GameEngine
 {
 	namespace Library
 	{
+		RTTI_DEFINITIONS(Scope);
+
 		Scope::Scope(const std::uint32_t size)
 			: mpParent(nullptr)
 		{
@@ -91,6 +93,7 @@ namespace GameEngine
 				// that would do 2 searches. This is more optimized.
 				if (mpParent)
 				{
+					// Update the parent to point to the new moved address
 					for (auto entry : mpParent->mVector)
 					{
 						Datum& datum = entry->second;
@@ -105,6 +108,20 @@ namespace GameEngine
 									break;
 								}
 							}
+						}
+					}
+				}
+
+				// Update all the children to point to the new moved address
+				for (ElementType* element : mVector)
+				{
+					Datum& datum = element->second;
+
+					if (datum.Type() == Datum::DatumType::Table)
+					{
+						for (std::uint32_t i = 0; i < datum.Size(); ++i)
+						{
+							datum.Get<Scope*>(i)->mpParent = this;
 						}
 					}
 				}
