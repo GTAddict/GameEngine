@@ -1,5 +1,6 @@
 #pragma once
 #include "Scope.h"
+#include "RTTI.h"
 
 namespace GameEngine
 {
@@ -46,7 +47,7 @@ namespace GameEngine
 	}
 }
 
-class Example : GameEngine::Library::Attributed
+class Example : public GameEngine::Library::Attributed
 {
 	RTTI_DECLARATIONS(Example, Attributed);
 
@@ -55,14 +56,16 @@ class Example : GameEngine::Library::Attributed
 
 	Example()
 	{
-		// AddPrescribedAttributeExternal("Foo", foo);
-		// AddPrescribedAttributeExternal("More", more, 2);
+		AddPrescribedAttributeExternal("Foo", foo);
+		AddPrescribedAttributeExternal("More", more, 2);
 	}
 };
 
-class Another : GameEngine::Library::Attributed
+class Another : public GameEngine::Library::Attributed
 {
 	RTTI_DECLARATIONS(Another, Attributed);
+
+	typedef RTTI* RTTIPointer;
 
 	std::int32_t bar;
 
@@ -70,8 +73,7 @@ class Another : GameEngine::Library::Attributed
 
 	Another()
 	{
-		// AddPrescribedAttributeExternal("Bar", &bar, 1);
-		AddPrescribedAttributeExternal("ex", ex);
+		AddPrescribedAttributeExternal("ex", static_cast<RTTI*>(ex));
 	}
 };
 
