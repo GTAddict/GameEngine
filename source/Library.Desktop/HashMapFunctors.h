@@ -6,6 +6,7 @@
 // http://web.archive.org/web/20071223173210/http://www.concentric.net/~Ttwang/tech/inthash.htm
 // http://www.cse.yorku.ca/~oz/hash.html
 
+#define THROW_IF_NULL(x)	if (x == nullptr)	throw std::runtime_error("Key is null!");
 
 namespace GameEngine
 {
@@ -46,20 +47,41 @@ namespace GameEngine
 				return hash;
 			}
 
-			template <> std::uint32_t operator()(const char& key)			const	{ return operator()((std::int32_t) key); }
-			template <> std::uint32_t operator()(const bool& key)			const	{ return operator()((std::int32_t) key); }
+			template <>
+			std::uint32_t operator()(const std::int64_t& key) const
+			{
+				std::uint64_t hash = key;
+
+				hash = (~hash) + (hash << 21);
+				hash = hash ^ (hash >> 24);
+				hash = (hash + (hash << 3)) + (hash << 8);
+				hash = hash ^ (hash >> 14);
+				hash = (hash + (hash << 2)) + (hash << 4);
+				hash = hash ^ (hash >> 28);
+				hash = hash + (hash << 31);
+
+				return static_cast<std::uint32_t>(hash);
+			}
+
+			template <> std::uint32_t operator()(const std::uint32_t& key)	const	{ return operator()(static_cast<std::int32_t>(key)); }
+			template <> std::uint32_t operator()(const std::uint64_t& key)	const	{ return operator()(static_cast<std::int64_t>(key)); }
+			template <> std::uint32_t operator()(const char& key)			const	{ return operator()(static_cast<std::int32_t>(key)); }
+			template <> std::uint32_t operator()(const bool& key)			const	{ return operator()(static_cast<std::int32_t>(key)); }
 			template <> std::uint32_t operator()(const float& key)			const	{ return operator()(reinterpret_cast<const int*>(&key)); }
 			template <> std::uint32_t operator()(const std::string& key)	const	{ return operator()(key.c_str()); }
 
-			template <> std::uint32_t operator()(const std::int32_t* key)	const	{ return operator()(*key); }
-			template <> std::uint32_t operator()(const bool* key)			const	{ return operator()(*key); }
-			template <> std::uint32_t operator()(const float* key)			const	{ return operator()(*key); }
-			template <> std::uint32_t operator()(const std::string* key)	const	{ return operator()(key->c_str()); }
+			template <> std::uint32_t operator()(const std::int32_t* key)	const	{ THROW_IF_NULL(key); return operator()(*key); }
+			template <> std::uint32_t operator()(const std::int64_t* key)	const	{ THROW_IF_NULL(key); return operator()(*key); }
+			template <> std::uint32_t operator()(const bool* key)			const	{ THROW_IF_NULL(key); return operator()(*key); }
+			template <> std::uint32_t operator()(const float* key)			const	{ THROW_IF_NULL(key); return operator()(*key); }
+			template <> std::uint32_t operator()(const std::string* key)	const	{ THROW_IF_NULL(key); return operator()(key->c_str()); }
 
 #pragma warning (disable : 4706)
 			template <>
 			std::uint32_t operator()(const char* key) const
 			{
+				THROW_IF_NULL(key);
+
 				unsigned long hash = 5381;
 				int c;
 

@@ -203,7 +203,7 @@ namespace GameEngine
 			 *	\param size			The size of the array.
 			 */
 			template <typename T>
-			void					SetStorage(T* dataBlock, const std::uint32_t size);
+			void					SetStorage(const T* dataBlock, const std::uint32_t size);
 
 			/**
 			*	\brief				Pushes data to the end of the Datum.

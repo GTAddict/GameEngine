@@ -153,10 +153,10 @@ GameEngine::Library::Datum& GameEngine::Library::Datum::operator=(const T& rhs)
 }
 
 template<typename T>
-inline void GameEngine::Library::Datum::SetStorage(T* dataBlock, const std::uint32_t size)
+inline void GameEngine::Library::Datum::SetStorage(const T* dataBlock, const std::uint32_t size)
 {
 	Clear();
-	SetDataPointer<T>(dataBlock);
+	SetDataPointer<T>(const_cast<T*>(dataBlock));
 	mSize = size;
 	mExternalStorage = true;
 }
