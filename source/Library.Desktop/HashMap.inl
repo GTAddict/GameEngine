@@ -184,6 +184,13 @@ inline bool HashMap<TKey, TValue, HashFunctor>::operator!=(const HashMap& rhs) c
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
+inline bool GameEngine::Library::HashMap<TKey, TValue, HashFunctor>::Insert(const PairType& entry)
+{
+	static Iterator it;
+	return Insert(entry, it);
+}
+
+template<typename TKey, typename TValue, typename HashFunctor>
 inline bool HashMap<TKey, TValue, HashFunctor>::Insert(const PairType& entry, Iterator& outIterator)
 {
 	outIterator = Find(entry.first);

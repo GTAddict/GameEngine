@@ -191,6 +191,15 @@ namespace GameEngine
 			bool					operator!=(const HashMap& rhs) const;
 
 			/**
+			*	\brief				Inserts an key-value pair based on the hash of the key. This
+									is a variant which you can use when you don't need the found
+									iterator.
+			*	\param entry		A key-value std::pair.
+			*	\return				True if a new pair was inserted, false if it already existed.
+			*/
+			bool					Insert(const PairType& entry);
+
+			/**
 			*	\brief				Inserts an key-value pair based on the hash of the key. You
 			*						may provide your own hashing function as a template during
 									object declaration, or you may use the default.
