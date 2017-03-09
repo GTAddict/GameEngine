@@ -6,5 +6,6 @@
 #include "HashMap.h"
 #include "Datum.h"
 #include "Scope.h"
+#include "Attributed.h"
 #include "DummyStruct.h"
 #include <stdexcept>

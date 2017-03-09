@@ -173,12 +173,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AttributedFoo.h" />
     <ClInclude Include="ConvertVals.h" />
     <ClInclude Include="DummyStruct.h" />
     <ClInclude Include="Foo.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AttributedTest.cpp" />
     <ClCompile Include="DatumTest.cpp" />
     <ClCompile Include="HashMapTest.cpp" />
     <ClCompile Include="pch.cpp">
