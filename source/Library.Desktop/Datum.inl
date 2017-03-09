@@ -106,42 +106,49 @@ inline void GameEngine::Library::Datum::SetDataPointer(T* dataPointer)
 template <>
 inline void GameEngine::Library::Datum::SetDataPointer(std::int32_t* dataPointer)
 {
+	mType = DatumType::Integer;
 	mData.pInt = dataPointer;
 }
 
 template <>
 inline void GameEngine::Library::Datum::SetDataPointer(float* dataPointer)
 {
+	mType = DatumType::Float;
 	mData.pFloat = dataPointer;
 }
 
 template <>
 inline void GameEngine::Library::Datum::SetDataPointer(glm::vec4* dataPointer)
 {
+	mType = DatumType::Vector;
 	mData.pVec4 = dataPointer;
 }
 
 template <>
 inline void GameEngine::Library::Datum::SetDataPointer(glm::mat4x4* dataPointer)
 {
+	mType = DatumType::Matrix;
 	mData.pMat4 = dataPointer;
 }
 
 template <>
 inline void GameEngine::Library::Datum::SetDataPointer(std::string* dataPointer)
 {
+	mType = DatumType::String;
 	mData.pString = dataPointer;
 }
 
 template <>
 inline void GameEngine::Library::Datum::SetDataPointer(ScopePointer* dataPointer)
 {
+	mType = DatumType::Table;
 	mData.ppScope = dataPointer;
 }
 
 template <>
 inline void GameEngine::Library::Datum::SetDataPointer(RTTIPointer* dataPointer)
 {
+	mType = DatumType::Pointer;
 	mData.ppRTTI = dataPointer;
 }
 
