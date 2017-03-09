@@ -2,6 +2,9 @@
 #include "Scope.h"
 #include "RTTI.h"
 
+#define PRTTI_CAST(x)	static_cast<RTTI*>(x)
+#define PSCOPE_CAST(x)	static_cast<Scope*>(x)
+
 namespace GameEngine
 {
 	namespace Library
@@ -11,70 +14,43 @@ namespace GameEngine
 			RTTI_DECLARATIONS(Attributed, Scope);
 
 		public:
-			typedef RTTI* RTTIPointer;
-
-		public:
 
 			Attributed();
+			Attributed(const Attributed& rhs);
+			Attributed(Attributed&& rhs);
+			virtual ~Attributed();
+
+			Attributed& operator=(const Attributed& rhs);
+			Attributed& operator=(Attributed&& rhs);
 
 			bool IsPrescribedAttribute(const std::string& name) const;
 			bool IsAuxiliaryAttribute(const std::string& name) const;
 			bool IsAttribute(const std::string& name) const;
 
-			std::uint32_t AuxiliaryBegin() const;
-
-		protected:
-
 			template <typename T>
 			Datum* AddPrescribedAttributeInternal(const std::string& name, const T& data);
 			template <typename T>
 			Datum* AddPrescribedAttributeInternal(const std::string& name, const T* data, const std::uint32_t size);
-			// Datum* AddPrescribedRTTIInternal(const std::string& name, const RTTIPointer data);
-			// Datum* AddPrescribedRTTIbuteInternal(const std::string& name, const RTTIPointer* data, const std::uint32_t size);
 
 			template <typename T>
 			Datum* AddPrescribedAttributeExternal(const std::string& name, const T& data);
 			template <typename T>
 			Datum* AddPrescribedAttributeExternal(const std::string& name, const T* data, const std::uint32_t size);
-			// Datum* AddPrescribedAttributeExternal(const std::string& name, const RTTIPointer data);
-			// Datum* AddPrescribedAttributeExternal(const std::string& name, const RTTIPointer* data, const std::uint32_t size);
+
+			Scope* AddNestedScope(const std::string& name);
+			void AddNestedScope(const std::string& name, Scope* scope);
 			
 			Datum& AppendAuxiliaryAttribute(const std::string& name);
 
-			static HashMap<std::uint64_t, HashMap<std::string, Datum>> mPrescribedAttributes;
+		private:
+
+			static HashMap<std::uint64_t, HashMap<std::string, Datum>> s_mPrescribedAttributes;
 			HashMap<std::string, Datum> mAuxiliaryAttributes;
+
+			static std::int32_t s_mInstanceCount;
 		};
+
+#include "Attributed.inl"
+
 	}
 }
-
-class Example : public GameEngine::Library::Attributed
-{
-	RTTI_DECLARATIONS(Example, Attributed);
-
-	std::int32_t foo;
-	std::int32_t more[2];
-
-	Example()
-	{
-		AddPrescribedAttributeExternal("Foo", foo);
-		AddPrescribedAttributeExternal("More", more, 2);
-	}
-};
-
-class Another : public GameEngine::Library::Attributed
-{
-	RTTI_DECLARATIONS(Another, Attributed);
-
-	typedef RTTI* RTTIPointer;
-
-	std::int32_t bar;
-
-	Example* ex;
-
-	Another()
-	{
-		AddPrescribedAttributeExternal("ex", static_cast<RTTI*>(ex));
-	}
-};
-
-RTTI_DEFINITIONS(Example);

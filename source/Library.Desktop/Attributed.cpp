@@ -7,71 +7,64 @@ namespace GameEngine
 	{
 		RTTI_DEFINITIONS(Attributed);
 
+		HashMap<std::uint64_t, HashMap<std::string, Datum>> Attributed::s_mPrescribedAttributes;
+		std::int32_t Attributed::s_mInstanceCount = 0;
+
 		Attributed::Attributed()
 		{
-			RTTIPointer thisPointer = static_cast<RTTIPointer>(this);
-			AddPrescribedAttributeInternal("this", &thisPointer, 1);
+			++s_mInstanceCount;
+			AddPrescribedAttributeInternal("this", PRTTI_CAST(this));
 		}
 
-		template <typename T>
-		Datum* Attributed::AddPrescribedAttributeInternal(const std::string& name, const T& data)
+		Attributed::Attributed(const Attributed& rhs)
 		{
-			AddPrescribedAttributeInternal(name, &data, 1);
+			operator=(rhs);
 		}
 
-		template <typename T>
-		Datum* Attributed::AddPrescribedAttributeInternal(const std::string& name, const T* data, const std::uint32_t size)
+		Attributed::Attributed(Attributed&& rhs)
 		{
-			// Already added, return
-			if (IsAttribute(name))
+			operator=(std::move(rhs));
+		}
+
+		Attributed& Attributed::operator=(const Attributed& rhs)
+		{
+			Scope::operator=(rhs);
+
+			if (this != &rhs)
 			{
-				return nullptr;
+				mAuxiliaryAttributes = rhs.mAuxiliaryAttributes;
+				operator[]("this") = PRTTI_CAST(this);
 			}
 
-			if (data == nullptr)
-			{
-				throw std::runtime_error("Data is null.");
-			}
+			return *this;
+		}
 
-			Datum& datum = Append(name);
-			datum.SetSize(size);
+		Attributed& Attributed::operator=(Attributed&& rhs)
+		{
+			Scope::operator=(std::move(rhs));
+
+			if (this != &rhs)
+			{
+				mAuxiliaryAttributes = std::move(rhs.mAuxiliaryAttributes);
+				operator[]("this") = PRTTI_CAST(this);
+			}
 			
-			for (std::uint32_t i = 0; i < size; ++i)
-			{
-				datum.Set(*(data + i), i);
-			}
-
-			mPrescribedAttributes[TypeIdClass()][name] = datum;
-
-			return &datum;
+			return *this;
 		}
 
-		/*Datum* Attributed::AddPrescribedRTTIInternal(const std::string& name, const RTTIPointer data)
+		Attributed::~Attributed()
 		{
-			return AddPrescribedAttributeInternal(name, &data, 1);
-		}
+			--s_mInstanceCount;
 
-		Datum* Attributed::AddPrescribedRTTIInternal(const std::string& name, const RTTIPointer* data, const std::uint32_t size)
-		{
-			if (data == nullptr)
+			if (s_mInstanceCount == 0)
 			{
-				throw std::runtime_error("Data is null.");
+				s_mPrescribedAttributes.Clear();
 			}
 
-			if (data[0]->Is(RTTI::TypeIdClass()))
-			{
-
-			}
-		}*/
-
-		template <typename T>
-		Datum* Attributed::AddPrescribedAttributeExternal(const std::string& name, const T& data)
-		{
-			return AddPrescribedAttributeExternal(name, &data, 1);
+			mAuxiliaryAttributes.Clear();
 		}
 
-		template <typename T>
-		Datum* Attributed::AddPrescribedAttributeExternal(const std::string& name, const T* data, const std::uint32_t size)
+		Scope* Attributed::AddNestedScope(const std::string& name)
 		{
 			// Already added, return
 			if (IsAttribute(name))
@@ -79,44 +72,30 @@ namespace GameEngine
 				return nullptr;
 			}
 
-			if (data == nullptr)
-			{
-				throw std::runtime_error("Data is null.");
-			}
+			Scope& scope = AppendScope(name);
+			s_mPrescribedAttributes[TypeIdClass()][name] = &scope;
 
-			Datum& datum = Append(name);
-			datum.SetStorage(data, size);
-
-			mPrescribedAttributes[TypeIdClass()][name] = datum;
-
-			return &datum;
+			return &scope;
 		}
 
-		//Datum* Attributed::AddPrescribedAttributeExternal(const std::string& name, const RTTIPointer data)
-		//{
-		//	return AddPrescribedAttributeExternal(name, &data, 1);
-		//}
+		// If we are checking for nullptr, then accept a Scope& instead of a *
+		// one would say, but I wanted the syntax to be uniform across all
+		// signatures. So instead of the user dereferencing his scope pointer
+		// in the class he can just pass it in.
+		void Attributed::AddNestedScope(const std::string& name, Scope* scope)
+		{
+			if (scope == nullptr)
+			{
+				return;
+			}
 
-		//Datum* Attributed::AddPrescribedAttributeExternal(const std::string& name, const RTTIPointer* data, const std::uint32_t size)
-		//{
-		//	// Already added, return
-		//	if (IsAttribute(name))
-		//	{
-		//		return nullptr;
-		//	}
+			if (!IsAttribute(name))
+			{
+				s_mPrescribedAttributes[TypeIdClass()][name] = scope;
+			}
 
-		//	if (data == nullptr)
-		//	{
-		//		throw std::runtime_error("Data is null.");
-		//	}
-
-		//	Datum& datum = Append(name);
-		//	datum.SetStorage(data, size);
-
-		//	mPrescribedAttributes[TypeIdClass()][name] = datum;
-
-		//	return &datum;
-		//}
+			Adopt(*scope, name);
+		}
 
 		Datum& Attributed::AppendAuxiliaryAttribute(const std::string& name)
 		{
@@ -125,7 +104,7 @@ namespace GameEngine
 				throw std::invalid_argument("An attribute with the given name already exists.");
 			}
 
-			Datum& d = Append(name);
+			Datum& d = Append(name); d;
 
 			mAuxiliaryAttributes[name] = d;
 
@@ -134,7 +113,7 @@ namespace GameEngine
 
 		bool Attributed::IsPrescribedAttribute(const std::string& name) const
 		{
-			return mPrescribedAttributes[TypeIdClass()].ContainsKey(name);
+			return s_mPrescribedAttributes[TypeIdClass()].ContainsKey(name);
 		}
 
 		bool Attributed::IsAuxiliaryAttribute(const std::string& name) const

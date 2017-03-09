@@ -177,6 +177,7 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Attributed.inl" />
     <None Include="Datum.inl" />
     <None Include="HashMap.inl" />
     <None Include="packages.config" />

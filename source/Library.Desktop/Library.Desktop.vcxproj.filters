@@ -77,5 +77,8 @@
     <None Include="Datum.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="Attributed.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
