@@ -658,7 +658,6 @@ namespace UnitTestDatum
 				std::int32_t* extStorage = new int[20];
 				Datum d;
 				d.SetStorage(extStorage, 20);
-				d.SetType(Datum::DatumType::Integer);
 				for (std::int32_t i = 0; i < 20; ++i)
 				{
 					d.Set(i, i);
@@ -673,7 +672,6 @@ namespace UnitTestDatum
 				float* extStorage = new float[20];
 				Datum d;
 				d.SetStorage(extStorage, 20);
-				d.SetType(Datum::DatumType::Float);
 				for (std::int32_t i = 0; i < 20; ++i)
 				{
 					d.Set(static_cast<float>(i), i);
@@ -688,7 +686,6 @@ namespace UnitTestDatum
 				glm::vec4* extStorage = new glm::vec4[20];
 				Datum d;
 				d.SetStorage(extStorage, 20);
-				d.SetType(Datum::DatumType::Vector);
 				for (std::int32_t i = 0; i < 20; ++i)
 				{
 					d.Set(glm::vec4(i, i, i, i), i);
@@ -703,7 +700,6 @@ namespace UnitTestDatum
 				glm::mat4x4* extStorage = new glm::mat4x4[20];
 				Datum d;
 				d.SetStorage(extStorage, 20);
-				d.SetType(Datum::DatumType::Matrix);
 				for (std::int32_t i = 0; i < 20; ++i)
 				{
 					d.Set(glm::mat4x4(i, i, i, i, i, i, i, i, i, i, i, i, i, i, i, i), i);
@@ -719,7 +715,6 @@ namespace UnitTestDatum
 				std::string* extStorage = new std::string[20];
 				Datum d;
 				d.SetStorage(extStorage, 20);
-				d.SetType(Datum::DatumType::String);
 				for (std::int32_t i = 0; i < 20; ++i)
 				{
 					d.Set(std::string("hello"), i);
@@ -734,7 +729,6 @@ namespace UnitTestDatum
 				RTTI** extStorage = new RTTI*[20];
 				Datum d;
 				d.SetStorage(extStorage, 20);
-				d.SetType(Datum::DatumType::Pointer);
 				for (std::int32_t i = 0; i < 20; ++i)
 				{
 					d.Set(static_cast<RTTI*>(new Foo(i)), i);
