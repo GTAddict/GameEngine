@@ -9,7 +9,7 @@ namespace GameEngine
 	namespace Library
 	{
 		/**
-		*	\class	Class
+		*	\class	Scope
 		*	\brief	Scope is a table of String-Datum pairs. The Datum
 		*			itself can contain any type of data, including
 		*			more Scopes.
