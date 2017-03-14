@@ -185,11 +185,16 @@
     <None Include="Vector.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\..\build\packages\expat.redist.2.1.0.11\build\native\expat.redist.targets" Condition="Exists('..\..\build\packages\expat.redist.2.1.0.11\build\native\expat.redist.targets')" />
+    <Import Project="..\..\build\packages\expat.2.1.0.11\build\native\expat.targets" Condition="Exists('..\..\build\packages\expat.2.1.0.11\build\native\expat.targets')" />
+  </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\build\packages\GLMathematics.0.9.5.4\build\native\GLMathematics.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\build\packages\GLMathematics.0.9.5.4\build\native\GLMathematics.props'))" />
+    <Error Condition="!Exists('..\..\build\packages\expat.redist.2.1.0.11\build\native\expat.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\build\packages\expat.redist.2.1.0.11\build\native\expat.redist.targets'))" />
+    <Error Condition="!Exists('..\..\build\packages\expat.2.1.0.11\build\native\expat.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\build\packages\expat.2.1.0.11\build\native\expat.targets'))" />
   </Target>
 </Project>
