@@ -45,6 +45,9 @@
     <ClInclude Include="Attributed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IXMLParseHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils.cpp">

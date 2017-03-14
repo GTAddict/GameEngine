@@ -157,6 +157,7 @@
     <ClInclude Include="Datum.h" />
     <ClInclude Include="HashMap.h" />
     <ClInclude Include="HashMapFunctors.h" />
+    <ClInclude Include="IXMLParseHelper.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="RTTI.h" />
     <ClInclude Include="Scope.h" />
