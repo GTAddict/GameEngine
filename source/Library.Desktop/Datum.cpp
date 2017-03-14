@@ -306,7 +306,7 @@ namespace GameEngine
 			while (mSize < size)
 			{
 				T* currentElement = GetDataPointer<T>() + mSize;
-				currentElement = new (currentElement) T();
+				new (currentElement) T();
 				++mSize;
 			}
 

@@ -305,7 +305,7 @@ inline typename Vector<T>::Iterator Vector<T>::PushBack(const T& data)
 		Reserve(mfnGetCapacity(Size(), Capacity()));
 	}
 
-	mpEnd = new (mpEnd) T(data);
+	new (mpEnd) T(data);
 
 	return Iterator(mpEnd++, this);
 }
