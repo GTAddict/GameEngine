@@ -6,11 +6,12 @@ namespace GameEngine
 	{
 		class IXMLParseHelper
 		{
+		public:
 			void Initialize() {};
 			bool StartElementHandler() {};
 			bool EndElementHandler() {} ;
 			void CharDataHandler() {};
-			virtual void Clone() = 0;
+			virtual IXMLParseHelper* Clone() = 0;
 			virtual ~IXMLParseHelper() = default;
 		};
 	}

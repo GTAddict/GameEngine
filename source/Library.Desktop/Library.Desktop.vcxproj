@@ -164,6 +164,7 @@
     <ClInclude Include="SList.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Vector.h" />
+    <ClInclude Include="XMLParseMaster.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Attributed.cpp" />
@@ -176,6 +177,7 @@
     </ClCompile>
     <ClCompile Include="Scope.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="XMLParseMaster.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Attributed.inl" />
