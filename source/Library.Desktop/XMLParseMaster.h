@@ -2,6 +2,7 @@
 #include "SList.h"
 #include <cstdint>
 #include <string>
+#include <expat.h>
 
 namespace GameEngine
 {
@@ -14,38 +15,41 @@ namespace GameEngine
 			class SharedData
 			{
 			public:
-				SharedData() {};
-				virtual SharedData* Clone() {};
-				void SetXMLParseMaster(XMLParseMaster* parseMaster) { mpParseMaster = parseMaster; };
-				XMLParseMaster* GetXMLParseMaster() const { return mpParseMaster; };
-				void IncrementDepth() {};
-				void DecrementDepth() {};
-				std::uint32_t GetDepth() const {};
+				SharedData();
+				virtual SharedData* Clone() const;
+				void SetXMLParseMaster(XMLParseMaster* parseMaster);
+				XMLParseMaster* GetXMLParseMaster() const;
+				void IncrementDepth();
+				void DecrementDepth();
+				std::uint32_t GetDepth() const;
 
 			private:
 				XMLParseMaster* mpParseMaster;
+				std::uint32_t mDepth;
 			};
 
 		public:
-			XMLParseMaster(SharedData* data) { SetSharedData(data); };
-			virtual ~XMLParseMaster() = default;
-			virtual XMLParseMaster* Clone() {};
-			void AddHelper(IXMLParseHelper* helper) { mHelperList.PushBack(helper); };
-			void RemoveHelper(IXMLParseHelper* helper) { mHelperList.Remove(helper); };
-			void Parse(const char* data, const std::uint32_t count, bool lastChunk) { data; count; lastChunk; };
-			void ParseFromFile(std::string filename) { filename; };
-			std::string GetFileName() {};
-			SharedData* GetSharedData() const { return mpSharedData; };
-			void SetSharedData(SharedData* data) { mpSharedData = data; mpSharedData->SetXMLParseMaster(this); };
+			XMLParseMaster(SharedData* data);
+			virtual ~XMLParseMaster();
+			virtual XMLParseMaster* Clone();
+			void AddHelper(IXMLParseHelper* helper);
+			void RemoveHelper(IXMLParseHelper* helper);
+			void Parse(const char* data, const std::uint32_t length, bool isFinal);
+			void ParseFromFile(std::string filename);
+			std::string GetFileName();
+			SharedData* GetSharedData() const;
+			void SetSharedData(SharedData* data);
 
 
 		private:
+			static void StartElementHandler(void* data, const char* element, const char** attribute);
+			static void EndElementHandler(void* data, const char* element);
+			static void CharDataHandler(void* data, const char* content, int length);
 
-			void StartElementHandler() {};
-			void EndElementHandler() {};
-			void CharDataHandler() {};
 			SList<IXMLParseHelper*> mHelperList;
 			SharedData* mpSharedData;
+			std::string mFileName;
+			XML_Parser mParser;
 		};
 	}
 }
