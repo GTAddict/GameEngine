@@ -1,5 +1,6 @@
 #pragma once
 #include "SList.h"
+#include "RTTI.h"
 #include <cstdint>
 #include <string>
 #include <expat.h>
@@ -12,10 +13,13 @@ namespace GameEngine
 
 		class XMLParseMaster
 		{
-			class SharedData
+			class SharedData : public RTTI
 			{
+				RTTI_DECLARATIONS(SharedData, RTTI);
+
 			public:
 				SharedData();
+				virtual ~SharedData() override = default;
 				virtual SharedData* Clone() const;
 				void SetXMLParseMaster(XMLParseMaster* parseMaster);
 				XMLParseMaster* GetXMLParseMaster() const;
@@ -29,14 +33,14 @@ namespace GameEngine
 			};
 
 		public:
-			XMLParseMaster(SharedData* data);
+			explicit XMLParseMaster(SharedData* data);
 			virtual ~XMLParseMaster();
-			virtual XMLParseMaster* Clone();
+			virtual XMLParseMaster* Clone() const;
 			void AddHelper(IXMLParseHelper* helper);
 			void RemoveHelper(IXMLParseHelper* helper);
-			void Parse(const char* data, const std::uint32_t length, bool isFinal);
-			void ParseFromFile(std::string filename);
-			std::string GetFileName();
+			void Parse(const char* data, const std::uint32_t length, bool isFinal) const;
+			void ParseFromFile(const std::string& filename);
+			const std::string& GetFileName() const;
 			SharedData* GetSharedData() const;
 			void SetSharedData(SharedData* data);
 
@@ -47,9 +51,10 @@ namespace GameEngine
 			static void CharDataHandler(void* data, const char* content, int length);
 
 			SList<IXMLParseHelper*> mHelperList;
-			SharedData* mpSharedData;
-			std::string mFileName;
-			XML_Parser mParser;
+			SharedData*				mpSharedData;
+			std::string				mFileName;
+			XML_Parser				mParser;
+			bool					mIsClone;
 		};
 	}
 }
