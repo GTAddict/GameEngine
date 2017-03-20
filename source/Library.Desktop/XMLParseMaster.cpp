@@ -121,11 +121,12 @@ namespace GameEngine
 
 				for (IXMLParseHelper* helper : mHelperList)
 				{
-					helper->Initialize();
+					helper->Initialize(mpSharedData);
 				}
 
 				Parse(buffer, fileSize, XML_TRUE);
 				fclose(fp);
+				delete buffer;
 			}
 		}
 

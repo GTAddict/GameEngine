@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "FooSharedData.h"
 #include "FooXMLHelper.h"
 
 using namespace GameEngine::Library;
@@ -14,11 +13,13 @@ namespace UnitTestParseMaster
 
 		TEST_METHOD(TestConstructor)
 		{
-			FooSharedData* sharedData = new FooSharedData(); sharedData;
-			FooXMLHelper* helper = new FooXMLHelper(); helper;
+			FooXMLHelper::FooSharedData* sharedData = new FooXMLHelper::FooSharedData();
+			FooXMLHelper* helper = new FooXMLHelper();
 			XMLParseMaster parseMaster(sharedData);
 			parseMaster.AddHelper(helper);
 			parseMaster.ParseFromFile("books.xml");
+			delete sharedData;
+			delete helper;
 		}
 
 	public:
