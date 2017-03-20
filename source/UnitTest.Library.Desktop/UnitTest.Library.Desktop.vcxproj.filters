@@ -33,9 +33,6 @@
     <ClInclude Include="FooXMLHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FooSharedData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -66,9 +63,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FooXMLHelper.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FooSharedData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
