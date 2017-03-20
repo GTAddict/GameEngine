@@ -177,12 +177,17 @@
     <ClInclude Include="ConvertVals.h" />
     <ClInclude Include="DummyStruct.h" />
     <ClInclude Include="Foo.h" />
+    <ClInclude Include="FooSharedData.h" />
+    <ClInclude Include="FooXMLHelper.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AttributedTest.cpp" />
     <ClCompile Include="DatumTest.cpp" />
+    <ClCompile Include="FooSharedData.cpp" />
+    <ClCompile Include="FooXMLHelper.cpp" />
     <ClCompile Include="HashMapTest.cpp" />
+    <ClCompile Include="ParseMasterTest.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

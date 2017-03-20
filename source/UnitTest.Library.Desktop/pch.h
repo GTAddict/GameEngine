@@ -7,5 +7,6 @@
 #include "Datum.h"
 #include "Scope.h"
 #include "Attributed.h"
+#include "XMLParseMaster.h"
 #include "DummyStruct.h"
 #include <stdexcept>
