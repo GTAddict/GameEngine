@@ -3,16 +3,21 @@
 #include "RTTI.h"
 #include <cstdint>
 #include <string>
-#include <expat.h>
+
+// Forward declarations to avoid including expat here
+struct XML_ParserStruct;
+typedef struct XML_ParserStruct *XML_Parser;
+
 
 namespace GameEngine
 {
 	namespace Library
 	{
 		class IXMLParseHelper;
-
+		
 		class XMLParseMaster
 		{
+		public:
 			class SharedData : public RTTI
 			{
 				RTTI_DECLARATIONS(SharedData, RTTI);
@@ -32,7 +37,6 @@ namespace GameEngine
 				std::uint32_t mDepth;
 			};
 
-		public:
 			explicit XMLParseMaster(SharedData* data);
 			virtual ~XMLParseMaster();
 			virtual XMLParseMaster* Clone() const;

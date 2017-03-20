@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "XMLParseMaster.h"
 #include "IXMLParseHelper.h"
+#include "expat.h"
 
 namespace GameEngine
 {
