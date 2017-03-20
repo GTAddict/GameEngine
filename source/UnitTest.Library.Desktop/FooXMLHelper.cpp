@@ -13,19 +13,23 @@ namespace GameEngine
 			return SharedData::Clone();
 		}
 
+		std::string& FooXMLHelper::FooSharedData::GetConstructedString()
+		{
+			return mConstructedString;
+		}
+
 		bool FooXMLHelper::StartElementHandler(const std::string& element, const HashMap<std::string, std::string> attributes)
 		{
 			if (!mbIsInitialized || !mpSharedData->Is(FooSharedData::TypeIdClass()))	return false;
 
 			FooSharedData* sharedData = static_cast<FooSharedData*>(mpSharedData);
 
-			std::string outputString = "([" + std::to_string(sharedData->GetDepth()) + "]" + element;
+			sharedData->mConstructedString += "<" + element;
 			for (auto& attribute : attributes)
 			{
-				outputString += " " + attribute.first + ":" + attribute.second;
+				sharedData->mConstructedString += " " + attribute.first + "=\"" + attribute.second + "\"";
 			}
-			outputString += ")";
-			OutputDebugStringA(outputString.c_str());
+			sharedData->mConstructedString += ">";
 
 			return true;
 		}
@@ -35,10 +39,7 @@ namespace GameEngine
 			if (!mbIsInitialized || !mpSharedData->Is(FooSharedData::TypeIdClass()))	return false;
 
 			FooSharedData* sharedData = static_cast<FooSharedData*>(mpSharedData);
-
-			std::string outputString = "(/" + element + "[" + std::to_string(sharedData->GetDepth()) + "])";
-			OutputDebugStringA(outputString.c_str());
-
+			sharedData->mConstructedString += "</" + element + ">";
 			return true;
 		}
 
@@ -46,8 +47,8 @@ namespace GameEngine
 		{
 			if (!mbIsInitialized || !mpSharedData->Is(FooSharedData::TypeIdClass()))	return false;
 
-			std::string outputString(content, length);
-			OutputDebugStringA(outputString.c_str());
+			FooSharedData* sharedData = static_cast<FooSharedData*>(mpSharedData);
+			sharedData->mConstructedString += std::string(content, length);
 			return true;
 		}
 

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include "FooXMLHelper.h"
+#include <fstream>
 
 using namespace GameEngine::Library;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -13,11 +14,23 @@ namespace UnitTestParseMaster
 
 		TEST_METHOD(TestConstructor)
 		{
+			// First do the parsing and re-build the XML structure.
 			FooXMLHelper::FooSharedData* sharedData = new FooXMLHelper::FooSharedData();
 			FooXMLHelper* helper = new FooXMLHelper();
 			XMLParseMaster parseMaster(sharedData);
 			parseMaster.AddHelper(helper);
 			parseMaster.ParseFromFile("books.xml");
+
+			// Read in the file separately and see if the contents match.
+			std::fstream filin("books.xml", std::ios::in);
+			std::string fileContents;
+			std::getline(filin, fileContents); // chomp off the first line - xml spec
+			std::stringstream buffer;
+			buffer << filin.rdbuf();
+			filin.close();
+			fileContents = buffer.str();
+			std::string finalString = sharedData->GetConstructedString();
+			Assert::IsTrue(fileContents == finalString);
 			delete sharedData;
 			delete helper;
 		}
