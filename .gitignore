@@ -23,12 +23,13 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
-!external/glfw/lib/x64/
-!external/glfw/lib/x64/Debug/
-!external/glfw/lib/x64/Release/
-!external/glfw/lib/x86/
-!external/glfw/lib/x86/Debug/
-!external/glfw/lib/x86/Release/
+!external/Expat/lib/
+!external/Expat/lib/Win32/
+!external/Expat/lib/Win32/Debug/
+!external/Expat/lib/Win32/Release/
+!external/Expat/lib/x64/
+!external/Expat/lib/x64/Debug/
+!external/Expat/lib/x64/Release/
 
 # Visual Studio 2015 cache/options directory
 .vs/
@@ -78,8 +79,10 @@ artifacts/
 *.pidb
 *.svclog
 *.scc
-!external/glfw/lib/x64/Debug/*.pdb
-!external/glfw/lib/x86/Debug/*.pdb
+!external/Expat/lib/Win32/Debug/*.pdb
+!external/Expat/lib/Win32/Release/*.pdb
+!external/Expat/lib/x64/Debug/*.pdb
+!external/Expat/lib/x64/Release/*.pdb
 
 # Chutzpah Test files
 _Chutzpah*
