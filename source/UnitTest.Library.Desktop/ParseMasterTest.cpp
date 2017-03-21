@@ -12,7 +12,7 @@ namespace UnitTestParseMaster
 	{
 	private:
 
-		TEST_METHOD(TestConstructor)
+		TEST_METHOD(TestProcess)
 		{
 			// First do the parsing and re-build the XML structure.
 			FooXMLHelper::FooSharedData* sharedData = new FooXMLHelper::FooSharedData();
@@ -22,7 +22,7 @@ namespace UnitTestParseMaster
 			parseMaster.ParseFromFile("books.xml");
 
 			// Read in the file separately and see if the contents match.
-			std::fstream filin("books.xml", std::ios::in);
+			std::fstream filin(parseMaster.GetFileName(), std::ios::in);
 			std::string fileContents;
 			std::getline(filin, fileContents); // chomp off the first line - xml spec
 			std::stringstream buffer;
@@ -33,6 +33,29 @@ namespace UnitTestParseMaster
 			Assert::IsTrue(fileContents == finalString);
 			delete sharedData;
 			delete helper;
+		}
+
+		TEST_METHOD(TestDepthClone)
+		{
+			FooXMLHelper* helper = new FooXMLHelper();
+			XMLParseMaster::SharedData* sharedData = new XMLParseMaster::SharedData();
+			XMLParseMaster parseMaster(sharedData);
+			parseMaster.AddHelper(helper);
+			sharedData->IncrementDepth();
+			Assert::IsTrue(parseMaster.GetSharedData()->GetDepth() == 1);
+			parseMaster.GetSharedData()->DecrementDepth();
+			Assert::IsTrue(sharedData->GetDepth() == 0);
+			parseMaster.GetSharedData()->IncrementDepth();
+
+			XMLParseMaster& newParseMaster = *parseMaster.Clone();
+			Assert::IsTrue(newParseMaster.GetSharedData()->GetDepth() == 0);
+			Assert::IsTrue(parseMaster.GetSharedData()->GetXMLParseMaster() == &parseMaster);
+			Assert::IsTrue(newParseMaster.GetSharedData()->GetXMLParseMaster() == &newParseMaster);
+
+			parseMaster.RemoveHelper(helper);
+			delete helper;
+			delete sharedData;
+			delete &newParseMaster;
 		}
 
 	public:
