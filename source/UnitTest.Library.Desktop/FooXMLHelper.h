@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IXMLParseHelper.h"
+#include "XMLParseMaster.h"
 
 namespace GameEngine
 {
