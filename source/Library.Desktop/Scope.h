@@ -68,6 +68,12 @@ namespace GameEngine
 			*/
 			virtual					~Scope();
 
+			/**
+			*	\brief				Equals operator. Casts the RTTI instance passed in
+			*						to a Scope and calls the Equality operator.
+			*	\param rhs			The RTTI to compare to.
+			*	\return				True if the two casted Scopes are equal, false otherwise.
+			*/
 			virtual bool			Equals(const RTTI* rhs) const override;
 
 			/**
