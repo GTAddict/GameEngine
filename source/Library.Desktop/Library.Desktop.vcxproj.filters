@@ -51,6 +51,12 @@
     <ClInclude Include="XMLParseMaster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ScopeXMLHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Macros.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils.cpp">
@@ -72,6 +78,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IXMLParseHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScopeXMLHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
