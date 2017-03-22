@@ -314,55 +314,55 @@ inline std::string GameEngine::Library::Datum::ToString<GameEngine::Library::Dat
 template <typename T>
 inline GameEngine::Library::Datum::DatumType GameEngine::Library::Datum::DeduceType(const T& data) const
 {
-	data;
+	ENGINE_UNUSED(data);
 	return DatumType::Unknown;
 }
 
 template <>
 inline GameEngine::Library::Datum::DatumType GameEngine::Library::Datum::DeduceType(const std::int32_t& data) const
 {
-	data;
+	ENGINE_UNUSED(data);
 	return DatumType::Integer;
 }
 
 template <>
 inline GameEngine::Library::Datum::DatumType GameEngine::Library::Datum::DeduceType(const float& data) const
 {
-	data;
+	ENGINE_UNUSED(data);
 	return DatumType::Float;
 }
 
 template <>
 inline GameEngine::Library::Datum::DatumType GameEngine::Library::Datum::DeduceType(const glm::vec4& data) const
 {
-	data;
+	ENGINE_UNUSED(data);
 	return DatumType::Vector;
 }
 
 template <>
 inline GameEngine::Library::Datum::DatumType GameEngine::Library::Datum::DeduceType(const glm::mat4x4& data) const
 {
-	data;
+	ENGINE_UNUSED(data);
 	return DatumType::Matrix;
 }
 
 template <>
 inline GameEngine::Library::Datum::DatumType GameEngine::Library::Datum::DeduceType(const std::string& data) const
 {
-	data;
+	ENGINE_UNUSED(data);
 	return DatumType::String;
 }
 
 template <>
 inline GameEngine::Library::Datum::DatumType GameEngine::Library::Datum::DeduceType(const ScopePointer& data) const
 {
-	data;
+	ENGINE_UNUSED(data);
 	return DatumType::Table;
 }
 
 template <>
 inline GameEngine::Library::Datum::DatumType GameEngine::Library::Datum::DeduceType(const RTTIPointer& data) const
 {
-	data;
+	ENGINE_UNUSED(data);
 	return DatumType::Pointer;
 }
