@@ -134,6 +134,146 @@ namespace GameEngine
 			return *Get<ScopePointer>(index);
 		}
 
+		template<typename T>
+		inline T* GameEngine::Library::Datum::GetDataPointer() const
+		{
+			static_assert(false, "You need to provide implementation for your class.");
+			return nullptr;
+		}
+
+		template <>
+		inline std::int32_t* GameEngine::Library::Datum::GetDataPointer() const
+		{
+			if (mType != DatumType::Integer)
+			{
+				throw std::invalid_argument("Trying to access data as integer when data is not an integer!");
+			}
+
+			return mData.pInt;
+		}
+
+		template <>
+		inline float* GameEngine::Library::Datum::GetDataPointer() const
+		{
+			if (mType != DatumType::Float)
+			{
+				throw std::invalid_argument("Trying to access data as float when data is not a float!");
+			}
+
+			return mData.pFloat;
+		}
+
+		template <>
+		inline glm::vec4* GameEngine::Library::Datum::GetDataPointer() const
+		{
+			if (mType != DatumType::Vector)
+			{
+				throw std::invalid_argument("Trying to access data as vector when data is not a vector!");
+			}
+
+			return mData.pVec4;
+		}
+
+		template <>
+		inline glm::mat4x4* GameEngine::Library::Datum::GetDataPointer() const
+		{
+			if (mType != DatumType::Matrix)
+			{
+				throw std::invalid_argument("Trying to access data as matrix when data is not a matrix!");
+			}
+
+			return mData.pMat4;
+		}
+
+		template <>
+		inline std::string* GameEngine::Library::Datum::GetDataPointer() const
+		{
+			if (mType != DatumType::String)
+			{
+				throw std::invalid_argument("Trying to access data as string when data is not a string!");
+			}
+
+			return mData.pString;
+		}
+
+		template <>
+		inline GameEngine::Library::Datum::RTTIPointer* GameEngine::Library::Datum::GetDataPointer() const
+		{
+			// You are allowed to access a Table as an RTTIPointer
+			if (mType != DatumType::Pointer && mType != DatumType::Table)
+			{
+				throw std::invalid_argument("Trying to access data as RTTI pointer when data is not an RTTI pointer!");
+			}
+
+			return mData.ppRTTI;
+		}
+
+		template <>
+		inline GameEngine::Library::Datum::ScopePointer* GameEngine::Library::Datum::GetDataPointer() const
+		{
+			if (mType != DatumType::Table)
+			{
+				throw std::invalid_argument("Trying to access data as Scope pointer when data is not a Scope pointer!");
+			}
+
+			return mData.ppScope;
+		}
+
+		template<typename T>
+		inline void GameEngine::Library::Datum::SetDataPointer(T* dataPointer)
+		{
+			static_assert(false, "You need to provide implementation for your class.");
+		}
+
+		template <>
+		inline void GameEngine::Library::Datum::SetDataPointer(std::int32_t* dataPointer)
+		{
+			mType = DatumType::Integer;
+			mData.pInt = dataPointer;
+		}
+
+		template <>
+		inline void GameEngine::Library::Datum::SetDataPointer(float* dataPointer)
+		{
+			mType = DatumType::Float;
+			mData.pFloat = dataPointer;
+		}
+
+		template <>
+		inline void GameEngine::Library::Datum::SetDataPointer(glm::vec4* dataPointer)
+		{
+			mType = DatumType::Vector;
+			mData.pVec4 = dataPointer;
+		}
+
+		template <>
+		inline void GameEngine::Library::Datum::SetDataPointer(glm::mat4x4* dataPointer)
+		{
+			mType = DatumType::Matrix;
+			mData.pMat4 = dataPointer;
+		}
+
+		template <>
+		inline void GameEngine::Library::Datum::SetDataPointer(std::string* dataPointer)
+		{
+			mType = DatumType::String;
+			mData.pString = dataPointer;
+		}
+
+		template <>
+		inline void GameEngine::Library::Datum::SetDataPointer(ScopePointer* dataPointer)
+		{
+			mType = DatumType::Table;
+			mData.ppScope = dataPointer;
+		}
+
+		template <>
+		inline void GameEngine::Library::Datum::SetDataPointer(RTTIPointer* dataPointer)
+		{
+			mType = DatumType::Pointer;
+			mData.ppRTTI = dataPointer;
+		}
+
 		const Datum::DatumType& Datum::Type() const
 		{
 			return mType;
@@ -205,55 +345,36 @@ namespace GameEngine
 			{
 				throw std::domain_error("Datum type needs to be set.");
 			}
+			if (inputString.empty())
+			{
+				throw std::invalid_argument("Input string is empty.");
+			}
 
-			char dataType[11];
-			sscanf_s(inputString.c_str(), "%s", dataType, static_cast<unsigned int>(sizeof(dataType)));
-			std::string dataTypeString(dataType);
-
-			if (dataTypeString == "Integer" && mType == DatumType::Integer)
+			switch (mType)
 			{
-				std::int32_t data;
-				sscanf_s(inputString.c_str(), "%*s %d", &data);
-				Set(data, index);
-			}
-			else if (dataTypeString == "Float" && mType == DatumType::Float)
-			{
-				float data;
-				sscanf_s(inputString.c_str(), "%*s %f", &data);
-				Set(data, index);
-			}
-			else if (dataTypeString == "Vector" && mType == DatumType::Vector)
-			{
-				glm::vec4 data;
-				sscanf_s(inputString.c_str(), "%*s %f %f %f %f", &data[0], &data[1], &data[2], &data[3]);
-				Set(data, index);
-			}
-			else if (dataTypeString == "Matrix" && mType == DatumType::Matrix)
-			{
-				glm::mat4x4 data;
-				sscanf_s(
-					inputString.c_str(),
-					"%*s %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f",
-					&data[0][0],	&data[0][1],	&data[0][2],	&data[0][3],
-					&data[1][0],	&data[1][1],	&data[1][2],	&data[1][3],
-					&data[2][0],	&data[2][1],	&data[2][2],	&data[2][3],
-					&data[3][0],	&data[3][1],	&data[3][2],	&data[3][3]
-				);
-				Set(data, index);
-			}
-			else if (dataTypeString == "String" && mType == DatumType::String)
-			{
-				char data[255];
-				sscanf_s(inputString.c_str(), "%*s %s", &data, static_cast<unsigned int>(sizeof(data)));
-				Set(std::string(data), index);
-			}
-			else if (dataTypeString == "Pointer" && mType == DatumType::Pointer)
-			{
-				throw std::domain_error("Unimplemented.");
-			}
-			else
-			{
-				throw std::invalid_argument("Unknown datatype, parse error, or invalid assignment to datum of different type.");
+				case DatumType::Integer:	Set(stoi(inputString), index);	break;
+				case DatumType::Float:		Set(stof(inputString), index);	break;
+				case DatumType::Vector:
+				{
+					glm::vec4 data;
+					sscanf_s(inputString.c_str(), "vec4(%f, %f, %f, %f)", &data[0], &data[1], &data[2], &data[3]);
+					Set(data, index);
+					break;
+				}
+				case DatumType::Matrix:
+				{
+					glm::mat4x4 data;
+					sscanf_s(inputString.c_str(), "mat4x4((%f, %f, %f, %f), (%f, %f, %f, %f), (%f, %f, %f, %f), (%f, %f, %f, %f))"
+						, &data[0][0], &data[0][1], &data[0][2], &data[0][3]
+						, &data[1][0], &data[1][1], &data[1][2], &data[1][3]
+						, &data[2][0], &data[2][1], &data[2][2], &data[2][3]
+						, &data[3][0], &data[3][1], &data[3][2], &data[3][3]);
+					Set(data, index);
+					break;
+				}
+				case DatumType::String:		Set(inputString, index);	break;
+				default:
+					throw std::invalid_argument("Unknown datatype, parse error, or invalid assignment to datum of different type.");
 			}
 		}
 

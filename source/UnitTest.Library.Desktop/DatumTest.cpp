@@ -346,7 +346,7 @@ namespace UnitTestDatum
 		{
 			{
 				Datum d;
-				std::string text = "Integer 55";
+				std::string text = "55";
 				d.SetType(Datum::DatumType::Integer);
 				d.SetFromString(text);
 				Assert::IsTrue(d == 55);
@@ -354,7 +354,7 @@ namespace UnitTestDatum
 			}
 			{
 				Datum d;
-				std::string text = "Float 5.5";
+				std::string text = "5.500000";
 				d.SetType(Datum::DatumType::Float);
 				d.SetFromString(text);
 				Assert::IsTrue(d == 5.5f);
@@ -362,7 +362,7 @@ namespace UnitTestDatum
 			}
 			{
 				Datum d;
-				std::string text = "Vector 1.1 2.2 3.3 4.4";
+				std::string text = "vec4(1.100000, 2.200000, 3.300000, 4.400000)";
 				d.SetType(Datum::DatumType::Vector);
 				d.SetFromString(text);
 				Assert::IsTrue(d == glm::vec4(1.1, 2.2, 3.3, 4.4));
@@ -370,7 +370,7 @@ namespace UnitTestDatum
 			}
 			{
 				Datum d;
-				std::string text = "Matrix 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1 1.1 1.2 1.3 1.4 1.5 1.6";
+				std::string text = "mat4x4((0.100000, 0.200000, 0.300000, 0.400000), (0.500000, 0.600000, 0.700000, 0.800000), (0.900000, 1.000000, 1.100000, 1.200000), (1.300000, 1.400000, 1.500000, 1.600000))";
 				d.SetType(Datum::DatumType::Matrix);
 				d.SetFromString(text);
 				Assert::IsTrue(d == glm::mat4x4(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6));
@@ -378,7 +378,7 @@ namespace UnitTestDatum
 			}
 			{
 				Datum d;
-				std::string text = "String hello";
+				std::string text = "hello";
 				d.SetType(Datum::DatumType::String);
 				d.SetFromString(text);
 				Assert::IsTrue(d == std::string("hello"));

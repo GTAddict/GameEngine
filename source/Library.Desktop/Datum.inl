@@ -1,5 +1,6 @@
-#include "Datum.h"
 #pragma once
+#include "Datum.h"
+#include "Macros.h"
 
 template<typename T>
 inline bool GameEngine::Library::Datum::operator==(const T& rhs) const
@@ -11,146 +12,6 @@ template<typename T>
 inline bool GameEngine::Library::Datum::operator!=(const T& rhs) const
 {
 	return !(*this == rhs);
-}
-
-template<typename T>
-inline T* GameEngine::Library::Datum::GetDataPointer() const
-{
-	static_assert(false, "You need to provide implementation for your class.");
-	return nullptr;
-}
-
-template <>
-inline std::int32_t* GameEngine::Library::Datum::GetDataPointer() const
-{
-	if (mType != DatumType::Integer)
-	{
-		throw std::invalid_argument("Trying to access data as integer when data is not an integer!");
-	}
-
-	return mData.pInt;
-}
-
-template <>
-inline float* GameEngine::Library::Datum::GetDataPointer() const
-{
-	if (mType != DatumType::Float)
-	{
-		throw std::invalid_argument("Trying to access data as float when data is not a float!");
-	}
-
-	return mData.pFloat;
-}
-
-template <>
-inline glm::vec4* GameEngine::Library::Datum::GetDataPointer() const
-{
-	if (mType != DatumType::Vector)
-	{
-		throw std::invalid_argument("Trying to access data as vector when data is not a vector!");
-	}
-
-	return mData.pVec4;
-}
-
-template <>
-inline glm::mat4x4* GameEngine::Library::Datum::GetDataPointer() const
-{
-	if (mType != DatumType::Matrix)
-	{
-		throw std::invalid_argument("Trying to access data as matrix when data is not a matrix!");
-	}
-
-	return mData.pMat4;
-}
-
-template <>
-inline std::string* GameEngine::Library::Datum::GetDataPointer() const
-{
-	if (mType != DatumType::String)
-	{
-		throw std::invalid_argument("Trying to access data as string when data is not a string!");
-	}
-
-	return mData.pString;
-}
-
-template <>
-inline GameEngine::Library::Datum::RTTIPointer* GameEngine::Library::Datum::GetDataPointer() const
-{
-	// You are allowed to access a Table as an RTTIPointer
-	if (mType != DatumType::Pointer && mType != DatumType::Table)
-	{
-		throw std::invalid_argument("Trying to access data as RTTI pointer when data is not an RTTI pointer!");
-	}
-
-	return mData.ppRTTI;
-}
-
-template <>
-inline GameEngine::Library::Datum::ScopePointer* GameEngine::Library::Datum::GetDataPointer() const
-{
-	if (mType != DatumType::Table)
-	{
-		throw std::invalid_argument("Trying to access data as Scope pointer when data is not a Scope pointer!");
-	}
-
-	return mData.ppScope;
-}
-
-template<typename T>
-inline void GameEngine::Library::Datum::SetDataPointer(T* dataPointer)
-{
-	static_assert(false, "You need to provide implementation for your class.");
-}
-
-template <>
-inline void GameEngine::Library::Datum::SetDataPointer(std::int32_t* dataPointer)
-{
-	mType = DatumType::Integer;
-	mData.pInt = dataPointer;
-}
-
-template <>
-inline void GameEngine::Library::Datum::SetDataPointer(float* dataPointer)
-{
-	mType = DatumType::Float;
-	mData.pFloat = dataPointer;
-}
-
-template <>
-inline void GameEngine::Library::Datum::SetDataPointer(glm::vec4* dataPointer)
-{
-	mType = DatumType::Vector;
-	mData.pVec4 = dataPointer;
-}
-
-template <>
-inline void GameEngine::Library::Datum::SetDataPointer(glm::mat4x4* dataPointer)
-{
-	mType = DatumType::Matrix;
-	mData.pMat4 = dataPointer;
-}
-
-template <>
-inline void GameEngine::Library::Datum::SetDataPointer(std::string* dataPointer)
-{
-	mType = DatumType::String;
-	mData.pString = dataPointer;
-}
-
-template <>
-inline void GameEngine::Library::Datum::SetDataPointer(ScopePointer* dataPointer)
-{
-	mType = DatumType::Table;
-	mData.ppScope = dataPointer;
-}
-
-template <>
-inline void GameEngine::Library::Datum::SetDataPointer(RTTIPointer* dataPointer)
-{
-	mType = DatumType::Pointer;
-	mData.ppRTTI = dataPointer;
 }
 
 template <typename T>
@@ -245,58 +106,31 @@ inline std::string GameEngine::Library::Datum::ToString(const std::uint32_t inde
 template <>
 inline std::string GameEngine::Library::Datum::ToString<float>(const std::uint32_t index) const
 {
-	std::stringstream s;
-	s << "Float " << Get<float>(index);
-	return s.str();
+	return std::to_string(Get<float>(index));
 }
 
 template <>
 inline std::string GameEngine::Library::Datum::ToString<std::int32_t>(const std::uint32_t index) const
 {
-	std::stringstream s;
-	s << "Integer " << Get<std::int32_t>(index);
-	return s.str();
+	return std::to_string(Get<std::int32_t>(index));
 }
 
 template <>
 inline std::string GameEngine::Library::Datum::ToString<glm::mat4x4>(const std::uint32_t index) const
 {
-	std::stringstream s;
-	s << "Matrix";
-	glm::mat4x4& matrix = Get<glm::mat4x4>(index);
-
-	for (int i = 0; i < 4; ++i)
-	{
-		for (int j = 0; j < 4; ++j)
-		{
-			s << " " << matrix[i][j];
-		}
-	}
-
-	return s.str();
+	return glm::to_string(Get<glm::mat4x4>(index));
 }
 
 template <>
 inline std::string GameEngine::Library::Datum::ToString<glm::vec4>(const std::uint32_t index) const
 {
-	std::stringstream s;
-	s << "Vector";
-	glm::vec4& vector = Get<glm::vec4>(index);
-
-	for (int i = 0; i < 4; ++i)
-	{
-		s << " " << vector[i];
-	}
-
-	return s.str();
+	return glm::to_string(Get<glm::vec4>(index));
 }
 
 template <>
 inline std::string GameEngine::Library::Datum::ToString<std::string>(const std::uint32_t index) const
 {
-	std::stringstream s;
-	s << "String " << Get<std::string>(index);
-	return s.str();
+	return Get<std::string>(index);
 }
 
 template <>

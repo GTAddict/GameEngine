@@ -5,6 +5,10 @@
 #define GLM_FORCE_CXX98
 #include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>
+#pragma warning(push)
+#pragma warning(disable : 4310) //cast truncates constant value
+#include <glm/ext.hpp>
+#pragma warning(pop)
 #include "RTTI.h"
 
 namespace GameEngine
@@ -253,8 +257,9 @@ namespace GameEngine
 			*	\param index		The location to be set at.
 			*	\throw std::domain_error if the type is not set.
 			*	\throw std::invalid_argument if a type not defined in the enum is used,
-			*						if there was a parse error, or if there was an invalid
-			*						assignment to a Datum of a different type.
+			*						if there was a parse error, if the string passed in
+			*						is empty, or if there was an invalid assignment to a
+			*						Datum of a different type.
 			*/
 			void					SetFromString(const std::string& inputString, const std::uint32_t index = 0);
 
