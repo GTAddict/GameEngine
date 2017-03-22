@@ -1,13 +1,13 @@
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "ScopeXMLHelper.h"
+#include "XMLParseHelperTable.h"
 
 using namespace GameEngine::Library;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace UnitTestScopeParser
+namespace UnitTestTableParser
 {
-	TEST_CLASS(UnitTestScopeParser)
+	TEST_CLASS(UnitTestTableParser)
 	{
 	private:
 
@@ -16,8 +16,8 @@ namespace UnitTestScopeParser
 			std::string stringToParse = "<scope name=\"root\"><scope name=\"indent\"><int name=\"AnInteger\" value=\"5\" /><float name=\"AFloat\" value=\"5.6\" /><scope name=\"deeper\"></scope></scope><scope name=\"test\" /></scope>";
 
 			// First do the parsing and re-build the XML structure.
-			ScopeXMLHelper::ScopeSharedData* sharedData = new ScopeXMLHelper::ScopeSharedData();
-			ScopeXMLHelper* helper = new ScopeXMLHelper();
+			XMLParseHelperTable::SharedDataTable* sharedData = new XMLParseHelperTable::SharedDataTable();
+			XMLParseHelperTable* helper = new XMLParseHelperTable();
 			XMLParseMaster parseMaster(sharedData);
 			parseMaster.AddHelper(helper);
 			parseMaster.Parse(stringToParse.c_str(), (uint32_t)stringToParse.length(), true);
@@ -55,6 +55,6 @@ namespace UnitTestScopeParser
 	};
 
 #ifdef _DEBUG
-	_CrtMemState UnitTestScopeParser::sStartMemState;
+	_CrtMemState UnitTestTableParser::sStartMemState;
 #endif
 }

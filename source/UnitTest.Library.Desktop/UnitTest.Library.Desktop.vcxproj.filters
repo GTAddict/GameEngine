@@ -65,7 +65,7 @@
     <ClCompile Include="FooXMLHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ScopeParseTest.cpp">
+    <ClCompile Include="TableParserTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

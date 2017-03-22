@@ -9,7 +9,7 @@ namespace GameEngine
 {
 	namespace Library
 	{
-		namespace ScopeConstants
+		namespace TableParserConstants
 		{
 			const std::string SCOPE_IDENTIFIER = "scope";
 			const std::string SCOPE_NAME_IDEFNTIFIER = "name";
@@ -17,19 +17,19 @@ namespace GameEngine
 
 		class Scope;
 
-		class ScopeXMLHelper : public IXMLParseHelper
+		class XMLParseHelperTable : public IXMLParseHelper
 		{
 		public:
 
-			class ScopeSharedData : public XMLParseMaster::SharedData
+			class SharedDataTable : public XMLParseMaster::SharedData
 			{
-				friend class ScopeXMLHelper;
+				friend class XMLParseHelperTable;
 
-				RTTI_DECLARATIONS(ScopeSharedData, SharedData)
+				RTTI_DECLARATIONS(SharedDataTable, SharedData)
 
 			public:
-				ScopeSharedData();
-				~ScopeSharedData() override;
+				SharedDataTable();
+				~SharedDataTable() override;
 				SharedData* Clone() const override;
 
 				Scope* GetScope() const;

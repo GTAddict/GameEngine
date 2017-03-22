@@ -202,7 +202,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="RTTI.h" />
     <ClInclude Include="Scope.h" />
-    <ClInclude Include="ScopeXMLHelper.h" />
+    <ClInclude Include="XMLParseHelperTable.h" />
     <ClInclude Include="SList.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Vector.h" />
@@ -219,7 +219,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Scope.cpp" />
-    <ClCompile Include="ScopeXMLHelper.cpp" />
+    <ClCompile Include="XMLParseHelperTable.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="XMLParseMaster.cpp" />
   </ItemGroup>

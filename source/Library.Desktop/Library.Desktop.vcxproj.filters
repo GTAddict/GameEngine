@@ -51,10 +51,10 @@
     <ClInclude Include="XMLParseMaster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ScopeXMLHelper.h">
+    <ClInclude Include="Macros.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Macros.h">
+    <ClInclude Include="XMLParseHelperTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -80,7 +80,7 @@
     <ClCompile Include="IXMLParseHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ScopeXMLHelper.cpp">
+    <ClCompile Include="XMLParseHelperTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
