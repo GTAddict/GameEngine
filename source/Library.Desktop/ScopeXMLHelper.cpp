@@ -34,7 +34,7 @@ namespace GameEngine
 		{
 			if (!mbIsInitialized || !mpSharedData->Is(ScopeSharedData::TypeIdClass()))	return false;
 
-			ScopeSharedData* sharedData = static_cast<ScopeSharedData*>(mpSharedData);
+			ScopeSharedData* sharedData = mpSharedData->As<ScopeSharedData>();
 
 			if (element == SCOPE_IDENTIFIER)
 			{
@@ -57,7 +57,7 @@ namespace GameEngine
 		{
 			if (!mbIsInitialized || !mpSharedData->Is(ScopeSharedData::TypeIdClass()))	return false;
 
-			ScopeSharedData* sharedData = static_cast<ScopeSharedData*>(mpSharedData);
+			ScopeSharedData* sharedData = mpSharedData->As<ScopeSharedData>();
 
 			if (element == SCOPE_IDENTIFIER)
 			{

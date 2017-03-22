@@ -78,7 +78,8 @@ inline std::string* GameEngine::Library::Datum::GetDataPointer() const
 template <>
 inline GameEngine::Library::Datum::RTTIPointer* GameEngine::Library::Datum::GetDataPointer() const
 {
-	if (mType != DatumType::Pointer)
+	// You are allowed to access a Table as an RTTIPointer
+	if (mType != DatumType::Pointer && mType != DatumType::Table)
 	{
 		throw std::invalid_argument("Trying to access data as RTTI pointer when data is not an RTTI pointer!");
 	}

@@ -68,6 +68,8 @@ namespace GameEngine
 			*/
 			virtual					~Scope();
 
+			virtual bool			Equals(const RTTI* rhs) const override;
+
 			/**
 			*	\brief				Equality operator. Checks whether the two operands are equal.
 			*	\param rhs			The Scope to compare to.

@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Datum.h"
-#include "Scope.h"
 
 namespace GameEngine
 {
@@ -61,13 +60,13 @@ namespace GameEngine
 
 					switch (mType)
 					{
-					case DatumType::Float:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<float>(i)); }			break;
-					case DatumType::Integer:	for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<std::int32_t>(i)); }	break;
-					case DatumType::Matrix:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<glm::mat4x4>(i)); }	break;
-					case DatumType::Pointer:	for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<RTTIPointer>(i)); }	break;
-					case DatumType::String:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<std::string>(i)); }	break;
-					case DatumType::Vector:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<glm::vec4>(i)); }		break;
-					case DatumType::Table:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<ScopePointer>(i)); }	break;
+					case DatumType::Float:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<float>			(i)); }	break;
+					case DatumType::Integer:	for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<std::int32_t>	(i)); }	break;
+					case DatumType::Matrix:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<glm::mat4x4>	(i)); }	break;
+					case DatumType::Pointer:	for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<RTTIPointer>	(i)); }	break;
+					case DatumType::String:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<std::string>	(i)); }	break;
+					case DatumType::Vector:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<glm::vec4>		(i)); }	break;
+					case DatumType::Table:		for (std::uint32_t i = 0; i < Size(); ++i) { Set(rhs.Get<ScopePointer>	(i)); }	break;
 					default:					throw std::domain_error("Unimplemented.");
 					}
 				}
@@ -108,14 +107,14 @@ namespace GameEngine
 			{
 				switch (mType)
 				{
-				case DatumType::Float:		for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<float>			(i) != rhs.Get<float>			(i)) { return false; } }	break;
-				case DatumType::Integer:	for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<std::int32_t>	(i) != rhs.Get<std::int32_t>	(i)) { return false; } }	break;
-				case DatumType::Matrix:		for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<glm::mat4x4>	(i) != rhs.Get<glm::mat4x4>		(i)) { return false; } }	break;
-				case DatumType::Pointer:	for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<RTTIPointer>	(i) != rhs.Get<RTTIPointer>		(i)) { return false; } }	break;
-				case DatumType::String:		for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<std::string>	(i) != rhs.Get<std::string>		(i)) { return false; } }	break;
-				case DatumType::Vector:		for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<glm::vec4>		(i) != rhs.Get<glm::vec4>		(i)) { return false; } }	break;
-				case DatumType::Table:		for (std::uint32_t i = 0; i < Size(); ++i) { if (*Get<ScopePointer>	(i) != *rhs.Get<ScopePointer>	(i)) { return false; } }	break;
-				case DatumType::Unknown:	break; // Don't check data.
+				case DatumType::Float:		for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<float>			(i) != rhs.Get<float>				(i))	{ return false; } }	break;
+				case DatumType::Integer:	for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<std::int32_t>	(i) != rhs.Get<std::int32_t>		(i))	{ return false; } }	break;
+				case DatumType::Matrix:		for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<glm::mat4x4>	(i) != rhs.Get<glm::mat4x4>			(i))	{ return false; } }	break;
+				case DatumType::Pointer:	for (std::uint32_t i = 0; i < Size(); ++i) { if (!Get<RTTIPointer>	(i)->Equals(rhs.Get<RTTIPointer>	(i)))	{ return false; } }	break;
+				case DatumType::String:		for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<std::string>	(i) != rhs.Get<std::string>			(i))	{ return false; } }	break;
+				case DatumType::Vector:		for (std::uint32_t i = 0; i < Size(); ++i) { if (Get<glm::vec4>		(i) != rhs.Get<glm::vec4>			(i))	{ return false; } }	break;
+				case DatumType::Table:		for (std::uint32_t i = 0; i < Size(); ++i) { if (!Get<RTTIPointer>	(i)->Equals(rhs.Get<RTTIPointer>	(i)))	{ return false; } }	break;
+				case DatumType::Unknown:	break; // Don't check data. Don't return false either, as uninitialized are equal.
 				default:					throw std::domain_error("Unimplemented.");
 				}
 				
@@ -176,7 +175,7 @@ namespace GameEngine
 			case DatumType::String:		SetSize_Imp<std::string>	(size);		break;
 			case DatumType::Vector:		SetSize_Imp<glm::vec4>		(size);		break;
 			case DatumType::Table:		SetSize_Imp<ScopePointer>	(size);		break;
-			default:					throw std::domain_error("Unimplemented.");
+			default:					throw std::domain_error		("Unimplemented.");
 			}
 		}
 
@@ -274,7 +273,7 @@ namespace GameEngine
 			case DatumType::String:		Reserve_Imp<std::string>	(capacity);		break;
 			case DatumType::Pointer:	Reserve_Imp<RTTIPointer>	(capacity);		break;
 			case DatumType::Table:		Reserve_Imp<ScopePointer>	(capacity);		break;
-			default:					throw std::domain_error("Unimplemented.");
+			default:					throw std::domain_error		("Unimplemented.");
 			}
 
 		}
@@ -315,8 +314,8 @@ namespace GameEngine
 				T* currentElement = GetDataPointer<T>() + mSize - 1;
 				currentElement->~T();
 				--mSize;
-				currentElement;		// Destructor cannot be invoke on built-in types
-									// so "local variable not referenced" warning pops up
+				ENGINE_UNUSED(currentElement);		// Destructor cannot be invoke on built-in types
+													// so "local variable not referenced" warning pops up
 			}
 		}
 

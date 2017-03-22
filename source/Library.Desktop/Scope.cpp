@@ -136,6 +136,11 @@ namespace GameEngine
 			mpParent = nullptr;
 		}
 
+		bool Scope::Equals(const RTTI* rhs) const
+		{
+			return (*this == *rhs->As<Scope>());
+		}
+
 		bool Scope::operator==(const Scope& rhs) const
 		{
 			std::uint32_t size = mVector.Size();
