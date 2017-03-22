@@ -100,6 +100,11 @@ namespace GameEngine
 
 		void XMLParseMaster::Parse(const char* data, const std::uint32_t length, bool isFinal) const
 		{
+			for (IXMLParseHelper* helper : mHelperList)
+			{
+				helper->Initialize(mpSharedData);
+			}
+
 			XML_Parse(mParser, data, length, isFinal);
 		}
 
@@ -118,14 +123,9 @@ namespace GameEngine
 
 				char* buffer = new char[fileSize + 1];
 				fread(buffer, sizeof(char), fileSize, fp);
-
-				for (IXMLParseHelper* helper : mHelperList)
-				{
-					helper->Initialize(mpSharedData);
-				}
+				fclose(fp);
 
 				Parse(buffer, fileSize, XML_TRUE);
-				fclose(fp);
 				delete buffer;
 			}
 		}
