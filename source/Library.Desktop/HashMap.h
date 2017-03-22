@@ -232,6 +232,15 @@ namespace GameEngine
 			TValue&					operator[](const TKey& key);
 
 			/**
+			*	\brief				Returns a reference to the pair with the specified key.
+			*						If no entry is found, an exception is thrown.
+			*	\param key			The key whose pair to retrieve.
+			*	\return				A non-const reference to the pair with the specified key.
+			*	\throw std::invalid_argument if the specified key does not exist.
+			*/
+			TValue&					operator[](const TKey& key) const;
+
+			/**
 			*	\brief				Reports whether a specified key exists in the HashMap.
 			*	\param key			The key to search for.
 			*	\return				True if the key exists, false otherwise.

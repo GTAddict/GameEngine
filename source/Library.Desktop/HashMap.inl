@@ -257,6 +257,17 @@ inline TValue& HashMap<TKey, TValue, HashFunctor>::operator[](const TKey& key)
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
+inline TValue& HashMap<TKey, TValue, HashFunctor>::operator[](const TKey& key) const
+{
+	Iterator it = Find(key);
+	if (it == end())
+	{
+		throw std::out_of_range("Entry with specified key does not exist.");
+	}
+	return it->second;
+}
+
+template<typename TKey, typename TValue, typename HashFunctor>
 inline bool HashMap<TKey, TValue, HashFunctor>::ContainsKey(const TKey& key) const
 {
 	return Find(key) != end();
