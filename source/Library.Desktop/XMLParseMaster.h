@@ -213,6 +213,12 @@ namespace GameEngine
 			*/
 			void					SetSharedData(SharedData* data);
 
+			/**
+			*	\brief				Returns the list of helpers added.
+			*	\return				The list of helpers added to this instance.
+			*/
+			const SList<IXMLParseHelper*>&	GetHelperList();
+
 		private:
 
 			/**

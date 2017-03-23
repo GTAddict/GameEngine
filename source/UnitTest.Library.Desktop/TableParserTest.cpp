@@ -21,6 +21,9 @@ namespace UnitTestTableParser
 			XMLParseMaster parseMaster(sharedData);
 			parseMaster.AddHelper(helper);
 			parseMaster.Parse(stringToParse.c_str(), (uint32_t)stringToParse.length(), true, true);
+			XMLParseMaster* newMaster = parseMaster.Clone(); newMaster;
+			newMaster->Parse(stringToParse.c_str(), (uint32_t)stringToParse.length(), true, true);
+			delete newMaster;
 			Scope* scope = sharedData->GetScope();
 			scope;
 			// Scope& s = *scope;

@@ -132,7 +132,7 @@ namespace GameEngine
 			if (fileStream.good())
 			{
 				std::string buffer = std::string(std::istreambuf_iterator<char>(fileStream), std::istreambuf_iterator<char>());
-				Parse(buffer.c_str(), buffer.length(), XML_TRUE, XML_TRUE);
+				Parse(buffer.c_str(), static_cast<std::uint32_t>(buffer.length()), XML_TRUE, XML_TRUE);
 				fileStream.close();
 			}
 			else
@@ -158,6 +158,11 @@ namespace GameEngine
 			{
 				mpSharedData->SetXMLParseMaster(this);
 			}
+		}
+
+		const SList<IXMLParseHelper*>& XMLParseMaster::GetHelperList()
+		{
+			return mHelperList;
 		}
 
 		void XMLParseMaster::ResetParser()
