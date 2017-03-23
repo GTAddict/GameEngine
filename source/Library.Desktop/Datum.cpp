@@ -281,6 +281,11 @@ namespace GameEngine
 
 		void Datum::SetType(const DatumType& type)
 		{
+			if (mType == type)
+			{
+				return;
+			}
+
 			if (mType != DatumType::Unknown)
 			{
 				throw std::domain_error("You cannot change the type of data once it is set!");

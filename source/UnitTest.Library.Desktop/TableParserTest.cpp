@@ -13,7 +13,7 @@ namespace UnitTestTableParser
 
 		TEST_METHOD(TestProcess)
 		{
-			std::string stringToParse = "<scope name=\"root\"><scope name=\"indent\"><integer name=\"AnInteger\" value=\"5\" /><float name=\"AFloat\" value=\"5.6\" /><scope name=\"deeper\"></scope></scope><scope name=\"test\" /></scope>";
+			std::string stringToParse = "<scope name=\"root\"><scope name=\"indent\"><integer name=\"AnInteger\" value=\"5\" /><float name=\"AFloat\" value=\"5.6\" /><string name=\"AString\" value=\"Hello\" index=\"0\" /><string name=\"AString\" value=\"Hi\" index=\"1\" /><vector name=\"AVector\" value=\"vec4(2.2, 3.3, 4.4, 55)\" /><matrix name=\"AMatrix\" value=\"mat4x4((1.1, 2.2, 3.3, 4.4), (5.5, 6.6, 7.7, 8.8), (9.9, 10.10, 11.11, 12.12), (13.13, 14.14, 15.15, 16.16))\" /><scope name=\"deeper\"></scope></scope><scope name=\"test\" /></scope>";
 
 			// First do the parsing and re-build the XML structure.
 			XMLParseHelperTable::SharedDataTable* sharedData = new XMLParseHelperTable::SharedDataTable();
@@ -25,9 +25,19 @@ namespace UnitTestTableParser
 			newMaster->Parse(stringToParse.c_str(), (uint32_t)stringToParse.length(), true, true);
 			delete newMaster;
 			Scope* scope = sharedData->GetScope();
-			scope;
-			// Scope& s = *scope;
-			// Assert::IsTrue(5 == s["indent"].Get<Scope*>()->operator[]("integer").Get<int>());
+			std::int32_t integer			= (*scope)["indent"][0]["AnInteger"].Get<std::int32_t>();
+			float theFloat					= (*scope)["indent"][0]["AFloat"].Get<float>();
+			glm::vec4 theVector				= (*scope)["indent"][0]["AVector"].Get<glm::vec4>();
+			glm::mat4x4 theMatrix			= (*scope)["indent"][0]["AMatrix"].Get<glm::mat4x4>();
+			std::string theStringIndexZero	= (*scope)["indent"][0]["AString"].Get<std::string>();
+			std::string theStringIndexOne	= (*scope)["indent"][0]["AString"].Get<std::string>(1);
+			Assert::IsTrue(5 == integer);
+			Assert::IsTrue(5.6f == theFloat);
+			Assert::IsTrue(theVector == glm::vec4(2.2, 3.3, 4.4, 55));
+			Assert::IsTrue(theMatrix == glm::mat4x4(1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 10.10, 11.11, 12.12, 13.13, 14.14, 15.15, 16.16));
+			Assert::IsTrue(theStringIndexZero == "Hello");
+			Assert::IsTrue(theStringIndexOne == "Hi");
+
 			delete sharedData;
 			delete helper;
 		}
