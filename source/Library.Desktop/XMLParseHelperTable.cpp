@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "XMLParseHelperTable.h"
 #include "Scope.h"
+#include "Datum.h"
 
 namespace GameEngine
 {
@@ -30,7 +31,7 @@ namespace GameEngine
 			return mScope;
 		}
 
-		bool XMLParseHelperTable::StartElementHandler(const std::string& element, const HashMap<std::string, std::string> attributes)
+		bool XMLParseHelperTable::StartElementHandler(const std::string& element, const HashMapType attributes)
 		{
 			if (!mbIsInitialized || !mpSharedData->Is(SharedDataTable::TypeIdClass()))	return false;
 
@@ -51,43 +52,23 @@ namespace GameEngine
 			}
 			else if (element == INTEGER_IDENTIFIER)
 			{
-				assert(sharedData->mScope != nullptr);
-				Datum& datum = sharedData->mScope->Append(attributes[NAME_IDENTIFIER]);
-				datum.SetType(Datum::DatumType::Integer);
-				datum.SetFromString(attributes[VALUE_IDENTIFIER]);
-				return true;
+				return PopulateDatum(sharedData, static_cast<std::int32_t>(Datum::DatumType::Integer), attributes);
 			}
 			else if (element == FLOAT_IDENTIFIER)
 			{
-				assert(sharedData->mScope != nullptr);
-				Datum& datum = sharedData->mScope->Append(attributes[NAME_IDENTIFIER]);
-				datum.SetType(Datum::DatumType::Float);
-				datum.SetFromString(attributes[VALUE_IDENTIFIER]);
-				return true;
+				return PopulateDatum(sharedData, static_cast<std::int32_t>(Datum::DatumType::Float), attributes);
 			}
 			else if (element == MATRIX_IDENTIFIER)
 			{
-				assert(sharedData->mScope != nullptr);
-				Datum& datum = sharedData->mScope->Append(attributes[NAME_IDENTIFIER]);
-				datum.SetType(Datum::DatumType::Matrix);
-				datum.SetFromString(attributes[VALUE_IDENTIFIER]);
-				return true;
+				return PopulateDatum(sharedData, static_cast<std::int32_t>(Datum::DatumType::Matrix), attributes);
 			}
 			else if (element == VECTOR_IDENTIFIER)
 			{
-				assert(sharedData->mScope != nullptr);
-				Datum& datum = sharedData->mScope->Append(attributes[NAME_IDENTIFIER]);
-				datum.SetType(Datum::DatumType::Vector);
-				datum.SetFromString(attributes[VALUE_IDENTIFIER]);
-				return true;
+				return PopulateDatum(sharedData, static_cast<std::int32_t>(Datum::DatumType::Vector), attributes);
 			}
 			else if (element == STRING_IDENTIFIER)
 			{
-				assert(sharedData->mScope != nullptr);
-				Datum& datum = sharedData->mScope->Append(attributes[NAME_IDENTIFIER]);
-				datum.SetType(Datum::DatumType::String);
-				datum.SetFromString(attributes[VALUE_IDENTIFIER]);
-				return true;
+				return PopulateDatum(sharedData, static_cast<std::int32_t>(Datum::DatumType::String), attributes);
 			}
 
 			return false;
@@ -116,6 +97,17 @@ namespace GameEngine
 		IXMLParseHelper* XMLParseHelperTable::Clone()
 		{
 			return new XMLParseHelperTable();
+		}
+
+		bool XMLParseHelperTable::PopulateDatum(XMLParseHelperTable::SharedDataTable* sharedData, std::int32_t type, const HashMapType attributes)
+		{
+			assert(sharedData->mScope != nullptr);
+			Datum& datum = sharedData->mScope->Append(attributes[NAME_IDENTIFIER]);
+			datum.SetType(static_cast<Datum::DatumType>(type));
+			HashMapType::Iterator indexIt = attributes.Find(INDEX_IDENTIFIER);
+			std::uint32_t index = (indexIt == attributes.end() ? 0 : stoi(indexIt->second));
+			datum.SetFromString(attributes[VALUE_IDENTIFIER], index);
+			return true;
 		}
 	}
 }

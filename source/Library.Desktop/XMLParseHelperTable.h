@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include "IXMLParseHelper.h"
 #include "XMLParseMaster.h"
 
@@ -9,6 +7,9 @@ namespace GameEngine
 {
 	namespace Library
 	{
+		class Datum;
+		enum class DatumType;
+
 		namespace TableParserConstants
 		{
 			const std::string SCOPE_IDENTIFIER		= "scope";
@@ -20,6 +21,7 @@ namespace GameEngine
 
 			const std::string NAME_IDENTIFIER		= "name";
 			const std::string VALUE_IDENTIFIER		= "value";
+			const std::string INDEX_IDENTIFIER		= "index";
 
 		}
 
@@ -27,6 +29,8 @@ namespace GameEngine
 
 		class XMLParseHelperTable : public IXMLParseHelper
 		{
+			typedef HashMap<std::string, std::string> HashMapType;
+
 		public:
 
 			class SharedDataTable : public XMLParseMaster::SharedData
@@ -47,9 +51,15 @@ namespace GameEngine
 				Scope* mScope;
 			};
 
-			bool StartElementHandler(const std::string& element, const HashMap<std::string, std::string> attributes) override;
+			bool StartElementHandler(const std::string& element, const HashMapType attributes) override;
 			bool EndElementHandler(const std::string& element) override;
 			virtual IXMLParseHelper* Clone() override;
+
+		private:
+
+			// Casting type to an int back to avoid a Datum depencency in this header. You can't forward-declare
+			// an embedded enum.
+			bool PopulateDatum(SharedDataTable* sharedData, std::int32_t type, const HashMapType attributes);
 		};
 	}
 }
