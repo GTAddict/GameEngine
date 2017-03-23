@@ -77,7 +77,7 @@ namespace GameEngine
 		XMLParseMaster* XMLParseMaster::Clone() const
 		{
 			XMLParseMaster* pClone = new XMLParseMaster(mpSharedData->Clone());
-			
+
 			for (IXMLParseHelper* helper : mHelperList)
 			{
 				pClone->AddHelper(helper->Clone());
@@ -90,11 +90,29 @@ namespace GameEngine
 
 		void XMLParseMaster::AddHelper(IXMLParseHelper* helper)
 		{
-			mHelperList.PushBack(helper);
+			if (mIsClone)
+			{
+				throw std::runtime_error("You cannot add a helper to a clone!");
+			}
+
+			if (mHelperList.Find(helper) == mHelperList.end())
+			{
+				mHelperList.PushBack(helper);
+			}
+			else
+			{
+				throw std::invalid_argument("You've already added this helper to the list!");
+			}
+
 		}
 
 		void XMLParseMaster::RemoveHelper(IXMLParseHelper* helper)
 		{
+			if (mIsClone)
+			{
+				throw std::runtime_error("You cannot remove a helper from a clone!");
+			}
+
 			mHelperList.Remove(helper);
 		}
 
@@ -153,6 +171,11 @@ namespace GameEngine
 
 		void XMLParseMaster::SetSharedData(SharedData* data)
 		{
+			if (mIsClone)
+			{
+				delete mpSharedData;
+			}
+
 			mpSharedData = data;
 			if (mpSharedData)
 			{
@@ -167,10 +190,10 @@ namespace GameEngine
 
 		void XMLParseMaster::ResetParser()
 		{
-			XML_ParserReset				(mParser, nullptr);
-			XML_SetElementHandler		(mParser, StartElementHandler, EndElementHandler);
-			XML_SetCharacterDataHandler	(mParser, CharDataHandler);
-			XML_SetUserData				(mParser, reinterpret_cast<void*>(this));
+			XML_ParserReset(mParser, nullptr);
+			XML_SetElementHandler(mParser, StartElementHandler, EndElementHandler);
+			XML_SetCharacterDataHandler(mParser, CharDataHandler);
+			XML_SetUserData(mParser, reinterpret_cast<void*>(this));
 		}
 
 		void XMLParseMaster::StartElementHandler(void* data, const char* element, const char** attribute)
@@ -196,7 +219,7 @@ namespace GameEngine
 					}
 				}
 			}
-			
+
 		}
 
 		void XMLParseMaster::EndElementHandler(void* data, const char* element)
