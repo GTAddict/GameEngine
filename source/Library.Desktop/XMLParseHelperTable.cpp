@@ -44,9 +44,49 @@ namespace GameEngine
 				}
 				else
 				{
-					sharedData->mScope = &sharedData->mScope->AppendScope(attributes[SCOPE_NAME_IDEFNTIFIER]);
+					sharedData->mScope = &sharedData->mScope->AppendScope(attributes[NAME_IDENTIFIER]);
 				}
 
+				return true;
+			}
+			else if (element == INTEGER_IDENTIFIER)
+			{
+				assert(sharedData->mScope != nullptr);
+				Datum& datum = sharedData->mScope->Append(attributes[NAME_IDENTIFIER]);
+				datum.SetType(Datum::DatumType::Integer);
+				datum.SetFromString(attributes[VALUE_IDENTIFIER]);
+				return true;
+			}
+			else if (element == FLOAT_IDENTIFIER)
+			{
+				assert(sharedData->mScope != nullptr);
+				Datum& datum = sharedData->mScope->Append(attributes[NAME_IDENTIFIER]);
+				datum.SetType(Datum::DatumType::Float);
+				datum.SetFromString(attributes[VALUE_IDENTIFIER]);
+				return true;
+			}
+			else if (element == MATRIX_IDENTIFIER)
+			{
+				assert(sharedData->mScope != nullptr);
+				Datum& datum = sharedData->mScope->Append(attributes[NAME_IDENTIFIER]);
+				datum.SetType(Datum::DatumType::Matrix);
+				datum.SetFromString(attributes[VALUE_IDENTIFIER]);
+				return true;
+			}
+			else if (element == VECTOR_IDENTIFIER)
+			{
+				assert(sharedData->mScope != nullptr);
+				Datum& datum = sharedData->mScope->Append(attributes[NAME_IDENTIFIER]);
+				datum.SetType(Datum::DatumType::Vector);
+				datum.SetFromString(attributes[VALUE_IDENTIFIER]);
+				return true;
+			}
+			else if (element == STRING_IDENTIFIER)
+			{
+				assert(sharedData->mScope != nullptr);
+				Datum& datum = sharedData->mScope->Append(attributes[NAME_IDENTIFIER]);
+				datum.SetType(Datum::DatumType::String);
+				datum.SetFromString(attributes[VALUE_IDENTIFIER]);
 				return true;
 			}
 
@@ -70,13 +110,6 @@ namespace GameEngine
 				return true;
 			}
 
-			return false;
-		}
-
-		bool XMLParseHelperTable::CharDataHandler(const char* content, const std::uint32_t length)
-		{
-			ENGINE_UNUSED(content);
-			ENGINE_UNUSED(length);
 			return false;
 		}
 

@@ -2,6 +2,7 @@
 #include "XMLParseMaster.h"
 #include "IXMLParseHelper.h"
 #include "expat.h"
+#include <fstream>
 
 namespace GameEngine
 {
@@ -39,7 +40,10 @@ namespace GameEngine
 
 		void XMLParseMaster::SharedData::DecrementDepth()
 		{
-			--mDepth;
+			if (mDepth > 0)
+			{
+				--mDepth;
+			}
 		}
 
 		std::uint32_t XMLParseMaster::SharedData::GetDepth() const
@@ -49,14 +53,10 @@ namespace GameEngine
 
 		XMLParseMaster::XMLParseMaster(SharedData* data)
 			: mpSharedData(nullptr)
+			, mParser(XML_ParserCreate(nullptr))
 			, mIsClone(false)
 		{
 			SetSharedData(data);
-
-			mParser = XML_ParserCreate(nullptr);
-			XML_SetElementHandler(mParser, StartElementHandler, EndElementHandler);
-			XML_SetCharacterDataHandler(mParser, CharDataHandler);
-			XML_SetUserData(mParser, static_cast<void*>(this));
 		}
 
 		XMLParseMaster::~XMLParseMaster()
@@ -98,35 +98,46 @@ namespace GameEngine
 			mHelperList.Remove(helper);
 		}
 
-		void XMLParseMaster::Parse(const char* data, const std::uint32_t length, bool isFinal) const
+		void XMLParseMaster::Parse(const char* data, const std::uint32_t length, bool isInitial, bool isFinal)
 		{
-			for (IXMLParseHelper* helper : mHelperList)
+			if (isInitial)
 			{
-				helper->Initialize(mpSharedData);
+				ResetParser();
+				for (IXMLParseHelper* helper : mHelperList)
+				{
+					helper->Initialize(mpSharedData);
+				}
 			}
 
-			XML_Parse(mParser, data, length, isFinal);
+			if (XML_Parse(mParser, data, length, isFinal) == XML_STATUS_ERROR)
+			{
+				throw std::runtime_error("Error parsing file: " + std::string(XML_ErrorString(XML_GetErrorCode(mParser))));
+			}
+
+			if (isFinal)
+			{
+				for (IXMLParseHelper* helper : mHelperList)
+				{
+					helper->Finalize();
+				}
+			}
 		}
 
 		void XMLParseMaster::ParseFromFile(const std::string& filename)
 		{
 			mFileName = filename;
 
-			FILE* fp;
-			fopen_s(&fp, filename.c_str(), "r");
-			
-			if (fp)
+			std::ifstream fileStream(mFileName, std::ios::binary);
+
+			if (fileStream.good())
 			{
-				fseek(fp, 0, SEEK_END);
-				long fileSize = ftell(fp);
-				rewind(fp);
-
-				char* buffer = new char[fileSize + 1];
-				fread(buffer, sizeof(char), fileSize, fp);
-				fclose(fp);
-
-				Parse(buffer, fileSize, XML_TRUE);
-				delete buffer;
+				std::string buffer = std::string(std::istreambuf_iterator<char>(fileStream), std::istreambuf_iterator<char>());
+				Parse(buffer.c_str(), buffer.length(), XML_TRUE, XML_TRUE);
+				fileStream.close();
+			}
+			else
+			{
+				throw std::runtime_error("Could not open file!");
 			}
 		}
 
@@ -149,9 +160,17 @@ namespace GameEngine
 			}
 		}
 
+		void XMLParseMaster::ResetParser()
+		{
+			XML_ParserReset				(mParser, nullptr);
+			XML_SetElementHandler		(mParser, StartElementHandler, EndElementHandler);
+			XML_SetCharacterDataHandler	(mParser, CharDataHandler);
+			XML_SetUserData				(mParser, reinterpret_cast<void*>(this));
+		}
+
 		void XMLParseMaster::StartElementHandler(void* data, const char* element, const char** attribute)
 		{
-			XMLParseMaster* parseMaster = static_cast<XMLParseMaster*>(data);
+			XMLParseMaster* parseMaster = reinterpret_cast<XMLParseMaster*>(data);
 
 			if (parseMaster)
 			{
@@ -161,7 +180,7 @@ namespace GameEngine
 
 				for (std::uint32_t i = 0; attribute[i] != nullptr; i += 2)
 				{
-					attributeMap.Insert(std::pair<std::string, std::string>(attribute[i], attribute[i + 1]));
+					attributeMap[attribute[i]] = attribute[i + 1];
 				}
 
 				for (IXMLParseHelper* helper : parseMaster->mHelperList)
@@ -177,7 +196,7 @@ namespace GameEngine
 
 		void XMLParseMaster::EndElementHandler(void* data, const char* element)
 		{
-			XMLParseMaster* parseMaster = static_cast<XMLParseMaster*>(data);
+			XMLParseMaster* parseMaster = reinterpret_cast<XMLParseMaster*>(data);
 
 			if (parseMaster)
 			{
@@ -195,7 +214,7 @@ namespace GameEngine
 
 		void XMLParseMaster::CharDataHandler(void* data, const char* content, int length)
 		{
-			XMLParseMaster* parseMaster = static_cast<XMLParseMaster*>(data);
+			XMLParseMaster* parseMaster = reinterpret_cast<XMLParseMaster*>(data);
 
 			if (parseMaster)
 			{

@@ -116,8 +116,7 @@ namespace GameEngine
 			};
 
 			/**
-			*	\brief				Default constructor. Sets the shared data, initializes the parser
-			*						and registers the callbacks.
+			*	\brief				Default constructor. Sets the shared data and creates the parser.
 			*	\param data			The SharedData associated with this XMLParseMaster.
 			*/
 			explicit				XMLParseMaster(SharedData* data);
@@ -180,7 +179,7 @@ namespace GameEngine
 			*	\param length		The length of the passed in buffer.
 			*	\param isFinal		Denotes whether this is the last chunk passed in.
 			*/
-			void					Parse(const char* data, const std::uint32_t length, bool isFinal) const;
+			void					Parse(const char* data, const std::uint32_t length, bool isInitial, bool isFinal);
 
 			/**
 			*	\brief				Opens a file, allocates a buffer, reads it in and calls Parse.
@@ -215,6 +214,11 @@ namespace GameEngine
 			void					SetSharedData(SharedData* data);
 
 		private:
+
+			/**
+			*	\brief				Resets the state of the parser and registers its callbacks.
+			*/
+			void					ResetParser();
 
 			/**
 			*	\brief				The static callback Expat should call on finding a start tag.

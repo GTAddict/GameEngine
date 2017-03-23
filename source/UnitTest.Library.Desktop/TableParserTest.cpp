@@ -13,16 +13,18 @@ namespace UnitTestTableParser
 
 		TEST_METHOD(TestProcess)
 		{
-			std::string stringToParse = "<scope name=\"root\"><scope name=\"indent\"><int name=\"AnInteger\" value=\"5\" /><float name=\"AFloat\" value=\"5.6\" /><scope name=\"deeper\"></scope></scope><scope name=\"test\" /></scope>";
+			std::string stringToParse = "<scope name=\"root\"><scope name=\"indent\"><integer name=\"AnInteger\" value=\"5\" /><float name=\"AFloat\" value=\"5.6\" /><scope name=\"deeper\"></scope></scope><scope name=\"test\" /></scope>";
 
 			// First do the parsing and re-build the XML structure.
 			XMLParseHelperTable::SharedDataTable* sharedData = new XMLParseHelperTable::SharedDataTable();
 			XMLParseHelperTable* helper = new XMLParseHelperTable();
 			XMLParseMaster parseMaster(sharedData);
 			parseMaster.AddHelper(helper);
-			parseMaster.Parse(stringToParse.c_str(), (uint32_t)stringToParse.length(), true);
+			parseMaster.Parse(stringToParse.c_str(), (uint32_t)stringToParse.length(), true, true);
 			Scope* scope = sharedData->GetScope();
 			scope;
+			// Scope& s = *scope;
+			// Assert::IsTrue(5 == s["indent"].Get<Scope*>()->operator[]("integer").Get<int>());
 			delete sharedData;
 			delete helper;
 		}

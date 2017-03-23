@@ -49,11 +49,16 @@ namespace GameEngine
 			IXMLParseHelper&		operator=(IXMLParseHelper&& rhs) = delete;
 
 			/**
-			*	\brief				Sets the SharedData associated with this instance.
+			*	\brief				Called before the parse process begins.
 			*	\param sharedData	The SharedData to be associated with this class instance.
 			*						The class is not marked initialized if nullptr is passed in.
 			*/
 			virtual void			Initialize(XMLParseMaster::SharedData* sharedData);
+
+			/**
+			*	\brief				Called after the parse process is complete.
+			*/
+			virtual void			Finalize();
 
 			/**
 			*	\brief				The handler for the start tag. It should return true if handled, false otherwise.
@@ -77,7 +82,7 @@ namespace GameEngine
 			*	\param length		The length of the content to be handled.
 			*	\return				True if this instance handled the call, false otherwise.
 			*/
-			virtual bool			CharDataHandler(const char* content, const std::uint32_t length) = 0;
+			virtual bool			CharDataHandler(const char* content, const std::uint32_t length);
 
 			/**
 			*	\brief				This is akin to the copy constructor/assignment operator.
