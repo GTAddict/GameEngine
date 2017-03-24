@@ -13,16 +13,13 @@ namespace UnitTestTableParser
 
 		TEST_METHOD(TestProcess)
 		{
-			std::string stringToParse = "<scope name=\"root\"><scope name=\"indent\"><integer name=\"AnInteger\" value=\"5\" /><float name=\"AFloat\" value=\"5.6\" /><string name=\"AString\" value=\"Hello\" index=\"0\" /><string name=\"AString\" value=\"Hi\" index=\"1\" /><vector name=\"AVector\" value=\"vec4(2.2, 3.3, 4.4, 55)\" /><matrix name=\"AMatrix\" value=\"mat4x4((1.1, 2.2, 3.3, 4.4), (5.5, 6.6, 7.7, 8.8), (9.9, 10.10, 11.11, 12.12), (13.13, 14.14, 15.15, 16.16))\" /><scope name=\"deeper\"></scope></scope><scope name=\"test\" /></scope>";
-
-			// First do the parsing and re-build the XML structure.
 			XMLParseHelperTable::SharedDataTable* sharedData = new XMLParseHelperTable::SharedDataTable();
 			XMLParseHelperTable* helper = new XMLParseHelperTable();
 			XMLParseMaster parseMaster(sharedData);
 			parseMaster.AddHelper(helper);
-			parseMaster.Parse(stringToParse.c_str(), (uint32_t)stringToParse.length(), true, true);
+			parseMaster.ParseFromFile("TableParserTestData.xml");
 			XMLParseMaster* newMaster = parseMaster.Clone(); newMaster;
-			newMaster->Parse(stringToParse.c_str(), (uint32_t)stringToParse.length(), true, true);
+			newMaster->ParseFromFile("TableParserTestData.xml");
 			delete newMaster;
 			Scope* scope = sharedData->GetScope();
 			std::int32_t integer			= (*scope)["indent"][0]["AnInteger"].Get<std::int32_t>();
@@ -40,6 +37,15 @@ namespace UnitTestTableParser
 
 			delete sharedData;
 			delete helper;
+		}
+
+		TEST_METHOD(TestRTTI)
+		{
+			XMLParseMaster::SharedData* data = new XMLParseHelperTable::SharedDataTable();
+			Assert::IsTrue(data->Is(XMLParseHelperTable::SharedDataTable::TypeIdClass()));
+			Assert::IsTrue(data->Is("SharedDataTable"));
+			Assert::IsTrue(data->As<XMLParseHelperTable::SharedDataTable>() == static_cast<XMLParseHelperTable::SharedDataTable*>(data));
+			delete data;
 		}
 
 	public:

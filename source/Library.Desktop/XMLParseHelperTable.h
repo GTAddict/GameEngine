@@ -7,9 +7,6 @@ namespace GameEngine
 {
 	namespace Library
 	{
-		class Datum;
-		enum class DatumType;
-
 		namespace TableParserConstants
 		{
 			const std::string SCOPE_IDENTIFIER		= "scope";

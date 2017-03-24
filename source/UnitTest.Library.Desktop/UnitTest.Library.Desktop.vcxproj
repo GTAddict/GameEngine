@@ -113,7 +113,8 @@
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <PostBuildEvent>
-      <Command>copy /v /y $(SolutionDir)..\data\books.xml $(OutDir)</Command>
+      <Command>copy /v /y $(SolutionDir)..\data\books.xml $(OutDir)
+copy /v /y $(SolutionDir)..\data\TableParserTestData.xml $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -133,7 +134,8 @@
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <PostBuildEvent>
-      <Command>copy /v /y $(SolutionDir)..\data\books.xml $(OutDir)</Command>
+      <Command>copy /v /y $(SolutionDir)..\data\books.xml $(OutDir)
+copy /v /y $(SolutionDir)..\data\TableParserTestData.xml $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -157,7 +159,8 @@
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <PostBuildEvent>
-      <Command>copy /v /y $(SolutionDir)..\data\books.xml $(OutDir)</Command>
+      <Command>copy /v /y $(SolutionDir)..\data\books.xml $(OutDir)
+copy /v /y $(SolutionDir)..\data\TableParserTestData.xml $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -181,7 +184,8 @@
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <PostBuildEvent>
-      <Command>copy /v /y $(SolutionDir)..\data\books.xml $(OutDir)</Command>
+      <Command>copy /v /y $(SolutionDir)..\data\books.xml $(OutDir)
+copy /v /y $(SolutionDir)..\data\TableParserTestData.xml $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
