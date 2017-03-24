@@ -120,8 +120,6 @@ namespace GameEngine
 
 		private:
 
-			// Casting type to an int back to avoid a Datum depencency in this header. You can't forward-declare
-			// an embedded enum.
 			/**
 			*	\brief				Helper function that Appends data to scopes, sets their types
 			*						and sets their data.
