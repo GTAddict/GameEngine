@@ -10,7 +10,7 @@ namespace GameEngine
 
 		XMLParseMaster::SharedData* FooXMLHelper::FooSharedData::Clone() const
 		{
-			return SharedData::Clone();
+			return new FooSharedData();
 		}
 
 		std::string& FooXMLHelper::FooSharedData::GetConstructedString()

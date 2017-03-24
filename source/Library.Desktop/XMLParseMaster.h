@@ -52,20 +52,10 @@ namespace GameEngine
 									SharedData(const SharedData& rhs) = delete;
 
 				/**
-				*	\brief			Move constructor. This operation is not defined.
-				*/
-									SharedData(SharedData&& rhs) = delete;
-
-				/**
 				*	\brief			Copy assignment operator. This operation is not defined,
 				*					use Clone() instead.
 				*/
 				SharedData&			operator=(const SharedData& rhs) = delete;
-
-				/**
-				*	\brief			Move assignment operator. This operation is not defined.
-				*/
-				SharedData&			operator=(SharedData&& rhs) = delete;
 
 				/**
 				*	\brief			Destructor. Does nothing.
@@ -74,12 +64,11 @@ namespace GameEngine
 
 				/**
 				*	\brief			This is akin to the copy constructor/assignment operator.
-				*					However, since you cannot perfectly replicate the internal
-				*					state of the parser, we avoid those operators.
-				*	\return			A cloned instance of SharedData. This has similar behavior
-				*					but not similar state.
+				*					However, we avoid those operators.
+				*	\return			A cloned instance of SharedData. This has similar, but not
+				*					same, state.
 				*/
-				virtual	SharedData* Clone() const;
+				virtual				SharedData* Clone() const = 0;
 
 				/**
 				*	\brief			This sets the XMLParseMaster associated with this SharedData.

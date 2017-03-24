@@ -23,7 +23,10 @@ namespace GameEngine
 
 		XMLParseMaster::SharedData* XMLParseHelperTable::SharedDataTable::Clone() const
 		{
-			return new SharedDataTable();
+			SharedData* pClone = new SharedDataTable();
+			pClone->SetXMLParseMaster(GetXMLParseMaster());
+			// Clone scope?
+			return pClone;
 		}
 
 		Scope* XMLParseHelperTable::SharedDataTable::GetScope() const
@@ -96,6 +99,7 @@ namespace GameEngine
 
 		IXMLParseHelper* XMLParseHelperTable::Clone()
 		{
+
 			return new XMLParseHelperTable();
 		}
 

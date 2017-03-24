@@ -33,20 +33,10 @@ namespace GameEngine
 									IXMLParseHelper(const IXMLParseHelper& rhs) = delete;
 			
 			/**
-			*	\brief				Move constructor. This operation is not defined.
-			*/
-									IXMLParseHelper(IXMLParseHelper&& rhs) = delete;
-			
-			/**
 			*	\brief				Copy assignment operator. This operation is not defined,
 			*						use Clone() instead.
 			*/
 			IXMLParseHelper&		operator=(const IXMLParseHelper& rhs) = delete;
-
-			/**
-			*	\brief				Move assignment operator. This operation is not defined.
-			*/
-			IXMLParseHelper&		operator=(IXMLParseHelper&& rhs) = delete;
 
 			/**
 			*	\brief				Called before the parse process begins.

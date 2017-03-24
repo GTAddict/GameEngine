@@ -16,13 +16,6 @@ namespace GameEngine
 		{
 		}
 
-		XMLParseMaster::SharedData* XMLParseMaster::SharedData::Clone() const
-		{
-			SharedData* pClone = new SharedData();
-			pClone->SetXMLParseMaster(mpParseMaster);
-			return pClone;
-		}
-
 		void XMLParseMaster::SharedData::SetXMLParseMaster(XMLParseMaster* parseMaster)
 		{
 			mpParseMaster = parseMaster;

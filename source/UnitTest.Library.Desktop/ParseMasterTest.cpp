@@ -38,7 +38,7 @@ namespace UnitTestParseMaster
 		TEST_METHOD(TestDepthClone)
 		{
 			FooXMLHelper* helper = new FooXMLHelper();
-			XMLParseMaster::SharedData* sharedData = new XMLParseMaster::SharedData();
+			FooXMLHelper::FooSharedData* sharedData = new FooXMLHelper::FooSharedData();
 			XMLParseMaster parseMaster(sharedData);
 			parseMaster.AddHelper(helper);
 			sharedData->IncrementDepth();
