@@ -22,7 +22,6 @@ namespace GameEngine
 			const std::string NAME_IDENTIFIER		= "name";
 			const std::string VALUE_IDENTIFIER		= "value";
 			const std::string INDEX_IDENTIFIER		= "index";
-
 		}
 
 		class Scope;
