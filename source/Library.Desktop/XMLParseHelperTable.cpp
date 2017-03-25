@@ -99,7 +99,6 @@ namespace GameEngine
 
 		IXMLParseHelper* XMLParseHelperTable::Clone()
 		{
-
 			return new XMLParseHelperTable();
 		}
 
