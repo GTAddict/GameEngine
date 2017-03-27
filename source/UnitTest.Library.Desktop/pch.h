@@ -8,5 +8,6 @@
 #include "Scope.h"
 #include "Attributed.h"
 #include "XMLParseMaster.h"
+#include "Factory.h"
 #include "DummyStruct.h"
 #include <stdexcept>
