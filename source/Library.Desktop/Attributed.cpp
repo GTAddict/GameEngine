@@ -8,11 +8,9 @@ namespace GameEngine
 		RTTI_DEFINITIONS(Attributed);
 
 		HashMap<std::uint64_t, HashMap<std::string, Datum>> Attributed::s_mPrescribedAttributes;
-		std::int32_t Attributed::s_mInstanceCount = 0;
 
 		Attributed::Attributed()
 		{
-			++s_mInstanceCount;
 			AddPrescribedAttributeInternal("this", PRTTI_CAST(this));
 		}
 
@@ -32,7 +30,6 @@ namespace GameEngine
 
 			if (this != &rhs)
 			{
-				mAuxiliaryAttributes = rhs.mAuxiliaryAttributes;
 				operator[]("this") = PRTTI_CAST(this);
 			}
 
@@ -45,23 +42,10 @@ namespace GameEngine
 
 			if (this != &rhs)
 			{
-				mAuxiliaryAttributes = std::move(rhs.mAuxiliaryAttributes);
 				operator[]("this") = PRTTI_CAST(this);
 			}
 			
 			return *this;
-		}
-
-		Attributed::~Attributed()
-		{
-			--s_mInstanceCount;
-
-			if (s_mInstanceCount == 0)
-			{
-				s_mPrescribedAttributes.Clear();
-			}
-
-			mAuxiliaryAttributes.Clear();
 		}
 
 		Scope* Attributed::AddNestedScope(const std::string& name)
@@ -73,7 +57,7 @@ namespace GameEngine
 			}
 
 			Scope& scope = AppendScope(name);
-			s_mPrescribedAttributes[TypeIdClass()][name] = &scope;
+			s_mPrescribedAttributes[TypeIdInstance()][name] = &scope;
 
 			return &scope;
 		}
@@ -91,7 +75,7 @@ namespace GameEngine
 
 			if (!IsAttribute(name))
 			{
-				s_mPrescribedAttributes[TypeIdClass()][name] = scope;
+				s_mPrescribedAttributes[TypeIdInstance()][name] = scope;
 			}
 
 			Adopt(*scope, name);
@@ -104,26 +88,22 @@ namespace GameEngine
 				throw std::invalid_argument("An attribute with the given name already exists.");
 			}
 
-			Datum& d = Append(name); d;
-
-			mAuxiliaryAttributes[name] = d;
-
 			return Append(name);
 		}
 
 		bool Attributed::IsPrescribedAttribute(const std::string& name) const
 		{
-			return s_mPrescribedAttributes[TypeIdClass()].ContainsKey(name);
+			return IsAttribute(name) && s_mPrescribedAttributes[TypeIdInstance()].ContainsKey(name);
 		}
 
 		bool Attributed::IsAuxiliaryAttribute(const std::string& name) const
 		{
-			return mAuxiliaryAttributes.ContainsKey(name);
+			return IsAttribute(name) && !IsPrescribedAttribute(name);
 		}
 
 		bool Attributed::IsAttribute(const std::string& name) const
 		{
-			return IsPrescribedAttribute(name) || IsAuxiliaryAttribute(name);
+			return Find(name) != nullptr;
 		}
 	}
 }

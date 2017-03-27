@@ -39,12 +39,6 @@ namespace GameEngine
 								Attributed(Attributed&& rhs);
 
 			/**
-			*	\brief			Destructor. Clears aux list and prescribed list if no class
-			*					instances are left.
-			*/
-								virtual ~Attributed();
-
-			/**
 			*	\brief			Copy assignment operator. Deep copies the Attributed provided into itself.
 			*					This will copy all Scope data.
 			*	\param rhs		The Attributed to copy from.
@@ -151,9 +145,6 @@ namespace GameEngine
 		private:
 
 			static HashMap<std::uint64_t, HashMap<std::string, Datum>>	s_mPrescribedAttributes;		/**< A static HashMap of all the prescribed attributes per class type. */
-			HashMap<std::string, Datum>									mAuxiliaryAttributes;			/**< A HashMap of all the auxiliary attributes per class instance. */
-
-			static std::int32_t											s_mInstanceCount;				/**< A static count of all the current class instances. */
 		};
 
 #include "Attributed.inl"

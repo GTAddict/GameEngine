@@ -22,7 +22,7 @@ Datum* Attributed::AddPrescribedAttributeInternal(const std::string& name, const
 		datum.Set(*(data + i), i);
 	}
 
-	s_mPrescribedAttributes[TypeIdClass()][name] = datum;
+	s_mPrescribedAttributes[TypeIdInstance()][name] = datum;
 
 	return &datum;
 }
@@ -47,7 +47,7 @@ Datum* Attributed::AddPrescribedAttributeExternal(const std::string& name, const
 	Datum& datum = Append(name);
 	datum.SetStorage(data, size);
 
-	s_mPrescribedAttributes[TypeIdClass()][name] = datum;
+	s_mPrescribedAttributes[TypeIdInstance()][name] = datum;
 
 	return &datum;
 }
