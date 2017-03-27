@@ -57,6 +57,9 @@
     <ClInclude Include="XMLParseHelperTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Factory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils.cpp">
@@ -99,6 +102,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="Attributed.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Factory.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

@@ -193,6 +193,7 @@
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Factory.h" />
     <ClInclude Include="Attributed.h" />
     <ClInclude Include="Datum.h" />
     <ClInclude Include="HashMap.h" />
@@ -226,6 +227,7 @@
   <ItemGroup>
     <None Include="Attributed.inl" />
     <None Include="Datum.inl" />
+    <None Include="Factory.inl" />
     <None Include="HashMap.inl" />
     <None Include="packages.config" />
     <None Include="SList.inl" />
