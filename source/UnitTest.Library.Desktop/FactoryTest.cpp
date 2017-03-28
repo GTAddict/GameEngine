@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
+#include "Foo.h"
 #include "AttributedFoo.h"
 
 using namespace GameEngine::Library;
@@ -13,11 +14,59 @@ namespace UnitTestFactory
 
 		TEST_METHOD(TestConstructor)
 		{
+			ConcreteFactory(RTTI, Foo);
 			ConcreteFactory(RTTI, AttributedFoo);
-			AttributedFooFactory f;
-			RTTI* attributedFoo = Factory<RTTI>::Create("AttributedFoo");
+			ConcreteFactory(Scope, Attributed);
+
+			FooFactory fooFactory;
+			AttributedFooFactory attributedFooFactory;
+			AttributedFactory attributedFactory;
+
+			RTTI* attributedFoo = Factory<RTTI>	::Create("AttributedFoo");
+			RTTI* foo			= Factory<RTTI>	::Create("Foo");
+			Scope* attributed	= Factory<Scope>::Create("Attributed");
+
+			Assert::IsTrue(Factory<RTTI>::Find("Foo") == &fooFactory);
+			Assert::IsTrue(Factory<RTTI>::Find("AttributedFoo") == &attributedFooFactory);
+			Assert::IsTrue(Factory<Scope>::Find("Attributed") == &attributedFactory);
+			Assert::IsNull(Factory<RTTI>::Create("BLAHH"));
+			Assert::IsNull(Factory<Scope>::Create("BLAHH"));
+
+			Assert::IsTrue(foo->Is(Foo::TypeIdClass()));
 			Assert::IsTrue(attributedFoo->Is(AttributedFoo::TypeIdClass()));
+			Assert::IsTrue(attributed->Is(Attributed::TypeIdClass()));
+			Assert::IsTrue(foo->As<Foo>()->Equals(static_cast<Foo*>(foo)));
+			Assert::IsNotNull(attributedFoo->As<AttributedFoo>());
+			Assert::IsNotNull(attributed->As<Attributed>());
+			Assert::IsTrue(foo->ToString() == "RTTI");
+			Assert::IsTrue(attributedFoo->ToString() == "RTTI");
+			Assert::IsTrue(attributed->ToString() == "RTTI");
+			
+			Assert::IsNull(Factory<RTTI>::Find("Attributed"));
+			Assert::IsNull(Factory<Scope>::Find("Foo"));
+			Assert::IsNull(Factory<Scope>::Find("AttributedFoo"));
+
+			int counter = 0;
+			auto it = Factory<RTTI>::begin();
+			auto itEnd = Factory<RTTI>::end();
+			for (; it != itEnd; ++it)
+			{
+				++counter;
+			}
+			Assert::IsTrue(counter == 2);
+
+			auto anotherIt = Factory<Scope>::begin();
+			auto anotherItEnd = Factory<Scope>::end();
+			counter = 0;
+			for (; anotherIt != anotherItEnd; ++anotherIt)
+			{
+				++counter;
+			}
+			Assert::IsTrue(counter == 1);
+
+			delete foo;
 			delete attributedFoo;
+			delete attributed;
 		}
 
 	public:

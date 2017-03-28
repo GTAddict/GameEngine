@@ -201,6 +201,7 @@ copy /v /y $(SolutionDir)..\data\TableParserTestData.xml $(OutDir)</Command>
     <ClCompile Include="AttributedTest.cpp" />
     <ClCompile Include="DatumTest.cpp" />
     <ClCompile Include="FactoryTest.cpp" />
+    <ClCompile Include="Foo.cpp" />
     <ClCompile Include="FooXMLHelper.cpp" />
     <ClCompile Include="HashMapTest.cpp" />
     <ClCompile Include="ParseMasterTest.cpp" />
