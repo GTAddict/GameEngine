@@ -43,13 +43,13 @@ inline void GameEngine::Library::Factory<T>::Remove(Factory<T>* factory)
 }
 		
 template<typename T>
-inline typename GameEngine::Library::Factory<T>::MapType::Iterator Factory<T>::begin() const
+inline typename GameEngine::Library::Factory<T>::MapType::Iterator Factory<T>::begin()
 {
 	return m_sFactoryMap.begin();
 }
 
 template<typename T>
-inline typename GameEngine::Library::Factory<T>::MapType::Iterator Factory<T>::end() const
+inline typename GameEngine::Library::Factory<T>::MapType::Iterator Factory<T>::end()
 {
 	return m_sFactoryMap.end();
 }
