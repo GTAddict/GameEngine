@@ -23,7 +23,7 @@ namespace GameEngine
 		*			callbacks from the Expat library on to each helper
 		*			registered with the Master.
 		*/
-		class XMLParseMaster
+		class XMLParseMaster final
 		{
 
 		public:
@@ -56,11 +56,6 @@ namespace GameEngine
 				*					use Clone() instead.
 				*/
 				SharedData&			operator=(const SharedData& rhs) = delete;
-
-				/**
-				*	\brief			Destructor. Does nothing.
-				*/
-				virtual				~SharedData() override = default;
 
 				/**
 				*	\brief			This is akin to the copy constructor/assignment operator.
@@ -136,7 +131,7 @@ namespace GameEngine
 			*	\brief				Destructor. Destroys the parser and deletes any cloned helpers and
 			*						shared data. Does not touch helpers and shared data that is not cloned.
 			*/
-			virtual					~XMLParseMaster();
+									~XMLParseMaster();
 
 			/**
 			*	\brief				This is akin to the copy constructor/assignment operator.

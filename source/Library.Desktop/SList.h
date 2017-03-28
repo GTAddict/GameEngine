@@ -13,7 +13,7 @@ namespace GameEngine
 		*			will copy the pointer, not the data.
 		*/
 		template <typename T>
-		class SList
+		class SList final
 		{
 		private:
 
@@ -34,7 +34,7 @@ namespace GameEngine
 			*	\class		Iterator
 			*	\brief		Iterator class that helps walk the list.
 			*/
-			class Iterator
+			class Iterator final
 			{
 				friend class SList<T>;
 				template <typename A, typename B, typename C>
@@ -55,11 +55,6 @@ namespace GameEngine
 				*	\brief		Default constructor, initializes current pointer to nullptr.
 				*/
 								Iterator();
-
-				/**
-				*	\brief		Destructor, does nothing here.
-				*/
-				virtual			~Iterator() = default;
 
 				/**
 				*	\brief		Equality operator, checks whether addresses pointed to are same or not.
@@ -131,7 +126,7 @@ namespace GameEngine
 			/**
 			*	\brief		Destructor, clears the list.
 			*/
-			virtual			~SList();
+							~SList();
 
 			/**
 			*	\brief		Copy constructor, initializes the list

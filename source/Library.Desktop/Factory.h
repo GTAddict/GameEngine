@@ -91,7 +91,7 @@ namespace GameEngine
 #include "Factory.inl"
 
 #define ConcreteFactory(AbstractProductT, ConcreteProductT)								\
-		class ConcreteProductT ## Factory : public Factory<AbstractProductT>			\
+		class ConcreteProductT ## Factory final : public Factory<AbstractProductT>		\
 		{																				\
 		public:																			\
 			ConcreteProductT ## Factory()				{ Add(this); }					\

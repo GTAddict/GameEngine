@@ -29,7 +29,7 @@ namespace GameEngine
 		*			This will handle scopes, ints, floats, matrices,
 		*			vectors and strings.
 		*/
-		class XMLParseHelperTable : public IXMLParseHelper
+		class XMLParseHelperTable final : public IXMLParseHelper
 		{
 			typedef HashMap<std::string, std::string> HashMapType;
 
@@ -40,7 +40,7 @@ namespace GameEngine
 			*	\brief	This the derived class that can be registered to the Parse Master.
 			*			This class helps with parsing Scopes and their contained items.
 			*/
-			class SharedDataTable : public XMLParseMaster::SharedData
+			class SharedDataTable final : public XMLParseMaster::SharedData
 			{
 				friend class XMLParseHelperTable;
 

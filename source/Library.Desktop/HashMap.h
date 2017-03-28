@@ -15,7 +15,7 @@ namespace GameEngine
 		*			implementation is a Vector of fixed size containing SLists.
 		*/
 		template <typename TKey, typename TValue, typename HashFunctor = DefaultHashFunctor>
-		class HashMap
+		class HashMap final
 		{
 		public:
 
@@ -32,7 +32,7 @@ namespace GameEngine
 			*	\brief	Iterator implementation. This helps walk the HashMap and wraps pointer
 			*			implementation inside.
 			*/
-			class Iterator
+			class Iterator final
 			{
 				friend class HashMap;
 
@@ -65,11 +65,6 @@ namespace GameEngine
 				*	\param rhs		The iterator to move from.
 				*/
 									Iterator(Iterator&& rhs);
-
-				/**
-				*	\brief			Destructor, does nothing.
-				*/
-				virtual				~Iterator() = default;
 
 				/**
 				*	\brief			Copy assignment operator.
@@ -156,11 +151,6 @@ namespace GameEngine
 			*	\param rhs			The Vector to move data from.
 			*/
 									HashMap(HashMap&& rhs);
-
-			/**
-			*	\brief				Destructor, does nothing.
-			*/
-			virtual					~HashMap() = default;
 
 			/**
 			*	\brief				Copy assignment operator. Deep copies the HashMap provided into itself.

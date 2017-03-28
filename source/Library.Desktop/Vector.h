@@ -15,7 +15,7 @@ namespace GameEngine
 		 *			call will re-allocate memory.
 		 */
 		template <typename T>
-		class Vector
+		class Vector final
 		{
 		public:
 
@@ -27,7 +27,7 @@ namespace GameEngine
 			 *	\brief	Iterator implementation. This helps walk the Vector and wraps pointer
 			 *			implementation inside.
 			 */
-			class Iterator
+			class Iterator final
 			{
 				friend class Vector<T>;
 
@@ -73,11 +73,6 @@ namespace GameEngine
 				*	\return			A reference to this newly created Iterator.
 				*/
 				Iterator&			operator=(Iterator&& rhs);
-
-				/**
-				 *	\brief			The destructor. Does nothing.
-				 */
-				virtual				~Iterator() = default;
 
 				/**
 				*	\brief			Equality operator. Checks whether the two operands are equal.
@@ -226,7 +221,7 @@ namespace GameEngine
 			/**
 			 *	\brief				Destructor. Clears all elements and frees memory.
 			 */
-			virtual					~Vector();
+									~Vector();
 
 			/**
 			 *	\brief				Equality operator. Checks whether the two operands are equal.

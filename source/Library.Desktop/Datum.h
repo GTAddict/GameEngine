@@ -22,7 +22,7 @@ namespace GameEngine
 		 *	\class	Datum
 		 *	\brief	Datum is a homogeneous Vector whose type is defined at runtime.
 		 */
-		class Datum
+		class Datum final
 		{
 			typedef RTTI*	RTTIPointer;
 			typedef Scope*	ScopePointer;
@@ -83,7 +83,7 @@ namespace GameEngine
 			/**
 			 *	\brief				Destructor. Clears all elements and frees memory.
 			 */
-			virtual					~Datum();
+									~Datum();
 
 			/**
 			 *	\brief				Copy assignment operator. Deep copies the Datum provided into itself.
