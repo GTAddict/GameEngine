@@ -193,9 +193,12 @@
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Entity.h" />
     <ClInclude Include="Factory.h" />
     <ClInclude Include="Attributed.h" />
     <ClInclude Include="Datum.h" />
+    <ClInclude Include="GameClock.h" />
+    <ClInclude Include="GameTime.h" />
     <ClInclude Include="HashMap.h" />
     <ClInclude Include="HashMapFunctors.h" />
     <ClInclude Include="IXMLParseHelper.h" />
@@ -203,6 +206,9 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="RTTI.h" />
     <ClInclude Include="Scope.h" />
+    <ClInclude Include="Sector.h" />
+    <ClInclude Include="World.h" />
+    <ClInclude Include="WorldState.h" />
     <ClInclude Include="XMLParseHelperTable.h" />
     <ClInclude Include="SList.h" />
     <ClInclude Include="Utils.h" />
@@ -212,6 +218,9 @@
   <ItemGroup>
     <ClCompile Include="Attributed.cpp" />
     <ClCompile Include="Datum.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="GameClock.cpp" />
+    <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="IXMLParseHelper.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -220,6 +229,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Scope.cpp" />
+    <ClCompile Include="Sector.cpp" />
+    <ClCompile Include="World.cpp" />
+    <ClCompile Include="WorldState.cpp" />
     <ClCompile Include="XMLParseHelperTable.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="XMLParseMaster.cpp" />

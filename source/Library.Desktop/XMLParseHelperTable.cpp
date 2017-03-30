@@ -2,6 +2,9 @@
 #include "XMLParseHelperTable.h"
 #include "Scope.h"
 #include "Datum.h"
+#include "World.h"
+#include "Sector.h"
+#include "Entity.h"
 
 namespace GameEngine
 {
@@ -40,6 +43,18 @@ namespace GameEngine
 
 			SharedDataTable* sharedData = mpSharedData->As<SharedDataTable>();
 
+			if (element == WORLD_IDENTIFIER)
+			{
+
+			}
+			else if (element == SECTOR_IDENTIFIER)
+			{
+
+			}
+			else if (element == ENTITY_IDENTIFIER)
+			{
+
+			}
 			if (element == SCOPE_IDENTIFIER)
 			{
 				if (sharedData->mScope == nullptr)
