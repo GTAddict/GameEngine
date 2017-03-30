@@ -5,7 +5,6 @@ namespace GameEngine
 {
 	namespace Library
 	{
-		class Datum;
 		class Entity;
 		class World;
 		class WorldState;
@@ -20,13 +19,14 @@ namespace GameEngine
 			void SetName(const std::string& name);
 			Datum& Entities();
 			Entity& CreateEntity(const std::string& className, const std::string& instanceName);
-			void SetWorld(World& world);
 			const World& GetWorld() const;
 			void Update(const WorldState& worldState);
+			void AdoptEntity(Entity& entity);
 
 		private:
 
 			std::string mName;
+			Datum*		mpEntities;
 		};
 	}
 }

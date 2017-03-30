@@ -6,10 +6,18 @@ namespace GameEngine
 {
 	namespace Library
 	{
+		namespace WorldConstants
+		{
+			const std::string NAME_IDENTIFIER		= "Name";
+			const std::string SECTORS_IDENTIFIER	= "Sectors";
+		}
+
+		using namespace WorldConstants;
+
 		World::World()
 		{
-			AddPrescribedAttributeExternal("Name", mName);
-			Append("Sectors").SetType(Datum::DatumType::Table);
+			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
+			mpSectors = AddPrescribedAttributeInternal(SECTORS_IDENTIFIER, Datum::DatumType::Table);
 		}
 
 		const std::string& World::Name() const
@@ -29,24 +37,28 @@ namespace GameEngine
 
 		Datum& World::Sectors()
 		{
-			return Append("Sectors");
+			return *mpSectors;
 		}
 
 		Sector& World::CreateSector()
 		{
-			Sector* sector = new Sector();
-			sector->SetWorld(*this);
-			return *sector;
+			Sector& sector = *new Sector();
+			AdoptSector(sector);
+			return sector;
 		}
 
 		void GameEngine::Library::World::Update(const WorldState& worldState)
 		{
-			Datum& sectors = Sectors();
-
-			for (std::uint32_t i = 0; i < sectors.Size(); ++i)
+			for (std::uint32_t i = 0; i < mpSectors->Size(); ++i)
 			{
-				(sectors[i].As<Sector>())->Update(worldState);
+				assert((*mpSectors)[i].Is(Sector::TypeIdClass()));
+				(*mpSectors)[i].As<Sector>()->Update(worldState);
 			}
+		}
+
+		void World::AdoptSector(Sector& sector)
+		{
+			Adopt(sector, SECTORS_IDENTIFIER);
 		}
 	}
 }

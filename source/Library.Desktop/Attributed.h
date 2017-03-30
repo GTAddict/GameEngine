@@ -97,6 +97,9 @@ namespace GameEngine
 			template <typename T>
 			Datum*				AddPrescribedAttributeInternal(const std::string& name, const T* data, const std::uint32_t size);
 
+			template <typename T>
+			Datum*				AddPrescribedAttributeInternal(const std::string& name, const Datum::DatumType type);
+
 			/**
 			*	\brief			Adds the specified attribute into the Scope. Adds it to the list of attributes.
 			*	\param name		The name of the entry to be created.

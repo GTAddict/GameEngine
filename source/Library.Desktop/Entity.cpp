@@ -6,9 +6,16 @@ namespace GameEngine
 {
 	namespace Library
 	{
+		namespace EntityConstants
+		{
+			const std::string NAME_IDENTIFIER = "Name";
+		}
+
+		using namespace EntityConstants;
+
 		Entity::Entity()
 		{
-			AddPrescribedAttributeExternal("Name", mName);
+			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
 		}
 
 		const std::string& Entity::Name() const
@@ -28,12 +35,8 @@ namespace GameEngine
 
 		const Sector& Entity::GetSector() const
 		{
+			assert(GetParent()->Is(Sector::TypeIdClass()));
 			return *(GetParent()->As<Sector>());
-		}
-
-		void Entity::SetSector(Sector& sector)
-		{
-			sector.Adopt(*this, "Entities");
 		}
 
 		void Entity::Update(const WorldState& worldState)

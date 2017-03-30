@@ -5,7 +5,6 @@ namespace GameEngine
 {
 	namespace Library
 	{
-		class Datum;
 		class Sector;
 		class WorldState;
 
@@ -20,10 +19,12 @@ namespace GameEngine
 			Datum& Sectors();
 			Sector& CreateSector();
 			void Update(const WorldState& worldState);
+			void AdoptSector(Sector& sector);
 
 		private:
 
 			std::string mName;
+			Datum*		mpSectors;
 
 		};
 

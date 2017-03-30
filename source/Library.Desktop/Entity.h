@@ -17,7 +17,6 @@ namespace GameEngine
 			const std::string& Name() const;
 			void SetName(const std::string& name);
 			const Sector& GetSector() const;
-			void SetSector(Sector& sector);
 			void Update(const WorldState& worldState);
 
 		private:

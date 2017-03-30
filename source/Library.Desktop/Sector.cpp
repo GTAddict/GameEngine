@@ -8,10 +8,18 @@ namespace GameEngine
 {
 	namespace Library
 	{
+		namespace SectorConstants
+		{
+			const std::string NAME_IDENTIFIER		= "Name";
+			const std::string ENTITIES_IDENTIFIER	= "Entities";
+		}
+
+		using namespace SectorConstants;
+
 		Sector::Sector()
 		{
-			AddPrescribedAttributeExternal("Name", mName);
-			Append("Sectors").SetType(Datum::DatumType::Table);
+			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
+			mpEntities = AddPrescribedAttributeInternal(ENTITIES_IDENTIFIER, Datum::DatumType::Table);
 		}
 
 		const std::string& Sector::Name() const
@@ -31,35 +39,35 @@ namespace GameEngine
 
 		Datum& Sector::Entities()
 		{
-			return Append("Entities");
+			return *mpEntities;
 		}
 
 		Entity& Sector::CreateEntity(const std::string& className, const std::string & instanceName)
 		{
-			Entity* entity = Factory<Entity>::Create(className);
-			entity->SetName(instanceName);
-			entity->SetSector(*this);
-			return *entity;
-		}
-
-		void Sector::SetWorld(World& world)
-		{
-			world.Adopt(*this, "Sectors");
+			Entity& entity = *Factory<Entity>::Create(className);
+			entity.SetName(instanceName);
+			AdoptEntity(entity);
+			return entity;
 		}
 
 		const World& Sector::GetWorld() const
 		{
+			assert(GetParent()->Is(World::TypeIdClass()));
 			return *(GetParent()->As<World>());
 		}
 
 		void Sector::Update(const WorldState& worldState)
 		{
-			Datum& entities = Entities();
-
-			for (std::uint32_t i = 0; i < entities.Size(); ++i)
+			for (std::uint32_t i = 0; i < mpEntities->Size(); ++i)
 			{
-				(entities[i].As<Entity>())->Update(worldState);
+				assert((*mpEntities)[i].Is(Entity::TypeIdClass()));
+				(*mpEntities)[i].As<Entity>()->Update(worldState);
 			}
+		}
+
+		void Sector::AdoptEntity(Entity& entity)
+		{
+			Adopt(entity, ENTITIES_IDENTIFIER);
 		}
 	}
 }
