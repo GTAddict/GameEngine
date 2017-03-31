@@ -263,6 +263,10 @@ namespace GameEngine
 			*/
 			void					SetFromString(const std::string& inputString, const std::uint32_t index = 0);
 
+			/**
+			*	\brief				Returns the type of the data passed in as a DatumType.
+			*	\return				The type of data passed in as a DatumType.
+			*/
 			template <typename T>
 			DatumType				DeduceType(const T& data) const;
 

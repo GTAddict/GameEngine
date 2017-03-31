@@ -30,7 +30,7 @@ namespace GameEngine
 		/**
 		*	\class	XMLParseHelperTable
 		*	\brief	A concrete interface that implements IXMLParseHelper.
-		*			This will handle scopes, ints, floats, matrices,
+		*			This will handle ints, floats, matrices,
 		*			vectors and strings.
 		*/
 		class XMLParseHelperTable final : public IXMLParseHelper
@@ -121,7 +121,7 @@ namespace GameEngine
 			*	\param attributes	The hashmap of Key-Value attributes.
 			*	\return				True if the process was completed successfully, false otherwise.
 			*/
-			bool PopulateDatum(SharedDataTable* sharedData, std::int32_t type, const HashMapType attributes);
+			bool					PopulateDatum(SharedDataTable* sharedData, std::int32_t type, const HashMapType attributes);
 		};
 	}
 }

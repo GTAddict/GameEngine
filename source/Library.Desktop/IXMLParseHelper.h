@@ -19,6 +19,7 @@ namespace GameEngine
 		class IXMLParseHelper
 		{
 		protected:
+
 			typedef HashMap<std::string, std::string> HashMapType;
 
 		public:

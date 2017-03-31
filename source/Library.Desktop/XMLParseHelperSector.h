@@ -5,6 +5,11 @@ namespace GameEngine
 {
 	namespace Library
 	{
+		/**
+		*	\class	XMLParseHelperTable
+		*	\brief	A concrete interface that implements IXMLParseHelper.
+		*			This will handle Sectors.
+		*/
 		class XMLParseHelperSector : public IXMLParseHelper
 		{
 		public:
