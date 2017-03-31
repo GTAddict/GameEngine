@@ -133,17 +133,6 @@ namespace UnitTestAttributed
 #ifdef _DEBUG
 		TEST_METHOD_INITIALIZE(Initialize)
 		{
-			AttributedFoo* AttrFoo1 = new AttributedFoo(
-				1,
-				2.0f,
-				glm::vec4(),
-				glm::mat4x4(),
-				"hello",
-				new AttributedFoo(),
-				nullptr
-			);
-			delete AttrFoo1;
-
 			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 			_CrtMemCheckpoint(&sStartMemState);
 		}
