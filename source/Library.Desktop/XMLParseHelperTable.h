@@ -35,8 +35,6 @@ namespace GameEngine
 		*/
 		class XMLParseHelperTable final : public IXMLParseHelper
 		{
-			typedef HashMap<std::string, std::string> HashMapType;
-
 		public:
 
 			/**
@@ -82,17 +80,9 @@ namespace GameEngine
 				*/
 				SharedData*			Clone() const override;
 
-				/**
-				*	\brief			Returns the current scope in the ParseHelper. You need to
-				*					make a copy of this Scope if you want to retain it, as it
-				*					gets deleted in the destructor.
-				*	\return			A pointer to the Scope that represents the parsed string.
-				*/
-				Scope*				GetScope() const;
-
-			private:
-
-				Scope* mScope;		/**< The scope being built out of the string passed in. */
+				Scope*				mScope;		/**< The scope being built out of the string passed in. 
+														You need to make a copy of this Scope if you want
+														retain it, as it gets deleted in the destructor. */
 			};
 
 			/**

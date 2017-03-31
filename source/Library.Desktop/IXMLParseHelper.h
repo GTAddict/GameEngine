@@ -18,6 +18,9 @@ namespace GameEngine
 		*/
 		class IXMLParseHelper
 		{
+		protected:
+			typedef HashMap<std::string, std::string> HashMapType;
+
 		public:
 
 
@@ -56,7 +59,7 @@ namespace GameEngine
 			*	\param attributes	A hashmap of Key-Value attributes.
 			*	\return				True if this instance handled the call, false otherwise.
 			*/
-			virtual bool			StartElementHandler(const std::string& element, const HashMap<std::string, std::string> attributes) = 0;
+			virtual bool			StartElementHandler(const std::string& element, const HashMapType attributes) = 0;
 			
 			/**
 			*	\brief				The handler for the end tag. It should return true if handled, false otherwise.

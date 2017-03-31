@@ -1,0 +1,59 @@
+#include "pch.h"
+#include "XMLParseHelperEntity.h"
+#include "XMLParseHelperTable.h"
+#include "Entity.h"
+#include "Sector.h"
+
+namespace GameEngine
+{
+	namespace Library
+	{
+		using namespace TableParserConstants;
+
+		bool XMLParseHelperEntity::StartElementHandler(const std::string& element, const HashMapType attributes)
+		{
+			if (!mbIsInitialized || !mpSharedData->Is(XMLParseHelperTable::SharedDataTable::TypeIdClass()))	return false;
+
+			XMLParseHelperTable::SharedDataTable* sharedData = mpSharedData->As<XMLParseHelperTable::SharedDataTable>();
+
+			if (element == ENTITY_IDENTIFIER)
+			{
+				assert(sharedData->mScope != nullptr);
+				if (!sharedData->mScope->Is(Sector::TypeIdClass()))
+				{
+					throw std::runtime_error("Entities can only be children of sectors!");
+				}
+
+				sharedData->mScope = &sharedData->mScope->As<Sector>()->CreateEntity(attributes[CLASS_IDENTIFIER], attributes[NAME_IDENTIFIER]);
+				return true;
+			}
+
+			return false;
+		}
+
+		bool XMLParseHelperEntity::EndElementHandler(const std::string & element)
+		{
+			if (!mbIsInitialized || !mpSharedData->Is(XMLParseHelperTable::SharedDataTable::TypeIdClass()))	return false;
+
+			XMLParseHelperTable::SharedDataTable* sharedData = mpSharedData->As<XMLParseHelperTable::SharedDataTable>();
+
+			if (element == ENTITY_IDENTIFIER)
+			{
+				if (sharedData->GetDepth() > 1)
+				{
+					assert(sharedData->mScope->GetParent() != nullptr);
+					sharedData->mScope = sharedData->mScope->GetParent();
+				}
+
+				return true;
+			}
+
+			return false;
+		}
+
+		IXMLParseHelper* XMLParseHelperEntity::Clone()
+		{
+			return new XMLParseHelperEntity();
+		}
+	}
+}

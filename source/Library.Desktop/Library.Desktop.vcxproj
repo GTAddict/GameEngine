@@ -209,10 +209,13 @@
     <ClInclude Include="Sector.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="WorldState.h" />
+    <ClInclude Include="XMLParseHelperEntity.h" />
+    <ClInclude Include="XMLParseHelperSector.h" />
     <ClInclude Include="XMLParseHelperTable.h" />
     <ClInclude Include="SList.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Vector.h" />
+    <ClInclude Include="XMLParseHelperWorld.h" />
     <ClInclude Include="XMLParseMaster.h" />
   </ItemGroup>
   <ItemGroup>
@@ -232,8 +235,11 @@
     <ClCompile Include="Sector.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="WorldState.cpp" />
+    <ClCompile Include="XMLParseHelperEntity.cpp" />
+    <ClCompile Include="XMLParseHelperSector.cpp" />
     <ClCompile Include="XMLParseHelperTable.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="XMLParseHelperWorld.cpp" />
     <ClCompile Include="XMLParseMaster.cpp" />
   </ItemGroup>
   <ItemGroup>
