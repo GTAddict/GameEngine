@@ -28,6 +28,28 @@ namespace GameEngine
 									Sector();
 
 			/**
+			*	\brief				Copy constructor. Sector is non-copyable.
+			*/
+									Sector(const Sector& rhs) = delete;
+
+			/**
+			*	\brief				Move constructor.
+			*/
+									Sector(Sector&& rhs);
+
+			/**
+			*	\brief				Copy assignment operator. Sector is
+			*						non-copyable.
+			*/
+			Sector&					operator=(const Sector& rhs) = delete;
+
+			/**
+			*	\brief				Move assignment operator.
+			*	\return				A reference to this Sector.
+			*/
+			Sector&					operator=(Sector&& rhs);
+
+			/**
 			*	\brief				Returns the name of this Sector.
 			*	\return				A const string reference to the this Sector's name.
 			*/

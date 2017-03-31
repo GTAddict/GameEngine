@@ -25,6 +25,28 @@ namespace GameEngine
 									Entity();
 
 			/**
+			*	\brief				Copy constructor. Entity is non-copyable.
+			*/
+									Entity(const Entity& rhs) = delete;
+
+			/**
+			*	\brief				Move constructor.
+			*/
+									Entity(Entity&& rhs);
+
+			/**
+			*	\brief				Copy assignment operator. Entity is
+			*						non-copyable.
+			*/
+			Entity&					operator=(const Entity& rhs) = delete;
+
+			/**
+			*	\brief				Move assignment operator.
+			*	\return				A reference to this Entity.
+			*/
+			Entity&					operator=(Entity&& rhs);
+
+			/**
 			*	\brief				Default destructor. Does nothing.
 			*/
 			virtual					~Entity() = default;

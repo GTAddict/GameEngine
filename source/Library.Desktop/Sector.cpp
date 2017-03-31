@@ -23,6 +23,29 @@ namespace GameEngine
 			mpEntities = AddPrescribedAttributeInternalWithType(ENTITIES_IDENTIFIER, Datum::DatumType::Table);
 		}
 
+		Sector::Sector(Sector&& rhs)
+			: Attributed::Attributed(std::move(rhs))
+			, mName(std::move(rhs.mName))
+			, mpEntities(rhs.mpEntities)
+		{
+			rhs.mpEntities = nullptr;
+		}
+
+		Sector& Sector::operator=(Sector&& rhs)
+		{
+			Attributed::operator=(std::move(rhs));
+
+			if (this != &rhs)
+			{
+				mName = std::move(rhs.mName);
+				mpEntities = rhs.mpEntities;
+
+				rhs.mpEntities = nullptr;
+			}
+
+			return *this;
+		}
+
 		const std::string& Sector::Name() const
 		{
 			return mName;

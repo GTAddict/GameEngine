@@ -16,9 +16,33 @@ namespace GameEngine
 		using namespace WorldConstants;
 
 		World::World()
+			: mpSectors(nullptr)
 		{
 			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
 			mpSectors = AddPrescribedAttributeInternalWithType(SECTORS_IDENTIFIER, Datum::DatumType::Table);
+		}
+
+		World::World(World&& rhs)
+			: Attributed::Attributed(std::move(rhs))
+			, mName(std::move(rhs.mName))
+			, mpSectors(rhs.mpSectors)
+		{
+			rhs.mpSectors = nullptr;
+		}
+
+		World& World::operator=(World&& rhs)
+		{
+			Attributed::operator=(rhs);
+
+			if (this != &rhs)
+			{
+				mName = std::move(rhs.mName);
+				mpSectors = rhs.mpSectors;
+
+				rhs.mpSectors = nullptr;
+			}
+
+			return *this;
 		}
 
 		const std::string& World::Name() const

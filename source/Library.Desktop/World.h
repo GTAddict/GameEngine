@@ -25,6 +25,28 @@ namespace GameEngine
 									World();
 
 			/**
+			*	\brief				Copy constructor. World is non-copyable.
+			*/
+									World(const World& rhs) = delete;
+
+			/**
+			*	\brief				Move constructor.
+			*/
+									World(World&& rhs);
+
+			/**
+			*	\brief				Copy assignment operator. World is
+			*						non-copyable.
+			*/
+			World&					operator=(const World& rhs) = delete;
+
+			/**
+			*	\brief				Move assignment operator.
+			*	\return				A reference to this World.
+			*/
+			World&					operator=(World&& rhs);
+
+			/**
 			*	\brief				Returns the name of this World.
 			*	\return				A const string reference to the this World's name.
 			*/

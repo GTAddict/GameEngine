@@ -18,6 +18,24 @@ namespace GameEngine
 			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
 		}
 
+		Entity::Entity(Entity&& rhs)
+			: Attributed(std::move(rhs))
+			, mName(std::move(rhs.mName))
+		{
+		}
+
+		Entity& Entity::operator=(Entity && rhs)
+		{
+			Attributed::operator=(std::move(rhs));
+			
+			if (this != &rhs)
+			{
+				mName = std::move(rhs.mName);
+			}
+
+			return *this;
+		}
+
 		const std::string& Entity::Name() const
 		{
 			return mName;
