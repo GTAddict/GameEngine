@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "XMLParseHelperTable.h"
-#include "Scope.h"
 #include "Datum.h"
+#include "Scope.h"
 #include "World.h"
 #include "Sector.h"
 #include "Entity.h"
@@ -45,27 +45,48 @@ namespace GameEngine
 
 			if (element == WORLD_IDENTIFIER)
 			{
-
-			}
-			else if (element == SECTOR_IDENTIFIER)
-			{
-
-			}
-			else if (element == ENTITY_IDENTIFIER)
-			{
-
-			}
-			if (element == SCOPE_IDENTIFIER)
-			{
 				if (sharedData->mScope == nullptr)
 				{
-					sharedData->mScope = new Scope();
+					World* world = new World();
+					sharedData->mScope = world;
+					if (attributes.ContainsKey(NAME_IDENTIFIER))
+					{
+						world->SetName(attributes[NAME_IDENTIFIER]);
+					}
 				}
 				else
 				{
-					sharedData->mScope = &sharedData->mScope->AppendScope(attributes[NAME_IDENTIFIER]);
+					throw std::runtime_error("Cannot have a world contained inside another!");
 				}
-
+				
+				return true;
+			}
+			else if (element == SECTOR_IDENTIFIER)
+			{
+				assert(sharedData->mScope != nullptr);
+				if (!sharedData->mScope->Is(World::TypeIdClass()))
+				{
+					throw std::runtime_error("Sectors can only be children of worlds!");
+				}
+				
+				Sector& sector = sharedData->mScope->As<World>()->CreateSector();
+				if (attributes.ContainsKey(NAME_IDENTIFIER))
+				{
+					sector.SetName(attributes[NAME_IDENTIFIER]);
+				}
+				
+				sharedData->mScope = &sector;
+				return true;
+			}
+			else if (element == ENTITY_IDENTIFIER)
+			{
+				assert(sharedData->mScope != nullptr);
+				if (!sharedData->mScope->Is(Sector::TypeIdClass()))
+				{
+					throw std::runtime_error("Entities can only be children of sectors!");
+				}
+				
+				sharedData->mScope = &sharedData->mScope->As<Sector>()->CreateEntity(attributes[CLASS_IDENTIFIER], attributes[NAME_IDENTIFIER]);
 				return true;
 			}
 			else if (element == INTEGER_IDENTIFIER)
@@ -98,7 +119,7 @@ namespace GameEngine
 
 			SharedDataTable* sharedData = mpSharedData->As<SharedDataTable>();
 
-			if (element == SCOPE_IDENTIFIER)
+			if (element == WORLD_IDENTIFIER || element == SECTOR_IDENTIFIER || element == ENTITY_IDENTIFIER)
 			{
 				if (sharedData->GetDepth() > 1)
 				{

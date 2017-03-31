@@ -7,11 +7,22 @@ namespace GameEngine
 	{
 		RTTI_DEFINITIONS(Attributed);
 
+		std::uint32_t Attributed::mInstanceCount = 0;
+
 		HashMap<std::uint64_t, HashMap<std::string, Datum>> Attributed::s_mPrescribedAttributes;
 
 		Attributed::Attributed()
 		{
+			++mInstanceCount;
 			AddPrescribedAttributeInternal("this", PRTTI_CAST(this));
+		}
+
+		Attributed::~Attributed()
+		{
+			if (--mInstanceCount == 0)
+			{
+				s_mPrescribedAttributes.Clear();
+			}
 		}
 
 		Attributed::Attributed(const Attributed& rhs)
@@ -46,6 +57,20 @@ namespace GameEngine
 			}
 			
 			return *this;
+		}
+
+		Datum* Attributed::AddPrescribedAttributeInternalWithType(const std::string& name, const Datum::DatumType type)
+		{
+			if (IsAttribute(name))
+			{
+				return nullptr;
+			}
+
+			Datum& datum = Append(name);
+			datum.SetType(type);
+			s_mPrescribedAttributes[TypeIdInstance()][name] = datum;
+
+			return &datum;
 		}
 
 		Scope* Attributed::AddNestedScope(const std::string& name)

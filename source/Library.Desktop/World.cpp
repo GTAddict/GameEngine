@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "World.h"
 #include "Sector.h"
+#include "WorldState.h"
 
 namespace GameEngine
 {
@@ -17,7 +18,7 @@ namespace GameEngine
 		World::World()
 		{
 			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
-			mpSectors = AddPrescribedAttributeInternal(SECTORS_IDENTIFIER, Datum::DatumType::Table);
+			mpSectors = AddPrescribedAttributeInternalWithType(SECTORS_IDENTIFIER, Datum::DatumType::Table);
 		}
 
 		const std::string& World::Name() const
@@ -47,12 +48,13 @@ namespace GameEngine
 			return sector;
 		}
 
-		void GameEngine::Library::World::Update(const WorldState& worldState)
+		void GameEngine::Library::World::Update(WorldState& worldState)
 		{
 			for (std::uint32_t i = 0; i < mpSectors->Size(); ++i)
 			{
 				assert((*mpSectors)[i].Is(Sector::TypeIdClass()));
-				(*mpSectors)[i].As<Sector>()->Update(worldState);
+				worldState.mpSector = (*mpSectors)[i].As<Sector>();
+				worldState.mpSector->Update(worldState);
 			}
 		}
 

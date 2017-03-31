@@ -8,6 +8,11 @@
 #include "Scope.h"
 #include "Attributed.h"
 #include "XMLParseMaster.h"
+#include "XMLParseHelperTable.h"
+#include "World.h"
+#include "Sector.h"
+#include "Entity.h"
 #include "Factory.h"
+#include "WorldState.h"
 #include "DummyStruct.h"
 #include <stdexcept>

@@ -1,12 +1,25 @@
-<scope name="root">
-	<scope name="indent">
-		<integer name="AnInteger" value="5" />
-		<float name="AFloat" value="5.6" />
-		<string name="AString" value="Hello" index="0" />
-		<string name="AString" value="Hi" index="1" />
-		<vector name="AVector" value="vec4(2.2, 3.3, 4.4, 55)" />
-		<matrix name="AMatrix" value="mat4x4((1.1, 2.2, 3.3, 4.4), (5.5, 6.6, 7.7, 8.8), (9.9, 10.10, 11.11, 12.12), (13.13, 14.14, 15.15, 16.16))" />
+<world name="root">
+	<sector name="indent">
+		<entity class="TestClass" name="one">
+			<integer name="AnInteger" value="5" />
+			<float name="AFloat" value="5.6" />
+			<string name="AString" value="Hello" index="0" />
+		</entity>
+		<entity class="AnotherClass" name="two">
+			<string name="AString" value="Hi" index="1" />
+			<vector name="AVector" value="vec4(2.2, 3.3, 4.4, 55)" />
+			<matrix name="AMatrix" value="mat4x4((1.1, 2.2, 3.3, 4.4), (5.5, 6.6, 7.7, 8.8), (9.9, 10.10, 11.11, 12.12), (13.13, 14.14, 15.15, 16.16))" />
+		</entity>
 		<scope name="deeper"></scope>
-	</scope>
-	<scope name="test" />
-</scope>
+	</sector>
+	<sector name="test">
+		<entity class="TestClass" name="three">
+			<integer name="LastInt" value="22" />
+			<float name="LastFloat" value="4.4" />
+		</entity>
+		<entity class="AnotherClass" name="four">
+			<string name="LastString" value="bleep" index="1" />
+			<vector name="LastVector" value="vec4(9.2, 8.3, 7.4, 6.6)" />
+		</entity>
+	</sector>
+</world>

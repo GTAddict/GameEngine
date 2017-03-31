@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Factory.h"
 #include "World.h"
+#include "WorldState.h"
 
 namespace GameEngine
 {
@@ -19,7 +20,7 @@ namespace GameEngine
 		Sector::Sector()
 		{
 			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
-			mpEntities = AddPrescribedAttributeInternal(ENTITIES_IDENTIFIER, Datum::DatumType::Table);
+			mpEntities = AddPrescribedAttributeInternalWithType(ENTITIES_IDENTIFIER, Datum::DatumType::Table);
 		}
 
 		const std::string& Sector::Name() const
@@ -42,7 +43,7 @@ namespace GameEngine
 			return *mpEntities;
 		}
 
-		Entity& Sector::CreateEntity(const std::string& className, const std::string & instanceName)
+		Entity& Sector::CreateEntity(const std::string& className, const std::string& instanceName)
 		{
 			Entity& entity = *Factory<Entity>::Create(className);
 			entity.SetName(instanceName);
@@ -56,12 +57,13 @@ namespace GameEngine
 			return *(GetParent()->As<World>());
 		}
 
-		void Sector::Update(const WorldState& worldState)
+		void Sector::Update(WorldState& worldState)
 		{
 			for (std::uint32_t i = 0; i < mpEntities->Size(); ++i)
 			{
 				assert((*mpEntities)[i].Is(Entity::TypeIdClass()));
-				(*mpEntities)[i].As<Entity>()->Update(worldState);
+				worldState.mpEntity = (*mpEntities)[i].As<Entity>();
+				worldState.mpEntity->Update(worldState);
 			}
 		}
 

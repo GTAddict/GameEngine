@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "XMLParseHelperTable.h"
 
 using namespace GameEngine::Library;
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -48,6 +47,27 @@ namespace UnitTestTableParser
 			delete data;
 		}
 
+		TEST_METHOD(TestEntities)
+		{
+			 ConcreteFactory(Entity, TestClass);
+			 ConcreteFactory(Entity, AnotherClass);
+			 TestClassFactory testClassFactory;
+			 AnotherClassFactory anotherClassFactory;
+			 
+			 XMLParseHelperTable::SharedDataTable* sharedData = new XMLParseHelperTable::SharedDataTable();
+			 XMLParseHelperTable* helper = new XMLParseHelperTable();
+			 XMLParseMaster parseMaster(sharedData);
+			 parseMaster.AddHelper(helper);
+			 parseMaster.ParseFromFile("TableParserTestData.xml");
+			 
+			 WorldState state;
+			 state.mpWorld = sharedData->GetScope()->As<World>();
+			 state.mpWorld->Update(state);
+			 
+			 delete sharedData;
+			 delete helper;
+		}
+
 	public:
 
 #ifdef _DEBUG
@@ -72,6 +92,9 @@ namespace UnitTestTableParser
 	private:
 		static _CrtMemState sStartMemState;
 #endif
+
+		class TestClass : public Entity {};
+		class AnotherClass : public Entity {};
 
 	};
 

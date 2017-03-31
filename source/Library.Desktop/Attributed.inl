@@ -28,21 +28,6 @@ Datum* Attributed::AddPrescribedAttributeInternal(const std::string& name, const
 }
 
 template <typename T>
-Datum* Attributed::AddPrescribedAttributeInternal(const std::string& name, const Datum::DatumType type)
-{
-	if (IsAttribute(name))
-	{
-		return nullptr;
-	}
-
-	Datum& datum = Append(name);
-	datum.SetType(type);
-	s_mPrescribedAttributes[TypeIdInstance()][name] = datum;
-
-	return &datum;
-}
-
-template <typename T>
 Datum* Attributed::AddPrescribedAttributeExternal(const std::string& name, const T& data)
 {
 	return AddPrescribedAttributeExternal(name, &data, 1);

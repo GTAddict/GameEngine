@@ -26,6 +26,11 @@ namespace GameEngine
 								Attributed();
 
 			/**
+			*	\brief			Destructor. Clears the hashmap when no class instances are left.
+			*/
+			virtual				~Attributed() override;
+
+			/**
 			*	\brief			Copy constructor. Deep copies the Attributed provided into itself.
 			*					This will copy all Scope data. 
 			*	\param rhs		The Attributed to copy from.
@@ -97,8 +102,14 @@ namespace GameEngine
 			template <typename T>
 			Datum*				AddPrescribedAttributeInternal(const std::string& name, const T* data, const std::uint32_t size);
 
-			template <typename T>
-			Datum*				AddPrescribedAttributeInternal(const std::string& name, const Datum::DatumType type);
+			/**
+			*	\brief			Appends a new datum and sets its type. Adds it to the prescribed attribute list.
+			*	\param name		The name of the entry to be created.
+			*	\param type		The type to set the newly created Datum to.
+			*	\return			A pointer to the new Datum created or the associated Datum if one already exists.
+			*					nullptr if an entry with name already exists.
+			*/
+			Datum*				AddPrescribedAttributeInternalWithType(const std::string& name, const Datum::DatumType type);
 
 			/**
 			*	\brief			Adds the specified attribute into the Scope. Adds it to the list of attributes.
@@ -148,6 +159,7 @@ namespace GameEngine
 		private:
 
 			static HashMap<std::uint64_t, HashMap<std::string, Datum>>	s_mPrescribedAttributes;		/**< A static HashMap of all the prescribed attributes per class type. */
+			static std::uint32_t mInstanceCount;														/**< Holds current class instance count. */
 		};
 
 #include "Attributed.inl"
