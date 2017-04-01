@@ -27,6 +27,7 @@ namespace GameEngine
 
 		Attributed::Attributed(const Attributed& rhs)
 		{
+			++mInstanceCount;
 			operator=(rhs);
 		}
 
