@@ -17,5 +17,7 @@
 #include "Entity.h"
 #include "Factory.h"
 #include "WorldState.h"
+#include "GameClock.h"
+#include "GameTime.h"
 #include "DummyStruct.h"
 #include <stdexcept>
