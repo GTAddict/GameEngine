@@ -33,6 +33,7 @@ namespace GameEngine
 
 		Attributed::Attributed(Attributed&& rhs)
 		{
+			++mInstanceCount;
 			operator=(std::move(rhs));
 		}
 
