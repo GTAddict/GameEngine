@@ -13,6 +13,8 @@ namespace GameEngine
 			const std::string SECTORS_IDENTIFIER	= "Sectors";
 		}
 
+		RTTI_DEFINITIONS(World);
+
 		using namespace WorldConstants;
 
 		World::World()

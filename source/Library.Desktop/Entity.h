@@ -16,6 +16,8 @@ namespace GameEngine
 		*/
 		class Entity : public Attributed
 		{
+			RTTI_DECLARATIONS(Entity, Attributed);
+
 		public:
 
 			/**

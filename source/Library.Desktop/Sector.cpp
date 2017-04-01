@@ -15,6 +15,8 @@ namespace GameEngine
 			const std::string ENTITIES_IDENTIFIER	= "Entities";
 		}
 
+		RTTI_DEFINITIONS(Sector);
+
 		using namespace SectorConstants;
 
 		Sector::Sector()

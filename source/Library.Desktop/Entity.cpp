@@ -11,6 +11,8 @@ namespace GameEngine
 			const std::string NAME_IDENTIFIER = "Name";
 		}
 
+		RTTI_DEFINITIONS(Entity);
+
 		using namespace EntityConstants;
 
 		Entity::Entity()

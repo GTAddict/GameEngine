@@ -16,6 +16,8 @@ namespace GameEngine
 		*/
 		class World final : public Attributed
 		{
+			RTTI_DECLARATIONS(World, Attributed);
+
 		public:
 			
 			/**

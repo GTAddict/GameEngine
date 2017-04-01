@@ -16,7 +16,29 @@ namespace UnitTestTableParser
 			Assert::IsTrue(data->Is(XMLParseHelperTable::SharedDataTable::TypeIdClass()));
 			Assert::IsTrue(data->Is("SharedDataTable"));
 			Assert::IsTrue(data->As<XMLParseHelperTable::SharedDataTable>() == static_cast<XMLParseHelperTable::SharedDataTable*>(data));
+			Assert::IsTrue(data->ToString() == "RTTI");
 			delete data;
+
+			World* world = new World();
+			Assert::IsTrue(world->Is(World::TypeIdClass()));
+			Assert::IsTrue(world->Is("World"));
+			Assert::IsTrue(world->As<Attributed>() == static_cast<Attributed*>(world));
+			Assert::IsTrue(world->ToString() == "RTTI");
+			delete world;
+
+			Sector* sector = new Sector();
+			Assert::IsTrue(sector->Is(Sector::TypeIdClass()));
+			Assert::IsTrue(sector->Is("Sector"));
+			Assert::IsTrue(sector->As<Attributed>() == static_cast<Attributed*>(sector));
+			Assert::IsTrue(sector->ToString() == "RTTI");
+			delete sector;
+
+			Entity* entity = new Entity();
+			Assert::IsTrue(entity->Is(Entity::TypeIdClass()));
+			Assert::IsTrue(entity->Is("Entity"));
+			Assert::IsTrue(entity->As<Attributed>() == static_cast<Attributed*>(entity));
+			Assert::IsTrue(entity->ToString() == "RTTI");
+			delete entity;
 		}
 
 		TEST_METHOD(TestEntities)

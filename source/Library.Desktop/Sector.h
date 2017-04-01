@@ -19,6 +19,8 @@ namespace GameEngine
 		*/
 		class Sector final : public Attributed
 		{
+			RTTI_DECLARATIONS(Sector, Attributed);
+
 		public:
 
 			/**
