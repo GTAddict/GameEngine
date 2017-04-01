@@ -1,11 +1,11 @@
 #pragma once
 
-class GameTime;
-
 namespace GameEngine
 {
 	namespace Library
 	{
+		class GameTime;
+
 		/**
 		*	\class	WorldState
 		*	\brief	This class holds the current World, Sector
