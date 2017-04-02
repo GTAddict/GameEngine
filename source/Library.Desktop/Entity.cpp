@@ -26,7 +26,7 @@ namespace GameEngine
 		{
 		}
 
-		Entity& Entity::operator=(Entity && rhs)
+		Entity& Entity::operator=(Entity&& rhs)
 		{
 			Attributed::operator=(std::move(rhs));
 			

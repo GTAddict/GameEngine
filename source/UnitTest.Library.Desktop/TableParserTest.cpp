@@ -116,6 +116,10 @@ namespace UnitTestTableParser
 			Assert::IsTrue(&sector->GetWorld() == &world);
 			Assert::IsTrue(entity->Name() == "one");
 			Assert::IsTrue(&entity->GetSector() == sector);
+
+			world = std::move(world);
+			sector = std::move(sector);
+			entity = std::move(entity);
 			 
 			delete sharedData;
 			SList<IXMLParseHelper*> list = parseMaster.GetHelperList();
@@ -124,6 +128,26 @@ namespace UnitTestTableParser
 				parseMaster.RemoveHelper(helper);
 				delete helper;
 			}
+		}
+
+		TEST_METHOD(TestExceptions)
+		{
+			Assert::ExpectException<std::invalid_argument>
+				([]{
+				Entity e;
+				e.SetName("");
+			});
+			Assert::ExpectException<std::invalid_argument>
+				([] {
+				Sector s;
+				s.SetName("");
+			});
+			Assert::ExpectException<std::invalid_argument>
+				([] {
+				World w;
+				w.SetName("");
+			});
+			
 		}
 
 	public:
