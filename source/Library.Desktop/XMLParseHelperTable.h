@@ -13,6 +13,8 @@ namespace GameEngine
 			const std::string SECTOR_IDENTIFIER		= "sector";
 			const std::string ENTITY_IDENTIFIER		= "entity";
 
+			const std::string ACTION_IDENTIFIER		= "action";
+
 			const std::string INTEGER_IDENTIFIER	= "integer";
 			const std::string FLOAT_IDENTIFIER		= "float";
 			const std::string VECTOR_IDENTIFIER		= "vector";

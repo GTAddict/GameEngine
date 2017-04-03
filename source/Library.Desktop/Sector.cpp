@@ -20,9 +20,9 @@ namespace GameEngine
 		using namespace SectorConstants;
 
 		Sector::Sector()
+			: mpEntities(AddPrescribedAttributeInternalWithType(ENTITIES_IDENTIFIER, Datum::DatumType::Table))
 		{
 			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
-			mpEntities = AddPrescribedAttributeInternalWithType(ENTITIES_IDENTIFIER, Datum::DatumType::Table);
 		}
 
 		Sector::Sector(Sector&& rhs)

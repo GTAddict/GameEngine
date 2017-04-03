@@ -7,6 +7,7 @@ namespace GameEngine
 	{
 		class Sector;
 		class WorldState;
+		class Action;
 
 		/**
 		*	\class	Entity
@@ -75,15 +76,37 @@ namespace GameEngine
 			const Sector&			GetSector() const;
 
 			/**
+			*	\brief				Returns a Datum containing the Actions in this
+			*						Entity.
+			*	\return				A reference to the Datum containing the Actions in
+			*						this Entity.
+			*/
+			Datum&					Actions() const;
+
+			/**
+			*	\brief				Creates a new Action from the Action Factory and
+			*						adopts it into itself.
+			*	\return				A reference to the Action just created.
+			*/
+			Action&					CreateAction(const std::string& className, const std::string& instanceName);
+
+			/**
 			*	\brief				Runs the simulation.
 			*	\param worldState	The current world state encapsulated as a WorldState
 			*						object.
 			*/
-			void					Update(const WorldState& worldState);
+			void					Update(WorldState& worldState);
+
+			/**
+			*	\brief				Adopts the provided Action into the Actions table.
+			*	\param				The Action to be adopted.
+			*/
+			void					AdoptAction(Action& action);
 
 		private:
 
 			std::string mName;		/**< The name of this Entity. */
+			Datum*		mpActions;	/**< The cached table of contained Actions. */
 		};
 	}
 }

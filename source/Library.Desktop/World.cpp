@@ -18,10 +18,9 @@ namespace GameEngine
 		using namespace WorldConstants;
 
 		World::World()
-			: mpSectors(nullptr)
+			: mpSectors(AddPrescribedAttributeInternalWithType(SECTORS_IDENTIFIER, Datum::DatumType::Table))
 		{
 			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
-			mpSectors = AddPrescribedAttributeInternalWithType(SECTORS_IDENTIFIER, Datum::DatumType::Table);
 		}
 
 		World::World(World&& rhs)

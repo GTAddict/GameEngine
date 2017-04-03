@@ -6,34 +6,34 @@ namespace GameEngine
 	namespace Library
 	{
 		/**
-		*	\class	XMLParseHelperEntity
+		*	\class	XMLParseHelperAction
 		*	\brief	A concrete interface that implements IXMLParseHelper.
-		*			This will handle Entities.
+		*			This will handle Actions.
 		*/
-		class XMLParseHelperEntity : public IXMLParseHelper
+		class XMLParseHelperAction : public IXMLParseHelper
 		{
 		public:
 
 			/**
 			*	\brief				Default constructor. Does nothing.
 			*/
-									XMLParseHelperEntity() = default;
+									XMLParseHelperAction() = default;
 
 			/**
 			*	\brief				Copy constructor. This operation is not defined,
 			*						use Clone() instead.
 			*/
-									XMLParseHelperEntity(const XMLParseHelperEntity& rhs) = delete;
+									XMLParseHelperAction(const XMLParseHelperAction& rhs) = delete;
 
 			/**
 			*	\brief				Copy assignment operator. This operation is not defined,
 			*						use Clone() instead.
 			*/
-			XMLParseHelperEntity&	operator=(const XMLParseHelperEntity& rhs) = delete;
-			
+			XMLParseHelperAction&	operator=(const XMLParseHelperAction& rhs) = delete;
+
 			/**
-			*	\brief				The handler for the start tag. Creates an Entity if
-			*						the parser is currently immediately inside a Sector.
+			*	\brief				The handler for the start tag. Creates an Action if
+			*						the parser is currently immediately inside an Entity.
 			*	\param element		The name of the tag.
 			*	\param attributes	A hashmap of Key-Value attributes.
 			*	\return				True if this instance handled the call, false otherwise.
@@ -50,11 +50,10 @@ namespace GameEngine
 			/**
 			*	\brief				This is akin to the copy constructor/assignment operator.
 			*						However, we avoid those operators.
-			*	\return				A cloned instance of XMLParseHelperEntity. This has similar,
+			*	\return				A cloned instance of XMLParseHelperAction. This has similar,
 			*						but not same, state.
 			*/
 			virtual IXMLParseHelper* Clone() override;
 		};
 	}
 }
-

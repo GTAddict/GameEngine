@@ -193,6 +193,8 @@
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Action.h" />
+    <ClInclude Include="ActionList.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Factory.h" />
     <ClInclude Include="Attributed.h" />
@@ -209,6 +211,7 @@
     <ClInclude Include="Sector.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="WorldState.h" />
+    <ClInclude Include="XMLParseHelperAction.h" />
     <ClInclude Include="XMLParseHelperEntity.h" />
     <ClInclude Include="XMLParseHelperSector.h" />
     <ClInclude Include="XMLParseHelperTable.h" />
@@ -219,6 +222,8 @@
     <ClInclude Include="XMLParseMaster.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Action.cpp" />
+    <ClCompile Include="ActionList.cpp" />
     <ClCompile Include="Attributed.cpp" />
     <ClCompile Include="Datum.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -235,6 +240,7 @@
     <ClCompile Include="Sector.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="WorldState.cpp" />
+    <ClCompile Include="XMLParseHelperAction.cpp" />
     <ClCompile Include="XMLParseHelperEntity.cpp" />
     <ClCompile Include="XMLParseHelperSector.cpp" />
     <ClCompile Include="XMLParseHelperTable.cpp" />
