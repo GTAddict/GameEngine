@@ -173,12 +173,6 @@ namespace GameEngine
 			void					ParseFromFile(const std::string& filename);
 
 			/**
-			*	\brief				Adds helpers to this class, adding on to the chain in the
-			*						chain of responsibility pattern,
-			*	\param helper		The helper to add.
-			*/
-
-			/**
 			*	\brief				Returns the name of the file currently being parsed.
 			*	\return				A reference to the name of the file currently being parsed.
 			*/
