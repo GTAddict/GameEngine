@@ -209,6 +209,7 @@
     <ClInclude Include="RTTI.h" />
     <ClInclude Include="Scope.h" />
     <ClInclude Include="Sector.h" />
+    <ClInclude Include="Stack.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="WorldState.h" />
     <ClInclude Include="XMLParseHelperAction.h" />
@@ -255,6 +256,7 @@
     <None Include="HashMap.inl" />
     <None Include="packages.config" />
     <None Include="SList.inl" />
+    <None Include="Stack.inl" />
     <None Include="Vector.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

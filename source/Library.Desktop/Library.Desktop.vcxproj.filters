@@ -96,6 +96,9 @@
     <ClInclude Include="XMLParseHelperAction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Stack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils.cpp">
@@ -177,6 +180,9 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="Factory.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Stack.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

@@ -211,6 +211,7 @@ copy /v /y $(SolutionDir)..\data\TableParserTestData.xml $(OutDir)</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="StackTest.cpp" />
     <ClCompile Include="TableParserTest.cpp" />
     <ClCompile Include="ScopeTest.cpp" />
     <ClCompile Include="SListTest.cpp" />

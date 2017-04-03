@@ -1,4 +1,5 @@
 #include "Vector.h"
+#include "Macros.h"
 #pragma once
 
 template <typename T>
@@ -42,6 +43,8 @@ inline Vector<T>& Vector<T>::operator=(const Vector& rhs)
 	if (this != &rhs)
 	{
 		Clear();
+
+		mfnGetCapacity = rhs.mfnGetCapacity;
 		Reserve(rhs.Capacity());
 
 		for (auto& value : rhs)
@@ -474,7 +477,7 @@ inline bool Vector<T>::IsValid(const Iterator& it) const
 template<typename T>
 inline std::int32_t Vector<T>::GetNewCapacity(const std::uint32_t currentSize, const std::uint32_t currentCapacity) const
 {
-	currentSize;	// Currently unused in default implementation
+	ENGINE_UNUSED(currentSize);
 
 	if (currentCapacity == 0)
 	{

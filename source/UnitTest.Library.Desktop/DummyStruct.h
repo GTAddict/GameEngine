@@ -40,6 +40,11 @@ struct DummyStruct
 	{
 		return (*pOwnedInteger == *rhs.pOwnedInteger) && ID == rhs.ID && name == rhs.name && customData == rhs.customData;
 	}
+
+	bool operator!=(const DummyStruct& rhs) const
+	{
+		return !(*this == rhs);
+	}
 };
 
 namespace Microsoft

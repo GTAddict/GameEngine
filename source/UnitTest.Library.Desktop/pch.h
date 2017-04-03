@@ -3,6 +3,7 @@
 #include <sdkddkver.h>
 #include "SList.h"
 #include "Vector.h"
+#include "Stack.h"
 #include "HashMap.h"
 #include "Datum.h"
 #include "Scope.h"
