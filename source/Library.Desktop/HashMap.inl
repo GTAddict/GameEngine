@@ -136,6 +136,16 @@ inline HashMap<TKey, TValue, HashFunctor>::HashMap(const std::uint32_t numBucket
 }
 
 template<typename TKey, typename TValue, typename HashFunctor>
+inline HashMap<TKey, TValue, HashFunctor>::HashMap(std::initializer_list<std::pair<const TKey, TValue>> list)
+	: HashMap()
+{
+	for (const std::pair<TKey, TValue>& eachPair : list)
+	{
+		Insert(eachPair);
+	}
+}
+
+template<typename TKey, typename TValue, typename HashFunctor>
 inline HashMap<TKey, TValue, HashFunctor>::HashMap(const HashMap& rhs)
 {
 	operator=(rhs);

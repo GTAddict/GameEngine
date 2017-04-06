@@ -141,6 +141,13 @@ namespace GameEngine
 			explicit				HashMap(const std::uint32_t numBuckets = DEFAULT_BUCKET_SIZE);
 
 			/**
+			*	\brief				Parametrized constructor. You can pass in an initializer-list to initialize
+			*						the HashMap with some data.
+			*	\param list			The initializer list.
+			*/
+									HashMap(std::initializer_list<std::pair<const TKey, TValue>> list);
+
+			/**
 			*	\brief				Copy constructor. Deep copies the HashMap provided into itself.
 			*	\param rhs			The HashMap to copy from.
 			*/
