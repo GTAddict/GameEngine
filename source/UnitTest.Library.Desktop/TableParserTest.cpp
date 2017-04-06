@@ -29,16 +29,23 @@ namespace UnitTestTableParser
 			Sector* sector = new Sector();
 			Assert::IsTrue(sector->Is(Sector::TypeIdClass()));
 			Assert::IsTrue(sector->Is("Sector"));
-			Assert::IsTrue(sector->As<Attributed>() == static_cast<Attributed*>(sector));
+			Assert::IsTrue(sector->As<Sector>() == static_cast<Sector*>(sector));
 			Assert::IsTrue(sector->ToString() == "RTTI");
 			delete sector;
 
 			Entity* entity = new Entity();
 			Assert::IsTrue(entity->Is(Entity::TypeIdClass()));
 			Assert::IsTrue(entity->Is("Entity"));
-			Assert::IsTrue(entity->As<Attributed>() == static_cast<Attributed*>(entity));
+			Assert::IsTrue(entity->As<Entity>() == static_cast<Entity*>(entity));
 			Assert::IsTrue(entity->ToString() == "RTTI");
 			delete entity;
+
+			ActionExpression* actionExpression = new ActionExpression();
+			Assert::IsTrue(actionExpression->Is(ActionExpression::TypeIdClass()));
+			Assert::IsTrue(actionExpression->Is("ActionExpression"));
+			Assert::IsTrue(actionExpression->As<ActionExpression>() == static_cast<ActionExpression*>(actionExpression));
+			Assert::IsTrue(actionExpression->ToString() == "RTTI");
+			delete actionExpression;
 		}
 
 		TEST_METHOD(TestEntities)
@@ -152,6 +159,67 @@ namespace UnitTestTableParser
 				w.SetName("");
 			});
 			
+		}
+
+		TEST_METHOD(TestParser)
+		{
+			Entity s;
+			s["AnInteger"] = 5;
+			s["AFloat"] = 5.6f;
+			s["LastInt"] = 22;
+			s["LastFloat"] = 4.4f;
+
+			WorldState ws;
+
+			{
+				ActionExpression& action = *new ActionExpression();
+				action.SetExpression(std::string("AnInteger * AFloat + 1"));
+				s.AdoptAction(action);
+				action.Update(ws);
+				Assert::IsTrue(action.GetResult() == 29);
+			}
+			{
+				ActionExpression& action = *new ActionExpression();
+				action.SetExpression(std::string("2 + 4 -5 *6 / 7^ 8 + (sin11 + cos12+  tan13 + (acos0.1 + asin(0.515)) +  atan0.16)+ pow(2, 2) + log(5)+  sqrt(4)+  invsqrt(5)"));
+				s.AdoptAction(action);
+				action.Update(ws);
+				Assert::IsTrue(action.GetResult() == 16.533823006125626);
+			}
+			{
+				ActionExpression& action = *new ActionExpression();
+				action.SetExpression(std::string("LastInt > 5"));
+				s.AdoptAction(action);
+				action.Update(ws);
+				Assert::IsTrue(action.GetResult() == 1);
+			}
+			{
+				ActionExpression& action = *new ActionExpression();
+				action.SetExpression(std::string("(LastInt < 5)"));
+				s.AdoptAction(action);
+				action.Update(ws);
+				Assert::IsTrue(action.GetResult() == 0);
+			}
+			{
+				ActionExpression& action = *new ActionExpression();
+				action.SetExpression(std::string("LastFloat == 22"));
+				s.AdoptAction(action);
+				action.Update(ws);
+				Assert::IsTrue(action.GetResult() == 0);
+			}
+			{
+				ActionExpression& action = *new ActionExpression();
+				action.SetExpression(std::string("LastFloat == 5 || LastInt == 22"));
+				s.AdoptAction(action);
+				action.Update(ws);
+				Assert::IsTrue(action.GetResult() == 1);
+			}
+			{
+				ActionExpression& action = *new ActionExpression();
+				action.SetExpression(std::string("!(LastFloat == 22)"));
+				s.AdoptAction(action);
+				action.Update(ws);
+				Assert::IsTrue(action.GetResult() == 1);
+			}
 		}
 
 	public:

@@ -50,8 +50,12 @@ namespace GameEngine
 			}
 
 			// Now simply evaluate the expression.
-			double result = mExpression.Compute();
-			ENGINE_UNUSED(result);
+			mResult = mExpression.Compute();
+		}
+
+		double ActionExpression::GetResult()
+		{
+			return mResult;
 		}
 	}
 }

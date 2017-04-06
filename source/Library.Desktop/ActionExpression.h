@@ -26,13 +26,20 @@ namespace GameEngine
 
 			/**
 			*	\brief				Runs the simulation.
-			*	\param worldState	Evalutes the expression contained within.
+			*	\param worldState	Evaluates the expression contained within.
 			*/
 			virtual void			Update(WorldState& worldState);
+
+			/**
+			*	\brief				Retrieves the result. Mainly for testing.
+			*	\param worldState	Retrieves the result.
+			*/
+			double					GetResult();
 
 		private:
 
 			Expression				mExpression;		/**< The expression to evaluate. */
+			double					mResult;			/**< The result of the calculation. Mainly for testing. */
 		};
 
 #define ActionFactory(ConcreteAction)	ConcreteFactory(Action, ConcreteAction)
