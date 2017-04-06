@@ -47,6 +47,8 @@ namespace UnitTestTableParser
 			ConcreteFactory(Entity, AnotherClass);
 			TestClassFactory testClassFactory;
 			AnotherClassFactory anotherClassFactory;
+			ActionFactory(ActionExpression);
+			ActionExpressionFactory actionExpressionFactory;
 
 			XMLParseHelperTable::SharedDataTable* sharedData = new XMLParseHelperTable::SharedDataTable();
 			XMLParseMaster parseMaster(sharedData);
@@ -54,6 +56,8 @@ namespace UnitTestTableParser
 			parseMaster.AddHelper(new XMLParseHelperWorld());
 			parseMaster.AddHelper(new XMLParseHelperSector());
 			parseMaster.AddHelper(new XMLParseHelperEntity());
+			parseMaster.AddHelper(new XMLParseHelperAction());
+			// parseMaster.AddHelper(new XMLParseHelperActionExpression());
 			parseMaster.ParseFromFile("TableParserTestData.xml");
 
 			GameClock clock;

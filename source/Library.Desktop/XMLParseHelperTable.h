@@ -9,17 +9,18 @@ namespace GameEngine
 	{
 		namespace TableParserConstants
 		{
-			const std::string WORLD_IDENTIFIER		= "world";
-			const std::string SECTOR_IDENTIFIER		= "sector";
-			const std::string ENTITY_IDENTIFIER		= "entity";
+			const std::string WORLD_IDENTIFIER			= "world";
+			const std::string SECTOR_IDENTIFIER			= "sector";
+			const std::string ENTITY_IDENTIFIER			= "entity";
 
-			const std::string ACTION_IDENTIFIER		= "action";
+			const std::string ACTION_IDENTIFIER			= "action";
+			const std::string EXPRESSION_IDENTIFIER		= "expression";
 
-			const std::string INTEGER_IDENTIFIER	= "integer";
-			const std::string FLOAT_IDENTIFIER		= "float";
-			const std::string VECTOR_IDENTIFIER		= "vector";
-			const std::string MATRIX_IDENTIFIER		= "matrix";
-			const std::string STRING_IDENTIFIER		= "string";
+			const std::string INTEGER_IDENTIFIER		= "integer";
+			const std::string FLOAT_IDENTIFIER			= "float";
+			const std::string VECTOR_IDENTIFIER			= "vector";
+			const std::string MATRIX_IDENTIFIER			= "matrix";
+			const std::string STRING_IDENTIFIER			= "string";
 
 			const std::string CLASS_IDENTIFIER		= "class";
 			const std::string NAME_IDENTIFIER		= "name";
