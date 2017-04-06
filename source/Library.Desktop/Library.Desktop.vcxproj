@@ -194,8 +194,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Action.h" />
+    <ClInclude Include="ActionExpression.h" />
     <ClInclude Include="ActionList.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Expression.h" />
     <ClInclude Include="Factory.h" />
     <ClInclude Include="Attributed.h" />
     <ClInclude Include="Datum.h" />
@@ -224,10 +226,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Action.cpp" />
+    <ClCompile Include="ActionExpression.cpp" />
     <ClCompile Include="ActionList.cpp" />
     <ClCompile Include="Attributed.cpp" />
     <ClCompile Include="Datum.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Expression.cpp" />
     <ClCompile Include="GameClock.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="IXMLParseHelper.cpp" />
