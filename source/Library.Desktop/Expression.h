@@ -12,7 +12,7 @@ namespace GameEngine
 		/**
 		*	\class	Expression
 		*	\brief	This is a class that interprets
-		*			postfix notation, stores the RPN
+		*			infix notation, stores the RPN
 		*			parse, and computes the result on
 		*			demand.
 		*/
