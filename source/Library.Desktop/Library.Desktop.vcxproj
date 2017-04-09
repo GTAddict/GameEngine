@@ -197,6 +197,10 @@
     <ClInclude Include="ActionExpression.h" />
     <ClInclude Include="ActionList.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="EventPublisher.h" />
+    <ClInclude Include="EventQueue.h" />
+    <ClInclude Include="EventSubscriber.h" />
     <ClInclude Include="Expression.h" />
     <ClInclude Include="Factory.h" />
     <ClInclude Include="Attributed.h" />
@@ -231,6 +235,9 @@
     <ClCompile Include="Attributed.cpp" />
     <ClCompile Include="Datum.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="EventPublisher.cpp" />
+    <ClCompile Include="EventQueue.cpp" />
+    <ClCompile Include="EventSubscriber.cpp" />
     <ClCompile Include="Expression.cpp" />
     <ClCompile Include="GameClock.cpp" />
     <ClCompile Include="GameTime.cpp" />
@@ -256,6 +263,7 @@
   <ItemGroup>
     <None Include="Attributed.inl" />
     <None Include="Datum.inl" />
+    <None Include="Event.inl" />
     <None Include="Factory.inl" />
     <None Include="HashMap.inl" />
     <None Include="packages.config" />
