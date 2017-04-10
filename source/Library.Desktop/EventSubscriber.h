@@ -9,8 +9,7 @@ namespace GameEngine
 		class EventSubscriber
 		{
 		public:
-			virtual ~EventSubscriber();
-
+			virtual ~EventSubscriber() = default;
 			virtual void Notify(const EventPublisher& event) = 0;
 		};
 

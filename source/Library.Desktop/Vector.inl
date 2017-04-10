@@ -435,12 +435,18 @@ inline void Vector<T>::Remove(const T& data)
 template<typename T>
 inline void Vector<T>::Remove(const Iterator& rangeBegin, const Iterator& rangeEnd)
 {
-	if (!(IsValid(rangeBegin) && IsValid(rangeEnd)) || rangeBegin > rangeEnd)
+	if (rangeBegin < begin() || rangeEnd > end() || rangeBegin > rangeEnd)
 	{
 		throw std::out_of_range("Invalid iterator. Check that both iterators are within array bounds and that rangeBegin is less than rangeEnd.");
 	}
 
-	for (Iterator it = rangeBegin; it <= rangeEnd; ++it)
+	if (rangeBegin == begin() && rangeEnd == end())
+	{
+		Clear();
+		return;
+	}
+
+	for (Iterator it = rangeBegin; it <= rangeEnd, it != end(); ++it)
 	{
 		(*it).~T();
 	}

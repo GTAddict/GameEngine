@@ -11,6 +11,8 @@ namespace GameEngine
 
 		class EventPublisher : public RTTI
 		{
+			RTTI_DECLARATIONS(EventPublisher, RTTI);
+
 		public:
 			EventPublisher(const Vector<EventSubscriber*>& concreteSubscribers, bool deleteAterPublish = true);
 			void SetTime(const std::chrono::high_resolution_clock::time_point& timeNow, const std::chrono::milliseconds& delay = std::chrono::milliseconds(0));

@@ -9,7 +9,7 @@ namespace GameEngine
 		template <typename T>
 		class Event final : public EventPublisher
 		{
-			RTTI_DECLARATIONS(Event, EventPublisher);
+			RTTI_DECLARATIONS(Event<T>, EventPublisher);
 
 		public:
 			Event(const T& message, bool deleteAfterPublishing);

@@ -5,8 +5,5 @@ namespace GameEngine
 {
 	namespace Library
 	{
-		EventSubscriber::~EventSubscriber()
-		{
-		}
 	}
 }

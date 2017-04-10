@@ -6,6 +6,8 @@ namespace GameEngine
 {
 	namespace Library
 	{
+		RTTI_DEFINITIONS(EventPublisher);
+
 		EventPublisher::EventPublisher(const Vector<EventSubscriber*>& concreteSubscribers, bool deleteAterPublish)
 			: mConcreteSubscribers(concreteSubscribers)
 			, mbDeleteAfterPublish(deleteAterPublish)
@@ -30,7 +32,7 @@ namespace GameEngine
 
 		bool EventPublisher::IsExpired(const std::chrono::high_resolution_clock::time_point & timeNow) const
 		{
-			return (mTimeEnqueued + mDelay) >= timeNow;
+			return (mTimeEnqueued + mDelay) <= timeNow;
 		}
 
 		void EventPublisher::Deliver()

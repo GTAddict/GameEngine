@@ -10,7 +10,7 @@ namespace UnitTestEvent
 	{
 	private:
 
-		TEST_METHOD(TestConstructor)
+		TEST_METHOD(TestBasicFunctionality)
 		{
 			EventQueue e;
 			DummyStruct d;
@@ -24,6 +24,11 @@ namespace UnitTestEvent
 					Event<DummyStruct>::Subscribe(*this);
 				}
 
+				~BlahBloo()
+				{
+					Event<DummyStruct>::Unsubscribe(*this);
+				}
+
 				void Notify(const EventPublisher& event) override
 				{
 					event;
@@ -34,11 +39,73 @@ namespace UnitTestEvent
 			GameTime g;
 			GameClock gam;
 			gam.UpdateGameTime(g);
+			event.SetTime(g.CurrentTime(), std::chrono::milliseconds(0));
 			e.Send(event);
 			Assert::IsTrue(called == 1);
 			e.Enqueue(event, g, std::chrono::milliseconds(0));
 			e.Update(g);
 			Assert::IsTrue(called == 2);
+		}
+
+		TEST_METHOD(TestPublisher)
+		{
+			EventQueue eventQueue;
+			DummyStruct d;
+			Event<DummyStruct> e(d, false);
+			Event<DummyStruct>* delEvent = new Event<DummyStruct>(d, true);
+			Assert::IsTrue(d == e.Message());
+			Assert::IsTrue(d == delEvent->Message());
+			GameClock clock;
+			GameTime gameTime;
+			std::chrono::milliseconds delay(1);
+			clock.UpdateGameTime(gameTime);
+			eventQueue.Enqueue(e, gameTime, delay);
+			eventQueue.Enqueue(*delEvent, gameTime, delay);
+			Assert::IsTrue(eventQueue.Size() == 2);
+			Assert::IsFalse(eventQueue.IsEmpty());
+			Assert::IsTrue(gameTime.CurrentTime() == e.TimeEnqueued());
+			Assert::IsTrue(delay == e.Delay());
+			Assert::IsFalse(e.IsExpired(gameTime.CurrentTime()));
+			eventQueue.Update(gameTime);
+			Assert::IsTrue(eventQueue.Size() == 2);
+			Assert::IsFalse(eventQueue.IsEmpty());
+			Sleep(1);
+			clock.UpdateGameTime(gameTime);
+			Assert::IsTrue(e.IsExpired(gameTime.CurrentTime()));
+			eventQueue.Update(gameTime);
+			Assert::IsTrue(eventQueue.Size() == 0);
+			Assert::IsTrue(eventQueue.IsEmpty());
+			Event<DummyStruct>::UnsubscribeAll();
+		}
+
+		TEST_METHOD(TestRTTI)
+		{
+			Event<DummyStruct>* event = new Event<DummyStruct>(DummyStruct(), true);
+			Assert::IsTrue(event->TypeName() == "Event<T>");
+			Assert::IsTrue(event->TypeIdClass() == Event<DummyStruct>::TypeIdClass());
+			Assert::IsTrue(event->TypeIdInstance() == event->TypeIdClass());
+			Assert::IsTrue(event->QueryInterface(event->TypeIdClass()) == static_cast<RTTI*>(event));
+			Assert::IsTrue(event->Is(Event<DummyStruct>::TypeIdClass()));
+			Assert::IsTrue(event->Is(EventPublisher::TypeIdClass()));
+			Assert::IsTrue(event->Is("Event<T>"));
+			Assert::IsTrue(event->Is("EventPublisher"));
+			Assert::IsTrue(event->Equals(event));
+			Assert::IsTrue(event->ToString() == "RTTI");
+			Assert::IsTrue(event->As<EventPublisher>() == static_cast<EventPublisher*>(event));
+
+			EventPublisher* publisher = event->As<EventPublisher>();
+			Assert::IsTrue(publisher->TypeName() == "EventPublisher");
+			Assert::IsTrue(publisher->TypeIdClass() == EventPublisher::TypeIdClass());
+			Assert::IsTrue(publisher->TypeIdInstance() == Event<DummyStruct>::TypeIdClass());
+			Assert::IsTrue(publisher->QueryInterface(publisher->TypeIdClass()) == static_cast<RTTI*>(event));
+			Assert::IsTrue(publisher->Is(EventPublisher::TypeIdClass()));
+			Assert::IsTrue(publisher->Is("Event<T>"));
+			Assert::IsTrue(publisher->Is("EventPublisher"));
+			Assert::IsTrue(publisher->Equals(publisher));
+			Assert::IsTrue(publisher->ToString() == "RTTI");
+			Assert::IsTrue(publisher->As<EventPublisher>() == static_cast<EventPublisher*>(event));
+
+			delete event;
 		}
 
 	public:

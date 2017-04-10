@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "EventQueue.h"
 #include "EventPublisher.h"
+#include <algorithm>
 
 namespace GameEngine
 {
@@ -15,7 +16,6 @@ namespace GameEngine
 		void EventQueue::Send(EventPublisher& publisher)
 		{
 			publisher.Deliver();
-			mEventQueue.Remove(&publisher);
 			if (publisher.DeleteAfterPublishing())
 			{
 				delete &publisher;
@@ -29,6 +29,20 @@ namespace GameEngine
 				if (eventPublisher->IsExpired(gameTime.CurrentTime()))
 				{
 					Send(*eventPublisher);
+				}
+			}
+
+			if (mEventQueue.Size())
+			{
+				auto it = std::partition(
+					mEventQueue.begin(),
+					mEventQueue.end(),
+					[&gameTime](EventPublisher* eventPublisher) { return !eventPublisher->IsExpired(gameTime.CurrentTime()); }
+				);
+
+				if (it != mEventQueue.end())
+				{
+					mEventQueue.Remove(it, mEventQueue.end());
 				}
 			}
 		}

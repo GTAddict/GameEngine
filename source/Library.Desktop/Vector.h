@@ -27,7 +27,7 @@ namespace GameEngine
 			 *	\brief	Iterator implementation. This helps walk the Vector and wraps pointer
 			 *			implementation inside.
 			 */
-			class Iterator final
+			class Iterator final : public std::iterator<std::forward_iterator_tag, T>
 			{
 				friend class Vector<T>;
 

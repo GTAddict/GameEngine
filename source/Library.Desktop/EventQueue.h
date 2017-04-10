@@ -21,8 +21,7 @@ namespace GameEngine
 
 		private:
 
-			Vector<EventPublisher*> mEventQueue;
-
+			Vector<EventPublisher*>		mEventQueue;
 		};
 	}
 }
