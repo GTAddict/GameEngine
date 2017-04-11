@@ -14,6 +14,11 @@ namespace GameEngine
 		public:
 			Event(const T& message, bool deleteAfterPublishing);
 
+			Event(const Event& rhs) = default;
+			Event(Event&& rhs) = default;
+			Event& operator=(const Event& rhs) = default;
+			Event& operator=(Event&& rhs) = default;
+
 			static void Subscribe(EventSubscriber& subscriber);
 			static void Unsubscribe(EventSubscriber& subscriber);
 			static void UnsubscribeAll();
@@ -22,7 +27,7 @@ namespace GameEngine
 
 		private:
 			static Vector<EventSubscriber*> mSubscribers;
-			const T& mMessage;
+			T mMessage;
 
 		};
 

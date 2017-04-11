@@ -14,7 +14,13 @@ namespace GameEngine
 			RTTI_DECLARATIONS(EventPublisher, RTTI);
 
 		public:
-			EventPublisher(const Vector<EventSubscriber*>& concreteSubscribers, bool deleteAterPublish = true);
+			EventPublisher(Vector<EventSubscriber*>& concreteSubscribers, bool deleteAterPublish = true);
+			EventPublisher(const EventPublisher& rhs) = default;
+			EventPublisher(EventPublisher&& rhs) = default;
+			EventPublisher& operator=(const EventPublisher& rhs) = default;
+			EventPublisher& operator=(EventPublisher&& rhs) = default;
+			virtual ~EventPublisher() = default;
+
 			void SetTime(const std::chrono::high_resolution_clock::time_point& timeNow, const std::chrono::milliseconds& delay = std::chrono::milliseconds(0));
 			const std::chrono::high_resolution_clock::time_point& TimeEnqueued() const;
 			const std::chrono::milliseconds& Delay() const;
@@ -22,14 +28,11 @@ namespace GameEngine
 			void Deliver();
 			bool DeleteAfterPublishing() const;
 
-			
-			virtual ~EventPublisher() = default;
-
 		private:
-			const Vector<EventSubscriber*>&						mConcreteSubscribers;
-			const bool											mbDeleteAfterPublish;
-			std::chrono::high_resolution_clock::time_point		mTimeEnqueued;
-			std::chrono::milliseconds							mDelay;
+			Vector<EventSubscriber*>*						mConcreteSubscribers;
+			bool											mbDeleteAfterPublish;
+			std::chrono::high_resolution_clock::time_point	mTimeEnqueued;
+			std::chrono::milliseconds						mDelay;
 		};
 	}
 }

@@ -108,6 +108,21 @@ namespace UnitTestEvent
 			delete event;
 		}
 
+		TEST_METHOD(TestCopyMoveSemantics)
+		{
+			DummyStruct d1, d2;
+			Event<DummyStruct> event(d1, true);
+			Event<DummyStruct> anotherEvent(d2, false);
+			
+			Event<DummyStruct> copyConstruct(event);
+			Event<DummyStruct> moveConstruct(event);
+
+			Event<DummyStruct> copyAssign(d1, true);
+			copyAssign = anotherEvent;
+			Event<DummyStruct> moveAssign(d1, true);
+			moveAssign = std::move(anotherEvent);
+		}
+
 	public:
 
 #ifdef _DEBUG

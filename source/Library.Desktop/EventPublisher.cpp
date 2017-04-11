@@ -8,8 +8,8 @@ namespace GameEngine
 	{
 		RTTI_DEFINITIONS(EventPublisher);
 
-		EventPublisher::EventPublisher(const Vector<EventSubscriber*>& concreteSubscribers, bool deleteAterPublish)
-			: mConcreteSubscribers(concreteSubscribers)
+		EventPublisher::EventPublisher(Vector<EventSubscriber*>& concreteSubscribers, bool deleteAterPublish)
+			: mConcreteSubscribers(&concreteSubscribers)
 			, mbDeleteAfterPublish(deleteAterPublish)
 		{
 		}
@@ -37,7 +37,7 @@ namespace GameEngine
 
 		void EventPublisher::Deliver()
 		{
-			for (EventSubscriber* eventSubscriber : mConcreteSubscribers)
+			for (EventSubscriber* eventSubscriber : *mConcreteSubscribers)
 			{
 				eventSubscriber->Notify(*this);
 			}
