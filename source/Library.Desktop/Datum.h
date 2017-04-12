@@ -51,7 +51,7 @@ namespace GameEngine
 			 *	\brief	This enum stores the different types
 			 *			of data this container can store.
 			 */
-			enum class DatumType
+			enum class DatumType : std::int8_t
 			{
 				Unknown = -1,
 				Integer = 0,
