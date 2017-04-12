@@ -14,23 +14,23 @@ namespace GameEngine
 		{
 		}
 
-		void EventPublisher::SetTime(const std::chrono::high_resolution_clock::time_point& timeNow, const std::chrono::milliseconds& delay)
+		void EventPublisher::SetTime(const time_point& timeNow, const milliseconds& delay)
 		{
 			mTimeEnqueued = timeNow;
 			mDelay = delay;
 		}
 
-		const std::chrono::high_resolution_clock::time_point& EventPublisher::TimeEnqueued() const
+		const EventPublisher::time_point& EventPublisher::TimeEnqueued() const
 		{
 			return mTimeEnqueued;
 		}
 
-		const std::chrono::milliseconds& EventPublisher::Delay() const
+		const EventPublisher::milliseconds& EventPublisher::Delay() const
 		{
 			return mDelay;
 		}
 
-		bool EventPublisher::IsExpired(const std::chrono::high_resolution_clock::time_point & timeNow) const
+		bool EventPublisher::IsExpired(const time_point& timeNow) const
 		{
 			return (mTimeEnqueued + mDelay) <= timeNow;
 		}

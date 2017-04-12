@@ -7,7 +7,7 @@ namespace GameEngine
 {
 	namespace Library
 	{
-		void EventQueue::Enqueue(EventPublisher& publisher, const GameTime& gameTime, const std::chrono::milliseconds& delay)
+		void EventQueue::Enqueue(EventPublisher& publisher, const GameTime& gameTime, const milliseconds& delay)
 		{
 			publisher.SetTime(gameTime.CurrentTime(), delay);
 			mEventQueue.PushBack(&publisher);
