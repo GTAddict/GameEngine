@@ -69,19 +69,19 @@ namespace GameEngine
 			*									with that factory.
 			*	\return							The name of the class associated with this factory.
 			*/
-			virtual std::string					GetClassName() const = 0;
+			virtual const std::string&			GetClassName() const = 0;
 
 			/**
 			*	\brief							Registers a concrete factory with the abstract factory.
 			*	\param factory					The concrete factory to register.
 			*/
-			static void							Add(Factory<T>* factory);
+			static void							Add(Factory<T>& factory);
 
 			/**
 			*	\brief							Unregisters a concrete factory from the abstract factory.
 			*	\param factory					The concrete factory to unregister.
 			*/
-			static void							Remove(Factory<T>* factory);
+			static void							Remove(Factory<T>& factory);
 
 		private:
 
@@ -94,15 +94,18 @@ namespace GameEngine
 		class ConcreteProductT ## Factory final : public Factory<AbstractProductT>		\
 		{																				\
 		public:																			\
-			ConcreteProductT ## Factory()				{ Add(this); }					\
-			~ConcreteProductT ## Factory()				{ Remove(this); }				\
-			virtual std::string GetClassName() const	{ return # ConcreteProductT; }	\
+			ConcreteProductT ## Factory()												\
+				: mClassName(# ConcreteProductT)			{ Add(*this); }				\
+			~ConcreteProductT ## Factory()					{ Remove(*this); }			\
+			virtual const std::string& GetClassName() const	{ return mClassName; }		\
 			virtual AbstractProductT* Create()											\
 			{																			\
 				AbstractProductT* product = new ConcreteProductT();						\
 				assert(product != nullptr);												\
 				return product;															\
 			}																			\
+		private:																		\
+			std::string mClassName;														\
 		};																				
 	}
 }

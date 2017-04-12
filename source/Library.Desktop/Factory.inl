@@ -29,17 +29,15 @@ inline T* GameEngine::Library::Factory<T>::Create(const std::string& classname)
 }
 
 template <typename T>
-inline void GameEngine::Library::Factory<T>::Add(Factory<T>* factory)
+inline void GameEngine::Library::Factory<T>::Add(Factory<T>& factory)
 {
-	assert(factory != nullptr);
-	m_sFactoryMap[factory->GetClassName()] = factory;
+	m_sFactoryMap[factory.GetClassName()] = &factory;
 }
 
 template <typename T>
-inline void GameEngine::Library::Factory<T>::Remove(Factory<T>* factory)
+inline void GameEngine::Library::Factory<T>::Remove(Factory<T>& factory)
 {
-	assert(factory != nullptr);
-	m_sFactoryMap.Remove(factory->GetClassName());
+	m_sFactoryMap.Remove(factory.GetClassName());
 }
 		
 template<typename T>
