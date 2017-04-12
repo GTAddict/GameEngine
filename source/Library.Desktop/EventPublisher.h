@@ -9,7 +9,7 @@ namespace GameEngine
 	{
 		class EventSubscriber;
 
-		class EventPublisher : public RTTI
+		class EventPublisher abstract : public RTTI
 		{
 			RTTI_DECLARATIONS(EventPublisher, RTTI);
 
