@@ -108,10 +108,10 @@ namespace GameEngine
 
 		private:
 
-			Vector<EventSubscriber*>*						mConcreteSubscribers;	/**< A pointer to the list of subscribers to notify. */
-			bool											mbDeleteAfterPublish;	/**< Whether or not this should be deleted after being published. */
-			std::chrono::high_resolution_clock::time_point	mTimeEnqueued;			/**< The time point at which the was added to the EventQueue. */
-			std::chrono::milliseconds						mDelay;					/**< The delay after the time enqueued that this is schedule to be delivered. */
+			Vector<EventSubscriber*>*	mConcreteSubscribers;	/**< A pointer to the list of subscribers to notify. */
+			bool						mbDeleteAfterPublish;	/**< Whether or not this should be deleted after being published. */
+			time_point					mTimeEnqueued;			/**< The time point at which the was added to the EventQueue. */
+			milliseconds				mDelay;					/**< The delay after the time enqueued that this is schedule to be delivered. */
 		};
 	}
 }
