@@ -117,6 +117,18 @@
     <ClInclude Include="EventQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Reaction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventMessageAttributed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReactionAttributed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils.cpp">
@@ -192,6 +204,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="EventQueue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Reaction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventMessageAttributed.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReactionAttributed.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
