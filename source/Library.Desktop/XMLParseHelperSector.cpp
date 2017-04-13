@@ -12,19 +12,21 @@ namespace GameEngine
 
 		bool XMLParseHelperSector::StartElementHandler(const std::string & element, const HashMapType attributes)
 		{
-			if (!mbIsInitialized || !mpSharedData->Is(XMLParseHelperTable::SharedDataTable::TypeIdClass()))	return false;
-
 			XMLParseHelperTable::SharedDataTable* sharedData = mpSharedData->As<XMLParseHelperTable::SharedDataTable>();
+
+			if (!mbIsInitialized || !sharedData)	return false;
 
 			if (element == SECTOR_IDENTIFIER)
 			{
 				assert(sharedData->mScope != nullptr);
-				if (!sharedData->mScope->Is(World::TypeIdClass()))
+				World* world = sharedData->mScope->As<World>();
+
+				if (!world)
 				{
 					throw std::runtime_error("Sectors can only be children of worlds!");
 				}
 
-				Sector& sector = sharedData->mScope->As<World>()->CreateSector();
+				Sector& sector = world->CreateSector();
 				if (attributes.ContainsKey(NAME_IDENTIFIER))
 				{
 					sector.SetName(attributes[NAME_IDENTIFIER]);
@@ -39,9 +41,9 @@ namespace GameEngine
 
 		bool XMLParseHelperSector::EndElementHandler(const std::string & element)
 		{
-			if (!mbIsInitialized || !mpSharedData->Is(XMLParseHelperTable::SharedDataTable::TypeIdClass()))	return false;
-
 			XMLParseHelperTable::SharedDataTable* sharedData = mpSharedData->As<XMLParseHelperTable::SharedDataTable>();
+
+			if (!mbIsInitialized || !sharedData)	return false;
 
 			if (element == SECTOR_IDENTIFIER)
 			{

@@ -14,6 +14,7 @@
 #include "XMLParseHelperSector.h"
 #include "XMLParseHelperEntity.h"
 #include "XMLParseHelperAction.h"
+#include "XMLParseHelperExpression.h"
 #include "World.h"
 #include "Sector.h"
 #include "Entity.h"

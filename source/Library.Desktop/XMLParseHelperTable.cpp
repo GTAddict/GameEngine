@@ -23,17 +23,14 @@ namespace GameEngine
 
 		XMLParseMaster::SharedData* XMLParseHelperTable::SharedDataTable::Clone() const
 		{
-			SharedData* pClone = new SharedDataTable();
-			pClone->SetXMLParseMaster(GetXMLParseMaster());
-			// Clone scope?
-			return pClone;
+			return new SharedDataTable();
 		}
 
 		bool XMLParseHelperTable::StartElementHandler(const std::string& element, const HashMapType attributes)
 		{
-			if (!mbIsInitialized || !mpSharedData->Is(SharedDataTable::TypeIdClass()))	return false;
-
 			SharedDataTable* sharedData = mpSharedData->As<SharedDataTable>();
+
+			if (!mbIsInitialized || !sharedData)	return false;
 
 			if (element == INTEGER_IDENTIFIER)
 			{

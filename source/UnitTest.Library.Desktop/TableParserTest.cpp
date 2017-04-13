@@ -64,7 +64,7 @@ namespace UnitTestTableParser
 			parseMaster.AddHelper(new XMLParseHelperSector());
 			parseMaster.AddHelper(new XMLParseHelperEntity());
 			parseMaster.AddHelper(new XMLParseHelperAction());
-			// parseMaster.AddHelper(new XMLParseHelperActionExpression());
+			parseMaster.AddHelper(new XMLParseHelperExpression());
 			parseMaster.ParseFromFile("TableParserTestData.xml");
 
 			GameClock clock;

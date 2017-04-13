@@ -4,24 +4,38 @@
 			<integer name="AnInteger" value="5" />
 			<float name="AFloat" value="5.6" />
 			<string name="AString" value="Hello" index="0" />
-			<action class="ActionExpression" name="shouldbe29" expression="AnInteger * AFloat + 1" />
+			<action class="ActionExpression" name="shouldbe29">
+				<expression value="AnInteger * AFloat + 1" />
+			</action>
 		</entity>
 		<entity class="AnotherClass" name="two">
 			<string name="AString" value="Hi" index="1" />
 			<vector name="AVector" value="vec4(2.2, 3.3, 4.4, 55)" />
 			<matrix name="AMatrix" value="mat4x4((1.1, 2.2, 3.3, 4.4), (5.5, 6.6, 7.7, 8.8), (9.9, 10.10, 11.11, 12.12), (13.13, 14.14, 15.15, 16.16))" />
-			<action class="ActionExpression" name="Random" expression="2 + 4 -5 *6 / 7^ 8 + (sin11 + cos12+  tan13 + (acos0.1 + asin(0.515)) +  atan0.16)+ pow(2, 2) + log(5)+  sqrt(4)+  invsqrt(5)" />
+			<action class="ActionExpression" name="Random">
+				<expression value="2 + 4 -5 *6 / 7^ 8 + (sin11 + cos12+  tan13 + (acos0.1 + asin(0.515)) +  atan0.16)+ pow(2, 2) + log(5)+  sqrt(4)+  invsqrt(5)" />
+			</action>
 		</entity>
 	</sector>
 	<sector name="test">
 		<entity class="TestClass" name="three">
 			<integer name="LastInt" value="22" />
 			<float name="LastFloat" value="4.4" />
-			<action class="ActionExpression" name="Random1" expression="LastInt > 5" />
-			<action class="ActionExpression" name="Random" expression="!(LastInt > 5)" />
-			<action class="ActionExpression" name="Random2" expression="LastFloat == 22" />
-			<action class="ActionExpression" name="Random3" expression="LastFloat == 5 || LastInt == 22" />
-			<action class="ActionExpression" name="Random4" expression="!(LastFloat == 22)" />
+			<action class="ActionExpression" name="Random1">
+				<expression value="LastInt > 5" />
+			</action>
+			<action class="ActionExpression" name="Random">
+				<expression value="!(LastInt > 5)" />
+			</action>
+			<action class="ActionExpression" name="Random2">
+				<expression value="LastFloat == 22" />
+			</action>
+			<action class="ActionExpression" name="Random3">
+				<expression value="LastFloat == 5 || LastInt == 22" />
+			</action>
+			<action class="ActionExpression" name="Random4">
+				<expression value="!(LastFloat == 22)" />
+			</action>
 		</entity>
 		<entity class="AnotherClass" name="four">
 			<string name="LastString" value="bleep" index="1" />

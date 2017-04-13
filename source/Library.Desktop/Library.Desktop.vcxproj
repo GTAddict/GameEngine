@@ -224,6 +224,7 @@
     <ClInclude Include="WorldState.h" />
     <ClInclude Include="XMLParseHelperAction.h" />
     <ClInclude Include="XMLParseHelperEntity.h" />
+    <ClInclude Include="XMLParseHelperExpression.h" />
     <ClInclude Include="XMLParseHelperSector.h" />
     <ClInclude Include="XMLParseHelperTable.h" />
     <ClInclude Include="SList.h" />
@@ -262,6 +263,7 @@
     <ClCompile Include="WorldState.cpp" />
     <ClCompile Include="XMLParseHelperAction.cpp" />
     <ClCompile Include="XMLParseHelperEntity.cpp" />
+    <ClCompile Include="XMLParseHelperExpression.cpp" />
     <ClCompile Include="XMLParseHelperSector.cpp" />
     <ClCompile Include="XMLParseHelperTable.cpp" />
     <ClCompile Include="Utils.cpp" />

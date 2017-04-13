@@ -12,19 +12,20 @@ namespace GameEngine
 
 		bool XMLParseHelperEntity::StartElementHandler(const std::string& element, const HashMapType attributes)
 		{
-			if (!mbIsInitialized || !mpSharedData->Is(XMLParseHelperTable::SharedDataTable::TypeIdClass()))	return false;
-
 			XMLParseHelperTable::SharedDataTable* sharedData = mpSharedData->As<XMLParseHelperTable::SharedDataTable>();
+
+			if (!mbIsInitialized || !sharedData)	return false;
 
 			if (element == ENTITY_IDENTIFIER)
 			{
 				assert(sharedData->mScope != nullptr);
-				if (!sharedData->mScope->Is(Sector::TypeIdClass()))
+				Sector* sector = sharedData->mScope->As<Sector>();
+				if (!sector)
 				{
 					throw std::runtime_error("Entities can only be children of sectors!");
 				}
 
-				sharedData->mScope = &sharedData->mScope->As<Sector>()->CreateEntity(attributes[CLASS_IDENTIFIER], attributes[NAME_IDENTIFIER]);
+				sharedData->mScope = &sector->CreateEntity(attributes[CLASS_IDENTIFIER], attributes[NAME_IDENTIFIER]);
 				return true;
 			}
 
@@ -33,9 +34,9 @@ namespace GameEngine
 
 		bool XMLParseHelperEntity::EndElementHandler(const std::string & element)
 		{
-			if (!mbIsInitialized || !mpSharedData->Is(XMLParseHelperTable::SharedDataTable::TypeIdClass()))	return false;
-
 			XMLParseHelperTable::SharedDataTable* sharedData = mpSharedData->As<XMLParseHelperTable::SharedDataTable>();
+
+			if (!mbIsInitialized || !sharedData)	return false;
 
 			if (element == ENTITY_IDENTIFIER)
 			{

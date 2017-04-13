@@ -9,11 +9,11 @@ namespace GameEngine
 	{
 		using namespace TableParserConstants;
 
-		bool XMLParseHelperWorld::StartElementHandler(const std::string & element, const HashMapType attributes)
+		bool XMLParseHelperWorld::StartElementHandler(const std::string& element, const HashMapType attributes)
 		{
-			if (!mbIsInitialized || !mpSharedData->Is(XMLParseHelperTable::SharedDataTable::TypeIdClass()))	return false;
-
 			XMLParseHelperTable::SharedDataTable* sharedData = mpSharedData->As<XMLParseHelperTable::SharedDataTable>();
+
+			if (!mbIsInitialized || !sharedData)	return false;
 
 			if (element == WORLD_IDENTIFIER)
 			{
@@ -39,9 +39,9 @@ namespace GameEngine
 
 		bool XMLParseHelperWorld::EndElementHandler(const std::string & element)
 		{
-			if (!mbIsInitialized || !mpSharedData->Is(XMLParseHelperTable::SharedDataTable::TypeIdClass()))	return false;
-
 			XMLParseHelperTable::SharedDataTable* sharedData = mpSharedData->As<XMLParseHelperTable::SharedDataTable>();
+
+			if (!mbIsInitialized || !sharedData)	return false;
 
 			if (element == WORLD_IDENTIFIER)
 			{
