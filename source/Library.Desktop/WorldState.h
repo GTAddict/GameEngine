@@ -33,6 +33,7 @@ namespace GameEngine
 			class Sector*		mpSector;		/**< A pointer to the current Sector being simulated. */
 			class Entity*		mpEntity;		/**< A pointer to the current Entity being simulated. */
 			class Action*		mpAction;		/**< A pointer to the current Action being simulated. */
+			class EventQueue*	mpEventQueue;	/**< A pointer to the Event Queue that processes Events. */
 
 		private:
 			const GameTime*		mpGameTime;		/**< A pointer to the GameTime object. */
