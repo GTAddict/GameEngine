@@ -318,6 +318,22 @@ namespace GameEngine
 			mHashMap.Clear();
 		}
 
+		std::uint32_t Scope::Size() const
+		{
+			assert(mHashMap.Size() == mVector.Size());
+			return mVector.Size();
+		}
+
+		Scope::VectorType::Iterator Scope::begin() const
+		{
+			return mVector.begin();
+		}
+
+		Scope::VectorType::Iterator Scope::end() const
+		{
+			return mVector.end();
+		}
+
 		void Scope::Orphan()
 		{
 			if (mpParent)

@@ -181,6 +181,16 @@ namespace GameEngine
 			*/
 			void					Clear();
 
+			/**
+			*	\brief				Returns the number of Datums contained in this Scope.
+			*	\return				The number of Datums inserted into this Scope.
+			*/
+			std::uint32_t			Size() const;
+
+			VectorType::Iterator	begin() const;
+
+			VectorType::Iterator	end()	const;
+
 		private:
 
 			/**
