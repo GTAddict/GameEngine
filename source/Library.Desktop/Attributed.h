@@ -156,10 +156,16 @@ namespace GameEngine
 			*/
 			Datum&				AppendAuxiliaryAttribute(const std::string& name);
 
+			/**
+			*	\brief			Returns the number of prescribed attributes for the derived class type.
+			*	\return			The number of prescribed attributes for TypeIdInstance().
+			*/
+			std::uint32_t		GetPrescribedAttributeCount() const;
+
 		private:
 
 			static HashMap<std::uint64_t, HashMap<std::string, Datum>>	s_mPrescribedAttributes;		/**< A static HashMap of all the prescribed attributes per class type. */
-			static std::uint32_t mInstanceCount;														/**< Holds current class instance count. */
+			static std::uint32_t										mInstanceCount;					/**< Holds current class instance count. */
 		};
 
 #include "Attributed.inl"

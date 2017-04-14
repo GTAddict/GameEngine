@@ -118,6 +118,11 @@ namespace GameEngine
 			return Append(name);
 		}
 
+		std::uint32_t Attributed::GetPrescribedAttributeCount() const
+		{
+			return s_mPrescribedAttributes[TypeIdInstance()].Size();
+		}
+
 		bool Attributed::IsPrescribedAttribute(const std::string& name) const
 		{
 			return IsAttribute(name) && s_mPrescribedAttributes[TypeIdInstance()].ContainsKey(name);
