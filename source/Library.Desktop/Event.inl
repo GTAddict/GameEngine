@@ -36,3 +36,9 @@ inline const T& GameEngine::Library::Event<T>::Message() const
 {
 	return mMessage;
 }
+
+template<typename T>
+inline T& GameEngine::Library::Event<T>::Message()
+{
+	return mMessage;
+}

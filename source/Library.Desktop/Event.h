@@ -81,6 +81,14 @@ namespace GameEngine
 			*/
 			const T&				Message() const;
 
+			/**
+			*	\brief				Returns the message associated with this
+			*						Event.
+			*	\return				A non-const reference to the message contained
+			*						in this event.
+			*/
+			T&						Message();
+
 		private:
 
 			static Vector<EventSubscriber*>		mSubscribers;	/**< The list of subscribers to send notifications to. */
