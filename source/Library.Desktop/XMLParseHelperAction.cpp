@@ -3,8 +3,6 @@
 #include "XMLParseHelperTable.h"
 #include "Action.h"
 #include "Entity.h"
-#include "Expression.h"
-#include "ActionExpression.h"
 
 namespace GameEngine
 {
