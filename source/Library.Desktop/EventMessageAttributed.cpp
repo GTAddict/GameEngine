@@ -8,7 +8,7 @@ namespace GameEngine
 	{
 		namespace EventMessageAttributedConstants
 		{
-			const std::string SUBTYPE_IDENTIFIER = "Subtype";
+			const std::string SUBTYPE_IDENTIFIER = "subtype";
 		}
 
 		using namespace EventMessageAttributedConstants;

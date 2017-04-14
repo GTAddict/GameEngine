@@ -23,10 +23,10 @@ namespace GameEngine
 			const std::string MATRIX_IDENTIFIER			= "matrix";
 			const std::string STRING_IDENTIFIER			= "string";
 
-			const std::string CLASS_IDENTIFIER		= "class";
-			const std::string NAME_IDENTIFIER		= "name";
-			const std::string VALUE_IDENTIFIER		= "value";
-			const std::string INDEX_IDENTIFIER		= "index";
+			const std::string CLASS_IDENTIFIER			= "class";
+			const std::string NAME_IDENTIFIER			= "name";
+			const std::string VALUE_IDENTIFIER			= "value";
+			const std::string INDEX_IDENTIFIER			= "index";
 		}
 
 		class Scope;

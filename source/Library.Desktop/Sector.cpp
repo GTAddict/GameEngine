@@ -11,8 +11,8 @@ namespace GameEngine
 	{
 		namespace SectorConstants
 		{
-			const std::string NAME_IDENTIFIER		= "Name";
-			const std::string ENTITIES_IDENTIFIER	= "Entities";
+			const std::string NAME_IDENTIFIER		= "name";
+			const std::string ENTITIES_IDENTIFIER	= "entities";
 		}
 
 		RTTI_DEFINITIONS(Sector);

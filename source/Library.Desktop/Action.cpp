@@ -7,7 +7,7 @@ namespace GameEngine
 	{
 		namespace ActionConstants
 		{
-			const std::string NAME_IDENTIFIER = "Name";
+			const std::string NAME_IDENTIFIER = "name";
 		}
 
 		RTTI_DEFINITIONS(Action);

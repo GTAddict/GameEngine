@@ -12,9 +12,9 @@ namespace GameEngine
 	{
 		namespace EntityConstants
 		{
-			const std::string NAME_IDENTIFIER		= "Name";
-			const std::string ACTIONS_IDENTIFIER	= "Actions";
-			const std::string REACTIONS_IDENTIFIER	= "Reactions";
+			const std::string NAME_IDENTIFIER		= "name";
+			const std::string ACTIONS_IDENTIFIER	= "actions";
+			const std::string REACTIONS_IDENTIFIER	= "reactions";
 		}
 
 		RTTI_DEFINITIONS(Entity);

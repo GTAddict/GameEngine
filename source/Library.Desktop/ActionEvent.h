@@ -21,12 +21,15 @@ namespace GameEngine
 		public:
 			
 			/**
-			*	\brief				Default constructor. Adds the subtype and the
-			*						delay as a prescribed attribute. Creates a new
-			*						EventMessageAttributed and Event.
+			*	\brief				Default constructor. Adds the subtype and the delay as
+			*						a prescribed attribute. Creates a new Event of type
+			*						EventMessageAttributed and stores it for reuse.
 			*/
 									ActionEvent();
 
+			/**
+			*	\brief				Destructor. Deletes the Event created in the constructor.
+			*/
 									~ActionEvent();
 
 			/**
@@ -41,7 +44,7 @@ namespace GameEngine
 
 			std::string								mSubtype;	/**< The subtype of the event. */
 			std::int32_t							mDelay;		/**< The delay to enqueue this event with. */
-			Event<EventMessageAttributed>*			mEvent;
+			Event<EventMessageAttributed>*			mEvent;		/**< The Event that will be sent on Update. */
 		};
 
 		ActionFactory(ActionEvent);

@@ -10,8 +10,8 @@ namespace GameEngine
 	{
 		namespace ActionEventConstants
 		{
-			const std::string SUBTYPE_IDENTIFIER = "Subtype";
-			const std::string DELAY_IDENTIFIER = "Delay";
+			const std::string SUBTYPE_IDENTIFIER	= "subtype";
+			const std::string DELAY_IDENTIFIER		= "delay";
 		}
 
 		using namespace ActionEventConstants;

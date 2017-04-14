@@ -8,7 +8,7 @@ namespace GameEngine
 	{
 		namespace ActionListConstants
 		{
-			const std::string ACTIONS_IDENTIFIER = "Actions";
+			const std::string ACTIONS_IDENTIFIER = "actions";
 		}
 
 		RTTI_DEFINITIONS(ActionList);

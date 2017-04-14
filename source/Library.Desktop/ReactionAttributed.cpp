@@ -9,7 +9,7 @@ namespace GameEngine
 	{
 		namespace ReactionAttributedConstants
 		{
-			const std::string SUBTYPES_IDENTIFIER = "Subtypes";
+			const std::string SUBTYPES_IDENTIFIER = "subtypes";
 		}
 
 		using namespace ReactionAttributedConstants;

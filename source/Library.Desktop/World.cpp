@@ -9,8 +9,8 @@ namespace GameEngine
 	{
 		namespace WorldConstants
 		{
-			const std::string NAME_IDENTIFIER		= "Name";
-			const std::string SECTORS_IDENTIFIER	= "Sectors";
+			const std::string NAME_IDENTIFIER		= "name";
+			const std::string SECTORS_IDENTIFIER	= "sectors";
 		}
 
 		RTTI_DEFINITIONS(World);
