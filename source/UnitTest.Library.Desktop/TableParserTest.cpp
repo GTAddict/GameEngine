@@ -50,12 +50,10 @@ namespace UnitTestTableParser
 
 		TEST_METHOD(TestEntities)
 		{
-			ConcreteFactory(Entity, TestClass);
-			ConcreteFactory(Entity, AnotherClass);
 			TestClassFactory testClassFactory;
 			AnotherClassFactory anotherClassFactory;
-			ActionFactory(ActionExpression);
 			ActionExpressionFactory actionExpressionFactory;
+			ActionEventFactory actionEventFactory;
 
 			XMLParseHelperTable::SharedDataTable* sharedData = new XMLParseHelperTable::SharedDataTable();
 			XMLParseMaster parseMaster(sharedData);
@@ -65,14 +63,17 @@ namespace UnitTestTableParser
 			parseMaster.AddHelper(new XMLParseHelperEntity());
 			parseMaster.AddHelper(new XMLParseHelperAction());
 			parseMaster.AddHelper(new XMLParseHelperExpression());
+			parseMaster.AddHelper(new XMLParseHelperReaction());
 			parseMaster.ParseFromFile("TableParserTestData.xml");
 
+			EventQueue e;
 			GameClock clock;
 			GameTime gameTime;
 			WorldState state;
 			state.SetGameTime(gameTime);
 			clock.UpdateGameTime(gameTime);
 			state.mpWorld = sharedData->mScope->As<World>();
+			state.mpEventQueue = &e;
 			state.mpWorld->Update(state);
 
 			Assert::IsTrue(state.GetGameTime().TotalGameTime() == gameTime.TotalGameTime());
@@ -97,8 +98,6 @@ namespace UnitTestTableParser
 
 		TEST_METHOD(TestMoveSemantics)
 		{
-			ConcreteFactory(Entity, TestClass);
-			ConcreteFactory(Entity, AnotherClass);
 			TestClassFactory testClassFactory;
 			AnotherClassFactory anotherClassFactory;
 
@@ -249,6 +248,8 @@ namespace UnitTestTableParser
 
 		class TestClass : public Entity {};
 		class AnotherClass : public Entity {};
+		ConcreteFactory(Entity, TestClass);
+		ConcreteFactory(Entity, AnotherClass);
 
 	};
 

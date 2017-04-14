@@ -26,3 +26,5 @@ public:
 private:
 	int* mpData;
 };
+
+ConcreteFactory(RTTI, Foo);

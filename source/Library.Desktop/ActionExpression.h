@@ -42,7 +42,6 @@ namespace GameEngine
 			double					mResult;			/**< The result of the calculation. Mainly for testing. */
 		};
 
-#define ActionFactory(ConcreteAction)	ConcreteFactory(Action, ConcreteAction)
-
+		ActionFactory(ActionExpression);
 	}
 }

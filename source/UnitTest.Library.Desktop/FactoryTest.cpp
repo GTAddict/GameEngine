@@ -14,8 +14,6 @@ namespace UnitTestFactory
 
 		TEST_METHOD(TestConstructor)
 		{
-			ConcreteFactory(RTTI, Foo);
-			ConcreteFactory(RTTI, AttributedFoo);
 			ConcreteFactory(Scope, Attributed);
 
 			FooFactory fooFactory;

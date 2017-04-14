@@ -38,3 +38,5 @@ private:
 	Scope*			mpUnknownScope;
 	RTTI*			mpRTTI;
 };
+
+ConcreteFactory(RTTI, AttributedFoo);
