@@ -275,6 +275,7 @@ namespace GameEngine
 			*/
 			bool					IsFunctionOperator(const std::string& token) const;
 
+
 			/**
 			*	\brief				Tries to interpret the string beginning at
 			*						the iterator as a number. Advances the iterator
