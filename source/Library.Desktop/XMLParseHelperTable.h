@@ -14,6 +14,7 @@ namespace GameEngine
 			const std::string ENTITY_IDENTIFIER			= "entity";
 
 			const std::string ACTION_IDENTIFIER			= "action";
+			const std::string REACTION_IDENTIFIER		= "reaction";
 			const std::string EXPRESSION_IDENTIFIER		= "expression";
 
 			const std::string INTEGER_IDENTIFIER		= "integer";

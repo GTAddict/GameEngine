@@ -225,6 +225,7 @@
     <ClInclude Include="XMLParseHelperAction.h" />
     <ClInclude Include="XMLParseHelperEntity.h" />
     <ClInclude Include="XMLParseHelperExpression.h" />
+    <ClInclude Include="XMLParseHelperReaction.h" />
     <ClInclude Include="XMLParseHelperSector.h" />
     <ClInclude Include="XMLParseHelperTable.h" />
     <ClInclude Include="SList.h" />
@@ -264,6 +265,7 @@
     <ClCompile Include="XMLParseHelperAction.cpp" />
     <ClCompile Include="XMLParseHelperEntity.cpp" />
     <ClCompile Include="XMLParseHelperExpression.cpp" />
+    <ClCompile Include="XMLParseHelperReaction.cpp" />
     <ClCompile Include="XMLParseHelperSector.cpp" />
     <ClCompile Include="XMLParseHelperTable.cpp" />
     <ClCompile Include="Utils.cpp" />

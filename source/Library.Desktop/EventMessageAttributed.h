@@ -5,7 +5,7 @@ namespace GameEngine
 {
 	namespace Library
 	{
-		class World;
+		class WorldState;
 
 		/**
 		*	\class	EventMessageAttributed
@@ -40,23 +40,21 @@ namespace GameEngine
 			const std::string&		GetSubtype() const;
 
 			/**
-			*	\brief				Sets the world that will process this event message.
-			*	\param world		The world that is to process this event message.
+			*	\brief				Sets the current World State.
+			*	\param world		The current World State at the time the message is sent.
 			*/
-			void					SetWorld(World& world);
+			void					SetWorldState(WorldState& worldState);
 
 			/**
-			*	\brief				Returns the world that should process this event message.
-			*	\return				The world that is to process this event message.
+			*	\brief				Returns the World State pointer.
+			*	\return				The World State pointer.
 			*/
-			World&					GetWorld();
+			WorldState&				GetWorldState();
 
 		private:
 
-			std::string		mSubtype;	/**< The subtype of this event. */
-			World*			mpWorld;	/**< The world that will process this message. */
-
-
+			std::string				mSubtype;		/**< The subtype of this event. */
+			WorldState*				mpWorldState;	/**< The World State at the time the message is sent. */
 		};
 	}
 }

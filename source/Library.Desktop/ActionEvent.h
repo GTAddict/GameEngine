@@ -1,11 +1,14 @@
 #pragma once
 #include "Action.h"
+#include "EventMessageAttributed.h"
 
 namespace GameEngine
 {
 	namespace Library
 	{
 		class WorldState;
+		template <typename T>
+		class Event;
 
 		/**
 		*	\class	ActionEvent
@@ -19,9 +22,12 @@ namespace GameEngine
 			
 			/**
 			*	\brief				Default constructor. Adds the subtype and the
-			*						delay as a prescribed attribute.
+			*						delay as a prescribed attribute. Creates a new
+			*						EventMessageAttributed and Event.
 			*/
 									ActionEvent();
+
+									~ActionEvent();
 
 			/**
 			*	\brief				Sends an EventMessageAttributed after copying all
@@ -33,8 +39,11 @@ namespace GameEngine
 
 		private:
 
-			std::string		mSubtype;	/**< The subtype of the event. */
-			std::int32_t	mDelay;		/**< The delay to enqueue this event with. */
+			std::string								mSubtype;	/**< The subtype of the event. */
+			std::int32_t							mDelay;		/**< The delay to enqueue this event with. */
+			Event<EventMessageAttributed>*			mEvent;
 		};
+
+		ActionFactory(ActionEvent);
 	}
 }

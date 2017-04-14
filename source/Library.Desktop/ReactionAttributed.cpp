@@ -34,10 +34,16 @@ namespace GameEngine
 				{
 					if (subtype == message->GetSubtype())
 					{
-						// TODO Copy event args
-						// World& world = message->GetWorld();
-						// TODO Get WorldState and Update with it
-						// Update(world);
+						VectorType::Iterator itBegin = message->begin() + message->GetPrescribedAttributeCount();
+						VectorType::Iterator itEnd = message->end();
+
+						for (; itBegin != itEnd; ++itBegin)
+						{
+							auto& datumPair = *itBegin;
+							(*this)[datumPair->first] = datumPair->second;
+						}
+						
+						Update(message->GetWorldState());
 					}
 				}
 			}

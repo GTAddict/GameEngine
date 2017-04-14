@@ -14,7 +14,7 @@ namespace GameEngine
 		using namespace EventMessageAttributedConstants;
 
 		EventMessageAttributed::EventMessageAttributed()
-			: mpWorld(nullptr)
+			: mpWorldState(nullptr)
 		{
 			AddPrescribedAttributeExternal(SUBTYPE_IDENTIFIER, mSubtype);
 		}
@@ -29,14 +29,14 @@ namespace GameEngine
 			return mSubtype;
 		}
 
-		void EventMessageAttributed::SetWorld(World& world)
+		void EventMessageAttributed::SetWorldState(WorldState& worldState)
 		{
-			mpWorld = &world;
+			mpWorldState = &worldState;
 		}
 
-		World& EventMessageAttributed::GetWorld()
+		WorldState& EventMessageAttributed::GetWorldState()
 		{
-			return *mpWorld;
+			return *mpWorldState;
 		}
 	}
 }

@@ -3,6 +3,7 @@
 #include "Sector.h"
 #include "Factory.h"
 #include "Action.h"
+#include "Reaction.h"
 #include "WorldState.h"
 
 namespace GameEngine
@@ -11,8 +12,9 @@ namespace GameEngine
 	{
 		namespace EntityConstants
 		{
-			const std::string NAME_IDENTIFIER = "Name";
-			const std::string ACTIONS_IDENTIFIER = "Actions";
+			const std::string NAME_IDENTIFIER		= "Name";
+			const std::string ACTIONS_IDENTIFIER	= "Actions";
+			const std::string REACTIONS_IDENTIFIER	= "Reactions";
 		}
 
 		RTTI_DEFINITIONS(Entity);
@@ -21,6 +23,7 @@ namespace GameEngine
 
 		Entity::Entity()
 			: mpActions(AddPrescribedAttributeInternalWithType(ACTIONS_IDENTIFIER, Datum::DatumType::Table))
+			, mpReactions(AddPrescribedAttributeInternalWithType(REACTIONS_IDENTIFIER, Datum::DatumType::Table))
 		{
 			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
 		}
@@ -28,7 +31,11 @@ namespace GameEngine
 		Entity::Entity(Entity&& rhs)
 			: Attributed(std::move(rhs))
 			, mName(std::move(rhs.mName))
+			, mpActions(rhs.mpActions)
+			, mpReactions(rhs.mpReactions)
 		{
+			rhs.mpActions	= nullptr;
+			rhs.mpReactions = nullptr;
 		}
 
 		Entity& Entity::operator=(Entity&& rhs)
@@ -37,7 +44,12 @@ namespace GameEngine
 			
 			if (this != &rhs)
 			{
-				mName = std::move(rhs.mName);
+				mName		= std::move(rhs.mName);
+				mpActions	= rhs.mpActions;
+				mpReactions = rhs.mpReactions;
+
+				rhs.mpActions	= nullptr;
+				rhs.mpReactions = nullptr;
 			}
 
 			return *this;
@@ -77,6 +89,14 @@ namespace GameEngine
 			return action;
 		}
 
+		Reaction& Entity::CreateReaction(const std::string& className, const std::string& instanceName)
+		{
+			Reaction& reaction = *Factory<Reaction>::Create(className);
+			reaction.SetName(instanceName);
+			AdoptReaction(reaction);
+			return reaction;
+		}
+
 		void Entity::Update(WorldState& worldState)
 		{
 			for (std::uint32_t i = 0; i < mpActions->Size(); ++i)
@@ -90,6 +110,11 @@ namespace GameEngine
 		void Entity::AdoptAction(Action& action)
 		{
 			Adopt(action, ACTIONS_IDENTIFIER);
+		}
+
+		void Entity::AdoptReaction(Reaction& reaction)
+		{
+			Adopt(reaction, REACTIONS_IDENTIFIER);
 		}
 	}
 }

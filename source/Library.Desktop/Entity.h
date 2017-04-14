@@ -8,6 +8,7 @@ namespace GameEngine
 		class Sector;
 		class WorldState;
 		class Action;
+		class Reaction;
 
 		/**
 		*	\class	Entity
@@ -91,6 +92,13 @@ namespace GameEngine
 			Action&					CreateAction(const std::string& className, const std::string& instanceName);
 
 			/**
+			*	\brief				Creates a new Reaction from the Reaction Factory and
+			*						adopts it into itself.
+			*	\return				A reference to the Reaction just created.
+			*/
+			Reaction&				CreateReaction(const std::string& className, const std::string& instanceName);
+
+			/**
 			*	\brief				Runs the simulation.
 			*	\param worldState	The current world state encapsulated as a WorldState
 			*						object.
@@ -103,10 +111,17 @@ namespace GameEngine
 			*/
 			void					AdoptAction(Action& action);
 
+			/**
+			*	\brief				Adopts the provided Reaction into the Reactions table.
+			*	\param				The Reaction to be adopted.
+			*/
+			void					AdoptReaction(Reaction& action);
+
 		private:
 
-			std::string mName;		/**< The name of this Entity. */
-			Datum*		mpActions;	/**< The cached table of contained Actions. */
+			std::string mName;			/**< The name of this Entity. */
+			Datum*		mpActions;		/**< The cached table of contained Actions. */
+			Datum*		mpReactions;	/**< The cached table of contained Reactions. */
 		};
 	}
 }
