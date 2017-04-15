@@ -16,6 +16,7 @@
 				<expression value="2 + 4 -5 *6 / 7^ 8 + (sin11 + cos12+  tan13 + (acos0.1 + asin(0.515)) +  atan0.16)+ pow(2, 2) + log(5)+  sqrt(4)+  invsqrt(5)" />
 			</action>
 			<action class="ActionEvent" name="AnEvent">
+				<string name="subtype" value="fire" />
 				<string name="EventString" value="argString" />
 				<integer name="EventInteger" value="11" />
 				<float name="EventFloat" value="2.3" />
@@ -41,6 +42,9 @@
 			<action class="ActionExpression" name="Random4">
 				<expression value="!(LastFloat == 22)" />
 			</action>
+			<reaction class="ReactionAttributed" name="RespondToFire">
+				<string name="subtypes" value="fire" index="0" />
+			</reaction>
 		</entity>
 		<entity class="AnotherClass" name="four">
 			<string name="LastString" value="bleep" index="1" />
