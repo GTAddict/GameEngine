@@ -5,5 +5,6 @@ namespace GameEngine
 {
 	namespace Library
 	{
+		RTTI_DEFINITIONS(Reaction);
 	}
 }

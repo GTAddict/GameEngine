@@ -13,6 +13,8 @@ namespace GameEngine
 		*/
 		class Reaction abstract : public ActionList, public EventSubscriber
 		{
+			RTTI_DECLARATIONS(Reaction, ActionList);
+
 		public:
 
 			/**

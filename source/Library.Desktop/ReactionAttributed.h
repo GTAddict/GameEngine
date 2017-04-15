@@ -12,7 +12,9 @@ namespace GameEngine
 		*/
 		class ReactionAttributed final : public Reaction
 		{
-			static const std::uint32_t kMaxSubtypes = 5;
+			RTTI_DECLARATIONS(ReactionAttributed, Reaction);
+
+			static const std::uint32_t kMaxSubtypes = 255;
 
 		public:
 
@@ -41,8 +43,9 @@ namespace GameEngine
 
 		private:
 
-			std::string	mSubtypes[kMaxSubtypes];	/**< The subtypes this Reaction should respond to. */
+			std::string				mSubtypes[kMaxSubtypes];	/**< The subtypes this Reaction can respond to. */
 		};
 
+		ReactionFactory(ReactionAttributed);
 	}
 }

@@ -11,6 +11,8 @@ namespace GameEngine
 			const std::string SUBTYPE_IDENTIFIER = "subtype";
 		}
 
+		RTTI_DEFINITIONS(EventMessageAttributed);
+
 		using namespace EventMessageAttributedConstants;
 
 		EventMessageAttributed::EventMessageAttributed()

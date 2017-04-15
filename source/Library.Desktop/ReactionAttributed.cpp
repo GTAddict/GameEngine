@@ -12,11 +12,13 @@ namespace GameEngine
 			const std::string SUBTYPES_IDENTIFIER = "subtypes";
 		}
 
+		RTTI_DEFINITIONS(ReactionAttributed);
+
 		using namespace ReactionAttributedConstants;
 
 		ReactionAttributed::ReactionAttributed()
 		{
-			AddPrescribedAttributeInternal(SUBTYPES_IDENTIFIER, mSubtypes, kMaxSubtypes);
+			AddPrescribedAttributeExternal(SUBTYPES_IDENTIFIER, mSubtypes, kMaxSubtypes);
 			Event<EventMessageAttributed>::Subscribe(*this);
 		}
 
@@ -27,23 +29,25 @@ namespace GameEngine
 
 		void ReactionAttributed::Notify(const EventPublisher& event)
 		{
-			EventMessageAttributed* message = event.As<EventMessageAttributed>();
-			if (message)
+			Event<EventMessageAttributed>* eventMessageAttributed = event.As<Event<EventMessageAttributed>>();
+
+			if (eventMessageAttributed)
 			{
+				EventMessageAttributed& message = eventMessageAttributed->Message();
 				for (std::string& subtype : mSubtypes)
 				{
-					if (subtype == message->GetSubtype())
+					if (subtype == message.GetSubtype())
 					{
-						VectorType::Iterator itBegin = message->begin() + message->GetPrescribedAttributeCount();
-						VectorType::Iterator itEnd = message->end();
+						VectorType::Iterator itBegin = message.begin() + message.GetPrescribedAttributeCount();
+						VectorType::Iterator itEnd = message.end();
 
 						for (; itBegin != itEnd; ++itBegin)
 						{
 							auto& datumPair = *itBegin;
 							(*this)[datumPair->first] = datumPair->second;
 						}
-						
-						Update(message->GetWorldState());
+
+						Update(message.GetWorldState());
 					}
 				}
 			}

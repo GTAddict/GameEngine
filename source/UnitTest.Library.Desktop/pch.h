@@ -22,6 +22,8 @@
 #include "Action.h"
 #include "ActionExpression.h"
 #include "ActionEvent.h"
+#include "Reaction.h"
+#include "ReactionAttributed.h"
 #include "Factory.h"
 #include "Event.h"
 #include "EventQueue.h"

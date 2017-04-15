@@ -14,6 +14,8 @@ namespace GameEngine
 		*/
 		class EventMessageAttributed : public Attributed
 		{
+			RTTI_DECLARATIONS(EventMessageAttributed, Attributed);
+
 		public:
 
 			/**

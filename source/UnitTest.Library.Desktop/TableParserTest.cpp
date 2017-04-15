@@ -54,6 +54,7 @@ namespace UnitTestTableParser
 			AnotherClassFactory anotherClassFactory;
 			ActionExpressionFactory actionExpressionFactory;
 			ActionEventFactory actionEventFactory;
+			ReactionAttributedFactory reactionAttributedFactory;
 
 			XMLParseHelperTable::SharedDataTable* sharedData = new XMLParseHelperTable::SharedDataTable();
 			XMLParseMaster parseMaster(sharedData);
@@ -75,6 +76,7 @@ namespace UnitTestTableParser
 			state.mpWorld = sharedData->mScope->As<World>();
 			state.mpEventQueue = &e;
 			state.mpWorld->Update(state);
+			e.Update(gameTime);
 
 			Assert::IsTrue(state.GetGameTime().TotalGameTime() == gameTime.TotalGameTime());
 			Assert::IsTrue(state.mpWorld->Name() == "root");
