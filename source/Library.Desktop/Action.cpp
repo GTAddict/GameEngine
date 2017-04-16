@@ -16,7 +16,7 @@ namespace GameEngine
 
 		Action::Action()
 		{
-			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
+			Populate();
 		}
 
 		const std::string& Action::Name() const
@@ -32,6 +32,12 @@ namespace GameEngine
 			}
 
 			mName = name;
+		}
+
+		void Action::Populate()
+		{
+			Parent::Populate();
+			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
 		}
 	}
 }

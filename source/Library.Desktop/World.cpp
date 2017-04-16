@@ -18,13 +18,12 @@ namespace GameEngine
 		using namespace WorldConstants;
 
 		World::World()
-			: mpSectors(AddPrescribedAttributeInternalWithType(SECTORS_IDENTIFIER, Datum::DatumType::Table))
 		{
-			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
+			Populate();
 		}
 
 		World::World(World&& rhs)
-			: Attributed::Attributed(std::move(rhs))
+			: Parent(std::move(rhs))
 			, mName(std::move(rhs.mName))
 			, mpSectors(rhs.mpSectors)
 		{
@@ -33,7 +32,7 @@ namespace GameEngine
 
 		World& World::operator=(World&& rhs)
 		{
-			Attributed::operator=(rhs);
+			Parent::operator=(rhs);
 
 			if (this != &rhs)
 			{
@@ -86,6 +85,13 @@ namespace GameEngine
 		void World::AdoptSector(Sector& sector)
 		{
 			Adopt(sector, SECTORS_IDENTIFIER);
+		}
+
+		void World::Populate()
+		{
+			Parent::Populate();
+			mpSectors = (AddPrescribedAttributeInternalWithType(SECTORS_IDENTIFIER, Datum::DatumType::Table));
+			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
 		}
 	}
 }

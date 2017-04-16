@@ -117,6 +117,8 @@ namespace GameEngine
 			*/
 			void					AdoptReaction(Reaction& action);
 
+			virtual void			Populate();
+
 		private:
 
 			std::string mName;			/**< The name of this Entity. */

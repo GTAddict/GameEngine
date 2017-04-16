@@ -16,8 +16,8 @@ namespace GameEngine
 		using namespace ActionListConstants;
 
 		ActionList::ActionList()
-			: mpActions(AddPrescribedAttributeInternalWithType(ACTIONS_IDENTIFIER, Datum::DatumType::Table))
 		{
+			Populate();
 		}
 
 		void ActionList::AdoptAction(Action& action)
@@ -33,6 +33,12 @@ namespace GameEngine
 				worldState.mpAction = (*mpActions)[i].As<Action>();
 				worldState.mpAction->Update(worldState);
 			}
+		}
+
+		void ActionList::Populate()
+		{
+			Parent::Populate();
+			mpActions = AddPrescribedAttributeInternalWithType(ACTIONS_IDENTIFIER, Datum::DatumType::Table);
 		}
 	}
 }

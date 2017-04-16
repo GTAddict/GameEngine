@@ -20,13 +20,12 @@ namespace GameEngine
 		using namespace SectorConstants;
 
 		Sector::Sector()
-			: mpEntities(AddPrescribedAttributeInternalWithType(ENTITIES_IDENTIFIER, Datum::DatumType::Table))
 		{
-			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
+			Populate();
 		}
 
 		Sector::Sector(Sector&& rhs)
-			: Attributed::Attributed(std::move(rhs))
+			: Parent(std::move(rhs))
 			, mName(std::move(rhs.mName))
 			, mpEntities(rhs.mpEntities)
 		{
@@ -35,7 +34,7 @@ namespace GameEngine
 
 		Sector& Sector::operator=(Sector&& rhs)
 		{
-			Attributed::operator=(std::move(rhs));
+			Parent::operator=(std::move(rhs));
 
 			if (this != &rhs)
 			{
@@ -95,6 +94,13 @@ namespace GameEngine
 		void Sector::AdoptEntity(Entity& entity)
 		{
 			Adopt(entity, ENTITIES_IDENTIFIER);
+		}
+
+		void Sector::Populate()
+		{
+			Parent::Populate();
+			mpEntities = AddPrescribedAttributeInternalWithType(ENTITIES_IDENTIFIER, Datum::DatumType::Table);
+			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
 		}
 	}
 }

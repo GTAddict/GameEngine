@@ -22,14 +22,12 @@ namespace GameEngine
 		using namespace EntityConstants;
 
 		Entity::Entity()
-			: mpActions(AddPrescribedAttributeInternalWithType(ACTIONS_IDENTIFIER, Datum::DatumType::Table))
-			, mpReactions(AddPrescribedAttributeInternalWithType(REACTIONS_IDENTIFIER, Datum::DatumType::Table))
 		{
-			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
+			Populate();
 		}
 
 		Entity::Entity(Entity&& rhs)
-			: Attributed(std::move(rhs))
+			: Parent(std::move(rhs))
 			, mName(std::move(rhs.mName))
 			, mpActions(rhs.mpActions)
 			, mpReactions(rhs.mpReactions)
@@ -40,7 +38,7 @@ namespace GameEngine
 
 		Entity& Entity::operator=(Entity&& rhs)
 		{
-			Attributed::operator=(std::move(rhs));
+			Parent::operator=(std::move(rhs));
 			
 			if (this != &rhs)
 			{
@@ -115,6 +113,14 @@ namespace GameEngine
 		void Entity::AdoptReaction(Reaction& reaction)
 		{
 			Adopt(reaction, REACTIONS_IDENTIFIER);
+		}
+
+		void Entity::Populate()
+		{
+			Parent::Populate();
+			mpActions	= AddPrescribedAttributeInternalWithType(ACTIONS_IDENTIFIER, Datum::DatumType::Table);
+			mpReactions = AddPrescribedAttributeInternalWithType(REACTIONS_IDENTIFIER, Datum::DatumType::Table);
+			AddPrescribedAttributeExternal(NAME_IDENTIFIER, mName);
 		}
 	}
 }

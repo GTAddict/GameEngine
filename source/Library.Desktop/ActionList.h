@@ -40,6 +40,8 @@ namespace GameEngine
 			*/
 			void					Update(WorldState& worldState) override;
 
+			void					Populate();
+
 		private:
 
 			Datum*	mpActions;		/**< The cached table of contained Actions. */

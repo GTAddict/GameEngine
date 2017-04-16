@@ -41,6 +41,8 @@ namespace GameEngine
 			*/
 			void					Notify(const EventPublisher& event) override;
 
+			void					Populate();
+
 		private:
 
 			std::string				mSubtypes[kMaxSubtypes];	/**< The subtypes this Reaction can respond to. */

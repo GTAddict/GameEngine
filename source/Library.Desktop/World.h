@@ -89,6 +89,8 @@ namespace GameEngine
 			*/
 			void					AdoptSector(Sector& sector);
 
+			void					Populate();
+
 		private:
 
 			std::string mName;		/**< The name of this World. */

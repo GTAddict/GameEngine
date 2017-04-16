@@ -12,7 +12,7 @@ namespace GameEngine
 		*	\brief	This is the message that an	ActionEvent
 		*			will send on its Update() method.
 		*/
-		class EventMessageAttributed : public Attributed
+		class EventMessageAttributed final : public Attributed
 		{
 			RTTI_DECLARATIONS(EventMessageAttributed, Attributed);
 
@@ -23,11 +23,6 @@ namespace GameEngine
 			*						prescribed attribute.
 			*/
 									EventMessageAttributed();
-
-			/**
-			*	\brief				Default destructor.
-			*/
-			virtual					~EventMessageAttributed() = default;
 
 			/**
 			*	\brief				Sets the subtype of this event message.
@@ -52,6 +47,8 @@ namespace GameEngine
 			*	\return				The World State pointer.
 			*/
 			WorldState&				GetWorldState();
+
+			void					Populate();
 
 		private:
 

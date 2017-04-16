@@ -51,6 +51,8 @@ namespace GameEngine
 			*/
 			virtual void			Update(WorldState& worldState) = 0;
 
+			virtual void			Populate();
+
 		private:
 
 			std::string mName;		/**< The name of this Action. */

@@ -100,6 +100,8 @@ namespace GameEngine
 			*/
 			void					AdoptEntity(Entity& entity);
 
+			void					Populate();
+
 		private:
 
 			std::string mName;		/**< The name of this Sector. */

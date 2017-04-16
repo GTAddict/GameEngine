@@ -18,7 +18,7 @@ namespace GameEngine
 
 		ReactionAttributed::ReactionAttributed()
 		{
-			AddPrescribedAttributeExternal(SUBTYPES_IDENTIFIER, mSubtypes, kMaxSubtypes);
+			Populate();
 			Event<EventMessageAttributed>::Subscribe(*this);
 		}
 
@@ -51,6 +51,12 @@ namespace GameEngine
 					}
 				}
 			}
+		}
+
+		void ReactionAttributed::Populate()
+		{
+			Parent::Populate();
+			AddPrescribedAttributeExternal(SUBTYPES_IDENTIFIER, mSubtypes, kMaxSubtypes);
 		}
 	}
 }

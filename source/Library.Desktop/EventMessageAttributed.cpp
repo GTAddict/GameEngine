@@ -18,7 +18,7 @@ namespace GameEngine
 		EventMessageAttributed::EventMessageAttributed()
 			: mpWorldState(nullptr)
 		{
-			AddPrescribedAttributeExternal(SUBTYPE_IDENTIFIER, mSubtype);
+			Populate();
 		}
 
 		void EventMessageAttributed::SetSubtype(const std::string subtype)
@@ -39,6 +39,12 @@ namespace GameEngine
 		WorldState& EventMessageAttributed::GetWorldState()
 		{
 			return *mpWorldState;
+		}
+
+		void EventMessageAttributed::Populate()
+		{
+			Parent::Populate();
+			AddPrescribedAttributeExternal(SUBTYPE_IDENTIFIER, mSubtype);
 		}
 	}
 }
