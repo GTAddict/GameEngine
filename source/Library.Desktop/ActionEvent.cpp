@@ -14,14 +14,15 @@ namespace GameEngine
 			const std::string DELAY_IDENTIFIER		= "delay";
 		}
 
+		RTTI_DEFINITIONS(ActionEvent);
+
 		using namespace ActionEventConstants;
 
 		ActionEvent::ActionEvent()
 			: mDelay(0)
 			, mEvent(new Event<EventMessageAttributed>(EventMessageAttributed(), false))
 		{
-			AddPrescribedAttributeExternal(SUBTYPE_IDENTIFIER, mSubtype);
-			AddPrescribedAttributeExternal(DELAY_IDENTIFIER, mDelay);
+			Populate();
 		}
 
 		ActionEvent::~ActionEvent()
@@ -36,8 +37,8 @@ namespace GameEngine
 			message.SetSubtype(mSubtype);
 			message.SetWorldState(worldState);
 
-			VectorType::Iterator itBegin	= begin() + GetPrescribedAttributeCount();
-			VectorType::Iterator itEnd		= end();
+			VectorType::Iterator itBegin = begin() + GetPrescribedAttributeCount();
+			VectorType::Iterator itEnd	 = end();
 			
 			for ( ; itBegin != itEnd; ++itBegin)
 			{
@@ -51,6 +52,13 @@ namespace GameEngine
 				worldState.GetGameTime(),
 				std::chrono::duration<long long, std::milli>(mDelay)
 			);
+		}
+
+		void ActionEvent::Populate()
+		{
+			Parent::Populate();
+			AddPrescribedAttributeExternal(SUBTYPE_IDENTIFIER, mSubtype);
+			AddPrescribedAttributeExternal(DELAY_IDENTIFIER, mDelay);
 		}
 	}
 }

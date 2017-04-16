@@ -18,6 +18,8 @@ namespace GameEngine
 		*/
 		class ActionEvent final : public Action
 		{
+			RTTI_DECLARATIONS(ActionEvent, Action);
+
 		public:
 			
 			/**
@@ -39,6 +41,8 @@ namespace GameEngine
 			*						object.
 			*/
 			void					Update(WorldState& worldState);
+
+			void					Populate();
 
 		private:
 
