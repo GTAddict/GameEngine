@@ -4,7 +4,7 @@ setlocal ENABLEDELAYEDEXPANSION
 set PROJECTS_DIR=..\source
 set PROJECT_UNDER_TEST=Library.Desktop
 set UNIT_TEST_PROJECT=UnitTest.Library.Desktop
-set DEFAULT_BINARY_PATH=Win32\Release
+set DEFAULT_BINARY_PATH=Win32\Debug
 set COVERAGE_REPORTS_PATH=CoverageReports
 set TEST_RESULTS_PATH=TestResults
 
