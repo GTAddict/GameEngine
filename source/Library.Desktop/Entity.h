@@ -23,8 +23,7 @@ namespace GameEngine
 		public:
 
 			/**
-			*	\brief				Default constructor. Adds Name as an
-			*						Attribute.
+			*	\brief				Default constructor. Calls Populate.
 			*/
 									Entity();
 
@@ -117,7 +116,11 @@ namespace GameEngine
 			*/
 			void					AdoptReaction(Reaction& action);
 
-			virtual void			Populate();
+			/**
+			*	\brief				Calls Parent Populate and adds Name as an
+			*						Attribute.
+			*/
+			virtual void			Populate() override;
 
 		private:
 

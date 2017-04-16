@@ -21,8 +21,7 @@ namespace GameEngine
 		public:
 			
 			/**
-			*	\brief				Default constructor. Adds Name and Sectors
-			*						as Attributes.
+			*	\brief				Default constructor. Calls Populate.
 			*/
 									World();
 
@@ -89,7 +88,11 @@ namespace GameEngine
 			*/
 			void					AdoptSector(Sector& sector);
 
-			void					Populate();
+			/**
+			*	\brief				Calls Parent Populate and Adds Name and Sectors
+			*						as Attributes.
+			*/
+			void					Populate() override;
 
 		private:
 

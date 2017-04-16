@@ -36,6 +36,7 @@ namespace GameEngine
 			class EventQueue*	mpEventQueue;	/**< A pointer to the Event Queue that processes Events. */
 
 		private:
+
 			const GameTime*		mpGameTime;		/**< A pointer to the GameTime object. */
 		};
 	}

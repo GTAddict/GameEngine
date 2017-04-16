@@ -20,8 +20,7 @@ namespace GameEngine
 		public:
 
 			/**
-			*	\brief				Default constructor. Adds Name as an
-			*						Attribute.
+			*	\brief				Default constructor. Calls Populate.
 			*/
 									Action();
 
@@ -51,7 +50,10 @@ namespace GameEngine
 			*/
 			virtual void			Update(WorldState& worldState) = 0;
 
-			virtual void			Populate();
+			/**
+			*	\brief				Calls parent Populate and adds Name as an Attribute.
+			*/
+			virtual void			Populate() override;
 
 		private:
 

@@ -19,8 +19,7 @@ namespace GameEngine
 		public:
 
 			/**
-			*	\brief				Default constructor. Adds the subtype as a
-			*						prescribed attribute.
+			*	\brief				Default constructor. Calls Populate.
 			*/
 									EventMessageAttributed();
 
@@ -48,7 +47,11 @@ namespace GameEngine
 			*/
 			WorldState&				GetWorldState();
 
-			void					Populate();
+			/**
+			*	\brief				Calls Parent Populate and adds the subtype as a
+			*						prescribed attribute.
+			*/
+			void					Populate() override;
 
 		private:
 

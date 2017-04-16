@@ -23,9 +23,9 @@ namespace GameEngine
 		public:
 			
 			/**
-			*	\brief				Default constructor. Adds the subtype and the delay as
-			*						a prescribed attribute. Creates a new Event of type
+			*	\brief				Default constructor. Creates a new Event of type
 			*						EventMessageAttributed and stores it for reuse.
+			*						Calls Populate.
 			*/
 									ActionEvent();
 
@@ -42,7 +42,11 @@ namespace GameEngine
 			*/
 			void					Update(WorldState& worldState);
 
-			void					Populate();
+			/**
+			*	\brief				Calls parent Populate and adds the subtype and the delay as
+			*						a prescribed attribute.
+			*/
+			void					Populate() override;
 
 		private:
 

@@ -19,9 +19,8 @@ namespace GameEngine
 		public:
 
 			/**
-			*	\brief				Default constructor. Adds the subtypes array
-			*						as a prescribed attribute. Also subscribes to
-			*						EventMessageAttributed messages.
+			*	\brief				Default constructor. Calls Populate. Also
+			*						subscribes to EventMessageAttributed messages.
 			*/
 									ReactionAttributed();
 			
@@ -41,7 +40,11 @@ namespace GameEngine
 			*/
 			void					Notify(const EventPublisher& event) override;
 
-			void					Populate();
+			/**
+			*	\brief				Calls Parent Populate and adds the subtypes array
+			*						as a prescribed attribute.
+			*/
+			void					Populate() override;
 
 		private:
 

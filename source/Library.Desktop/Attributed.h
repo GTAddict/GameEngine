@@ -21,7 +21,7 @@ namespace GameEngine
 		public:
 
 			/**
-			*	\brief			Default constructor. Adds "this" as a prescribed attribute.
+			*	\brief			Default constructor. Calls Populate.
 			*/
 								Attributed();
 
@@ -162,6 +162,9 @@ namespace GameEngine
 			*/
 			std::uint32_t		GetPrescribedAttributeCount() const;
 
+			/*
+			*	\brief			Calls the Parent Populate and adds "this" as a prescribed attribute.
+			*/
 			virtual void		Populate();
 
 		private:

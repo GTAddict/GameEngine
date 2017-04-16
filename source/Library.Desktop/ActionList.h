@@ -17,8 +17,7 @@ namespace GameEngine
 		public:
 
 			/**
-			*	\brief				Default constructor. Adds a table
-			*						of Actions as an Attribute.
+			*	\brief				Default constructor. Calls populate.
 			*/
 									ActionList();
 
@@ -40,7 +39,11 @@ namespace GameEngine
 			*/
 			void					Update(WorldState& worldState) override;
 
-			void					Populate();
+			/**
+			*	\brief				Calls the Parent Populate and adds a table
+			*						of Actions as an Attribute.
+			*/
+			void					Populate() override;
 
 		private:
 

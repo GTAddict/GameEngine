@@ -24,8 +24,7 @@ namespace GameEngine
 		public:
 
 			/**
-			*	\brief				Default constructor. Adds Name and Entities
-			*						as Attributes.
+			*	\brief				Default constructor. Calls Populate.
 			*/
 									Sector();
 
@@ -100,7 +99,11 @@ namespace GameEngine
 			*/
 			void					AdoptEntity(Entity& entity);
 
-			void					Populate();
+			/**
+			*	\brief				Calls Parent Populate and adds Name and Entities
+			*						as Attributes.
+			*/
+			void					Populate() override;
 
 		private:
 

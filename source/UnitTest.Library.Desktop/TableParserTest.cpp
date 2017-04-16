@@ -48,7 +48,7 @@ namespace UnitTestTableParser
 			delete actionExpression;
 		}
 
-		TEST_METHOD(TestEntities)
+		TEST_METHOD(TestParse)
 		{
 			TestClassFactory testClassFactory;
 			AnotherClassFactory anotherClassFactory;
