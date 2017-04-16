@@ -14,7 +14,7 @@ namespace GameEngine
 		Attributed::Attributed()
 		{
 			++mInstanceCount;
-			AddPrescribedAttributeInternal("this", PRTTI_CAST(this));
+			Populate();
 		}
 
 		Attributed::~Attributed()
@@ -63,29 +63,17 @@ namespace GameEngine
 
 		Datum* Attributed::AddPrescribedAttributeInternalWithType(const std::string& name, const Datum::DatumType type)
 		{
-			if (IsAttribute(name))
-			{
-				return nullptr;
-			}
-
 			Datum& datum = Append(name);
 			datum.SetType(type);
 			s_mPrescribedAttributes[TypeIdInstance()][name] = datum;
-
+			
 			return &datum;
 		}
 
 		Scope* Attributed::AddNestedScope(const std::string& name)
 		{
-			// Already added, return
-			if (IsAttribute(name))
-			{
-				return nullptr;
-			}
-
 			Scope& scope = AppendScope(name);
 			s_mPrescribedAttributes[TypeIdInstance()][name] = &scope;
-
 			return &scope;
 		}
 
@@ -100,11 +88,7 @@ namespace GameEngine
 				return;
 			}
 
-			if (!IsAttribute(name))
-			{
-				s_mPrescribedAttributes[TypeIdInstance()][name] = scope;
-			}
-
+			s_mPrescribedAttributes[TypeIdInstance()][name] = scope;
 			Adopt(*scope, name);
 		}
 
@@ -120,7 +104,13 @@ namespace GameEngine
 
 		std::uint32_t Attributed::GetPrescribedAttributeCount() const
 		{
-			return s_mPrescribedAttributes[TypeIdInstance()].Size();
+			auto foundIt = s_mPrescribedAttributes.Find(TypeIdInstance());
+			return foundIt == s_mPrescribedAttributes.end() ? 0 : foundIt->second.Size();
+		}
+
+		void Attributed::Populate()
+		{
+			AddPrescribedAttributeInternal("this", PRTTI_CAST(this));
 		}
 
 		bool Attributed::IsPrescribedAttribute(const std::string& name) const

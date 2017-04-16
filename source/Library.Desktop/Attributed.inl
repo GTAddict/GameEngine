@@ -9,12 +9,6 @@ Datum* Attributed::AddPrescribedAttributeInternal(const std::string& name, const
 {
 	THROW_IF_NULL(data);
 
-	// Already added, return
-	if (IsAttribute(name))
-	{
-		return nullptr;
-	}
-
 	Datum& datum = Append(name);
 
 	for (std::uint32_t i = 0; i < size; ++i)
@@ -23,7 +17,7 @@ Datum* Attributed::AddPrescribedAttributeInternal(const std::string& name, const
 	}
 
 	s_mPrescribedAttributes[TypeIdInstance()][name] = datum;
-
+	
 	return &datum;
 }
 
@@ -38,15 +32,8 @@ Datum* Attributed::AddPrescribedAttributeExternal(const std::string& name, const
 {
 	THROW_IF_NULL(data);
 
-	// Already added, return
-	if (IsAttribute(name))
-	{
-		return nullptr;
-	}
-
 	Datum& datum = Append(name);
 	datum.SetStorage(data, size);
-
 	s_mPrescribedAttributes[TypeIdInstance()][name] = datum;
 
 	return &datum;

@@ -162,6 +162,8 @@ namespace GameEngine
 			*/
 			std::uint32_t		GetPrescribedAttributeCount() const;
 
+			virtual void		Populate();
+
 		private:
 
 			static HashMap<std::uint64_t, HashMap<std::string, Datum>>	s_mPrescribedAttributes;		/**< A static HashMap of all the prescribed attributes per class type. */
