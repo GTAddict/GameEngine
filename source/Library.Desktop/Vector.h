@@ -269,6 +269,14 @@ namespace GameEngine
 			Iterator				PushBack(const T& data);
 
 			/**
+			*	\brief				Inserts an element at the end of the container by moving
+			*						it from the source.
+			*	\param data			The data to be move inserted.
+			*	\return				A copy of an iterator pointing to the data just pushed.
+			*/
+			Iterator				PushBack(T&& data);
+
+			/**
 			 *	\brief				Removes the element at the back of the container, and calls its destructor.
 			 *	\throw std::out_of_range if the container is empty.
 			 */

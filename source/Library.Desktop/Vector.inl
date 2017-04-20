@@ -313,6 +313,19 @@ inline typename Vector<T>::Iterator Vector<T>::PushBack(const T& data)
 	return Iterator(mpEnd++, this);
 }
 
+template <typename T>
+inline typename Vector<T>::Iterator Vector<T>::PushBack(T&& data)
+{
+	if (mpEnd == mpCapacity)
+	{
+		Reserve(mfnGetCapacity(Size(), Capacity()));
+	}
+
+	new (mpEnd) T(std::move(data));
+
+	return Iterator(mpEnd++, this);
+}
+
 template<typename T>
 inline void Vector<T>::PopBack()
 {
