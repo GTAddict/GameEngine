@@ -84,7 +84,6 @@ namespace UnitTestEvent
 			Assert::IsTrue(event->TypeName() == "Event<T>");
 			Assert::IsTrue(event->TypeIdClass() == Event<DummyStruct>::TypeIdClass());
 			Assert::IsTrue(event->TypeIdInstance() == event->TypeIdClass());
-			Assert::IsTrue(event->QueryInterface(event->TypeIdClass()) == static_cast<RTTI*>(event));
 			Assert::IsTrue(event->Is(Event<DummyStruct>::TypeIdClass()));
 			Assert::IsTrue(event->Is(EventPublisher::TypeIdClass()));
 			Assert::IsTrue(event->Is("Event<T>"));
@@ -97,7 +96,6 @@ namespace UnitTestEvent
 			Assert::IsTrue(publisher->TypeName() == "EventPublisher");
 			Assert::IsTrue(publisher->TypeIdClass() == EventPublisher::TypeIdClass());
 			Assert::IsTrue(publisher->TypeIdInstance() == Event<DummyStruct>::TypeIdClass());
-			Assert::IsTrue(publisher->QueryInterface(publisher->TypeIdClass()) == static_cast<RTTI*>(event));
 			Assert::IsTrue(publisher->Is(EventPublisher::TypeIdClass()));
 			Assert::IsTrue(publisher->Is("Event<T>"));
 			Assert::IsTrue(publisher->Is("EventPublisher"));
@@ -116,7 +114,7 @@ namespace UnitTestEvent
 			
 			Event<DummyStruct> copyConstruct(event);
 			Event<DummyStruct> moveConstruct(event);
-
+			
 			Event<DummyStruct> copyAssign(d1, true);
 			copyAssign = anotherEvent;
 			Event<DummyStruct> moveAssign(d1, true);

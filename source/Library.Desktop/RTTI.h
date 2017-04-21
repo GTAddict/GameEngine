@@ -15,12 +15,6 @@ namespace GameEngine
 
 			virtual std::uint64_t TypeIdInstance() const = 0;
 
-			virtual RTTI* QueryInterface(const std::uint64_t id) const
-			{
-				UNREFERENCED_PARAMETER(id);
-				return nullptr;
-			}
-
 			virtual bool Is(std::uint64_t id) const
 			{
 				UNREFERENCED_PARAMETER(id);
@@ -61,13 +55,7 @@ namespace GameEngine
 			static std::string TypeName() { return std::string(#Type); }                                     \
 			static std::uint64_t TypeIdClass() { return sRunTimeTypeId; }                                    \
 			virtual std::uint64_t TypeIdInstance() const override { return Type::TypeIdClass(); }            \
-			virtual GameEngine::Library::RTTI* QueryInterface(const std::uint64_t id) const override         \
-            {                                                                                                \
-                if (id == sRunTimeTypeId)                                                                    \
-					{ return (RTTI*)this; }                                                                  \
-                else                                                                                         \
-					{ return Parent::QueryInterface(id); }                                                   \
-            }                                                                                                \
+																										     \
 			virtual bool Is(std::uint64_t id) const override                                                 \
 			{                                                                                                \
 				if (id == sRunTimeTypeId)                                                                    \
