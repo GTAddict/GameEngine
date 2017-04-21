@@ -301,6 +301,12 @@ inline bool Vector<T>::IsEmpty() const
 }
 
 template<typename T>
+inline typename Vector<T>::Iterator Vector<T>::push_back(const T& data)
+{
+	return PushBack(data);
+}
+
+template<typename T>
 inline typename Vector<T>::Iterator Vector<T>::PushBack(const T& data)
 {
 	if (mpEnd == mpCapacity)
@@ -456,6 +462,11 @@ inline void Vector<T>::Remove(const Iterator& rangeBegin, const Iterator& rangeE
 	if (rangeBegin == begin() && rangeEnd == end())
 	{
 		Clear();
+		return;
+	}
+
+	if (rangeBegin == end())
+	{
 		return;
 	}
 

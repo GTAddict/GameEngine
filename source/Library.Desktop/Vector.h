@@ -19,6 +19,8 @@ namespace GameEngine
 		{
 		public:
 
+			typedef T value_type;
+			typedef const T& const_reference;
 			typedef std::function<std::uint32_t(std::uint32_t, std::uint32_t)>	GetCapacityFn_t;
 			static const std::uint32_t DEFAULT_CONTAINER_CAPACITY = 5;
 
@@ -260,6 +262,14 @@ namespace GameEngine
 			 *	\return				Whether the container is empty.
 			 */
 			bool					IsEmpty() const;
+
+			/**
+			*	\brief				Inserts an element at the end of the container.
+			*						This is a wrapper for STL iterator support.
+			*	\param data			The data to be inserted.
+			*	\return				A copy of an iterator pointing to the data just pushed.
+			*/
+			Iterator				push_back(const T& data);
 
 			/**
 			 *	\brief				Inserts an element at the end of the container.
