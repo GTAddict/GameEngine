@@ -16,10 +16,18 @@ struct DummyStruct
 
 	DummyStruct(const DummyStruct& rhs) : ID(0), customData(nullptr), pOwnedInteger(nullptr)
 	{
-		pOwnedInteger = new int(*(rhs.pOwnedInteger));
-		ID = rhs.ID;
-		name = rhs.name;
-		customData = rhs.customData;
+		pOwnedInteger	= new int(*(rhs.pOwnedInteger));
+		ID				= rhs.ID;
+		name			= rhs.name;
+		customData		= rhs.customData;
+	}
+
+	DummyStruct(DummyStruct&& rhs) : ID(rhs.ID), name(rhs.name), customData(rhs.customData), pOwnedInteger(rhs.pOwnedInteger)
+	{
+		rhs.pOwnedInteger	= nullptr;
+		rhs.ID				= 0;
+		rhs.name			= "";
+		rhs.customData		= nullptr;
 	}
 
 	DummyStruct& operator=(const DummyStruct& rhs)
@@ -27,10 +35,31 @@ struct DummyStruct
 		if (this != &rhs)
 		{
 			delete pOwnedInteger;
-			pOwnedInteger = new int(*(rhs.pOwnedInteger));
-			ID = rhs.ID;
-			name = rhs.name;
-			customData = rhs.customData;
+
+			pOwnedInteger	= new int(*(rhs.pOwnedInteger));
+			ID				= rhs.ID;
+			name			= rhs.name;
+			customData		= rhs.customData;
+		}
+
+		return *this;
+	}
+
+	DummyStruct& operator=(DummyStruct&& rhs)
+	{
+		if (this != &rhs)
+		{
+			delete pOwnedInteger;
+
+			pOwnedInteger		= rhs.pOwnedInteger;
+			ID					= rhs.ID;
+			name				= rhs.name;
+			customData			= rhs.customData;
+
+			rhs.pOwnedInteger	= nullptr;
+			rhs.ID				= 0;
+			rhs.name			= "";
+			rhs.customData		= nullptr;
 		}
 
 		return *this;
