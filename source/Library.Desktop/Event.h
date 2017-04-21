@@ -1,6 +1,7 @@
 #pragma once
 #include "EventPublisher.h"
 #include "Vector.h"
+#include <mutex>
 
 namespace GameEngine
 {
@@ -91,8 +92,9 @@ namespace GameEngine
 
 		private:
 
-			static Vector<EventSubscriber*>		mSubscribers;	/**< The list of subscribers to send notifications to. */
-			T									mMessage;		/**< The message associated with this Event. */
+			static Vector<EventSubscriber*>		mSubscribers;		/**< The list of subscribers to send notifications to. */
+			static std::mutex					mSubscribersLock;	/**< The mutex that guards the list of subscribers. */
+			T									mMessage;			/**< The message associated with this Event. */
 
 		};
 

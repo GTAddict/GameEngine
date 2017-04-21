@@ -2,6 +2,8 @@
 #include "EventQueue.h"
 #include "EventPublisher.h"
 #include <algorithm>
+#include <thread>
+#include <iterator>
 
 namespace GameEngine
 {
@@ -10,9 +12,12 @@ namespace GameEngine
 		void EventQueue::Enqueue(EventPublisher& publisher, const GameTime& gameTime, const milliseconds& delay)
 		{
 			publisher.SetTime(gameTime.CurrentTime(), delay);
-			mEventQueue.PushBack(&publisher);
-		}
 
+			_CRITICAL(mEventQueueLock)
+			mEventQueue.PushBack(&publisher);
+			_CRITICAL_END
+		}
+		
 		void EventQueue::Send(EventPublisher& publisher)
 		{
 			publisher.Deliver();
@@ -24,14 +29,7 @@ namespace GameEngine
 
 		void EventQueue::Update(const GameTime& gameTime)
 		{
-			for (EventPublisher* eventPublisher : mEventQueue)
-			{
-				if (eventPublisher->IsExpired(gameTime.CurrentTime()))
-				{
-					Send(*eventPublisher);
-				}
-			}
-
+			_CRITICAL(mEventQueueLock)
 			if (mEventQueue.Size())
 			{
 				auto it = std::partition(
@@ -40,15 +38,28 @@ namespace GameEngine
 					[&gameTime](EventPublisher* eventPublisher) { return !eventPublisher->IsExpired(gameTime.CurrentTime()); }
 				);
 
-				if (it != mEventQueue.end())
-				{
-					mEventQueue.Remove(it, mEventQueue.end());
-				}
+				std::back_insert_iterator<Vector<EventPublisher*>> sweepIt(mSweepQueue);
+				std::move(it, mEventQueue.end(), sweepIt);
+				mEventQueue.Remove(it, mEventQueue.end());
 			}
+			_CRITICAL_END
+
+			for (EventPublisher* eventPublisher : mSweepQueue)
+			{
+				mFutures.PushBack(std::async([this, eventPublisher] { Send(*eventPublisher); }));
+			}
+			mSweepQueue.Clear();
+
+			for (auto& f : mFutures)
+			{
+				f.get();
+			}
+			mFutures.Clear();
 		}
 
 		void EventQueue::Clear()
 		{
+			_CRITICAL(mEventQueueLock)
 			for (EventPublisher* eventPublisher : mEventQueue)
 			{
 				if (eventPublisher->DeleteAfterPublishing())
@@ -56,18 +67,22 @@ namespace GameEngine
 					delete eventPublisher;
 				}
 			}
-
 			mEventQueue.Clear();
+			_CRITICAL_END
 		}
 
 		std::uint32_t EventQueue::Size() const
 		{
+			_CRITICAL(mEventQueueLock)
 			return mEventQueue.Size();
+			_CRITICAL_END
 		}
 
 		bool EventQueue::IsEmpty() const
 		{
+			_CRITICAL(mEventQueueLock)
 			return mEventQueue.IsEmpty();
+			_CRITICAL_END
 		}
 	}
 }

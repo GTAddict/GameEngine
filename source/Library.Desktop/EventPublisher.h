@@ -2,6 +2,7 @@
 #include "RTTI.h"
 #include "Vector.h"
 #include <chrono>
+#include <future>
 
 namespace GameEngine
 {
@@ -19,99 +20,106 @@ namespace GameEngine
 		{
 			RTTI_DECLARATIONS(EventPublisher, RTTI);
 
-			using time_point = std::chrono::high_resolution_clock::time_point;
-			using milliseconds = std::chrono::milliseconds;
+			using time_point	= std::chrono::high_resolution_clock::time_point;
+			using milliseconds	= std::chrono::milliseconds;
 
 		public:
 
 			/**
-			*	\brief				Parametrized constructor. Stores the
-			*						list of subscribers to notify and whether
-			*						it should be deleted once published.
+			*	\brief						Parametrized constructor. Stores the
+			*								list of subscribers to notify and whether
+			*								it should be deleted once published.
 			*	\param concreteSubscribers	The list of subscribers to notify
+			*	\param concreteMutex		The mutex that guards the subscribers.
 			*	\param deleteAfterPublishing Whether this should be deleted once it
-			*						is dispatched from the EventQueue.
+			*								is dispatched from the EventQueue.
 			*/
-									EventPublisher(Vector<EventSubscriber*>& concreteSubscribers, bool deleteAterPublish = true);
+											EventPublisher(Vector<EventSubscriber*>& concreteSubscribers, std::mutex& concreteMutex, bool deleteAterPublish = true);
 
 			/**
-			*	\brief				Default copy constructor.
+			*	\brief						Copy constructor. Neither futures nor the
+			*								buffer are copied.
 			*/
-									EventPublisher(const EventPublisher& rhs) = default;
+											EventPublisher(const EventPublisher& rhs);
 
 			/**
-			*	\brief				Default move constructor.
+			*	\brief						Default move constructor.
 			*/
-									EventPublisher(EventPublisher&& rhs) = default;
+											EventPublisher(EventPublisher&& rhs);
 
 			/**
-			*	\brief				Default copy assignment operator.
-			*	\return				A reference to the EventPublisher assigned to.
+			*	\brief						Copy assignment operator. Neither futures nor
+			*								the buffer are copied.
+			*	\return						A reference to the EventPublisher assigned to.
 			*/
-			EventPublisher&			operator=(const EventPublisher& rhs) = default;
+			EventPublisher&					operator=(const EventPublisher& rhs);
 
 			/**
-			*	\brief				Default move assignment operator.
-			*	\return				A reference to the EventPublisher assigned to.
+			*	\brief						Default move assignment operator.
+			*	\return						A reference to the EventPublisher assigned to.
 			*/
-			EventPublisher&			operator=(EventPublisher&& rhs) = default;
+			EventPublisher&					operator=(EventPublisher&& rhs);
 
 			/**
-			*	\brief				Default destructor.
+			*	\brief						Default destructor.
 			*/
-			virtual					~EventPublisher() = default;
+			virtual							~EventPublisher() = default;
 
 			/**
-			*	\brief				Sets the current time and delay after which
-			*						Deliver is called, if this is enqueued in the
-			*						EventQueue.
-			*	\param timeNow		The current time.
-			*	\param delay		The period after the current time when Deliver
-			*						should be called.
+			*	\brief						Sets the current time and delay after which
+			*								Deliver is called, if this is enqueued in the
+			*								EventQueue.
+			*	\param timeNow				The current time.
+			*	\param delay				The period after the current time when Deliver
+			*								should be called.
 			*/
-			void					SetTime(const time_point& timeNow, const milliseconds& delay = milliseconds(0));
+			void							SetTime(const time_point& timeNow, const milliseconds& delay = milliseconds(0));
 
 			/**
-			*	\brief				Returns the time this was enqueued in the EventQueue.
-			*	\return				A const reference to the time this was enqueued.
+			*	\brief						Returns the time this was enqueued in the EventQueue.
+			*	\return						A const reference to the time this was enqueued.
 			*/
-			const time_point&		TimeEnqueued() const;
+			const time_point&				TimeEnqueued() const;
 
 			/**
-			*	\brief				Returns the delay from the enqueued time that this was
-			*						scheduled to be delivered.
-			*	\return				A const reference to the delay after the enqueued time
-			*						that this was scheduled to be delivered.
+			*	\brief						Returns the delay from the enqueued time that this was
+			*								scheduled to be delivered.
+			*	\return						A const reference to the delay after the enqueued time
+			*								that this was scheduled to be delivered.
 			*/
-			const milliseconds&		Delay() const;
+			const milliseconds&				Delay() const;
 			
 			/**
-			*	\brief				Whether the sum total of the enqueue time and delay
-			*						exceeds the current time or not.
-			*	\param timeNow		The current time.
-			*	\return				False if it exceeds, true if it doesn't.
+			*	\brief						Whether the sum total of the enqueue time and delay
+			*								exceeds the current time or not.
+			*	\param timeNow				The current time.
+			*	\return						False if it exceeds, true if it doesn't.
 			*/
-			bool					IsExpired(const time_point& timeNow) const;
+			bool							IsExpired(const time_point& timeNow) const;
 
 			/**
-			*	\brief				Notifies all of its subscribers about the event.
+			*	\brief						Notifies all of its subscribers about the event.
 			*/
-			void					Deliver();
+			void							Deliver();
 
 			/**
-			*	\brief				Returns whether or not this should be deleted after
-			*						being published from the EventQueue.
-			*	\return				Whether or not this should be deleted after being
-			*						published from the EventQueue.
+			*	\brief						Returns whether or not this should be deleted after
+			*								being published from the EventQueue.
+			*	\return						Whether or not this should be deleted after being
+			*								published from the EventQueue.
 			*/
-			bool					DeleteAfterPublishing() const;
+			bool							DeleteAfterPublishing() const;
 
 		private:
 
-			Vector<EventSubscriber*>*	mConcreteSubscribers;	/**< A pointer to the list of subscribers to notify. */
-			bool						mbDeleteAfterPublish;	/**< Whether or not this should be deleted after being published. */
-			time_point					mTimeEnqueued;			/**< The time point at which the was added to the EventQueue. */
-			milliseconds				mDelay;					/**< The delay after the time enqueued that this is schedule to be delivered. */
+			Vector<EventSubscriber*>*		mConcreteSubscribers;		/**< A pointer to the list of subscribers to notify. */
+			Vector<EventSubscriber*>		mSubscribersBuffer;			/**< A copy of the concrete subscribers that should be notified. */
+			std::mutex*						mConcreteSubscribersLock;	/**< A pointer to the concrete mutex that guards the concrete subscribers. */
+			Vector<std::future<void>>		mFutures;					/**< Vector of futures that async will create. Don't want to stack alloc this vector every frame on Update. */
+
+			bool							mbDeleteAfterPublish;		/**< Whether or not this should be deleted after being published. */
+			time_point						mTimeEnqueued;				/**< The time point at which the was added to the EventQueue. */
+			milliseconds					mDelay;						/**< The delay after the time enqueued that this is schedule to be delivered. */
 		};
 	}
 }

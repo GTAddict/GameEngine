@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "EventPublisher.h"
 #include "EventSubscriber.h"
+#include <thread>
+#include <future>
 
 namespace GameEngine
 {
@@ -8,10 +10,45 @@ namespace GameEngine
 	{
 		RTTI_DEFINITIONS(EventPublisher);
 
-		EventPublisher::EventPublisher(Vector<EventSubscriber*>& concreteSubscribers, bool deleteAterPublish)
+		EventPublisher::EventPublisher(Vector<EventSubscriber*>& concreteSubscribers, std::mutex& conreteMutex, bool deleteAterPublish)
 			: mConcreteSubscribers(&concreteSubscribers)
+			, mConcreteSubscribersLock(&conreteMutex)
 			, mbDeleteAfterPublish(deleteAterPublish)
 		{
+		}
+
+		EventPublisher::EventPublisher(const EventPublisher& rhs)
+			: mConcreteSubscribers(rhs.mConcreteSubscribers)
+			, mConcreteSubscribersLock(rhs.mConcreteSubscribersLock)
+			, mbDeleteAfterPublish(rhs.mbDeleteAfterPublish)
+			, mTimeEnqueued(rhs.mTimeEnqueued)
+			, mDelay(rhs.mDelay)
+		{
+		}
+
+		EventPublisher::EventPublisher(EventPublisher&& rhs)
+		{
+			rhs;
+		}
+
+		EventPublisher& EventPublisher::operator=(const EventPublisher& rhs)
+		{
+			if (this != &rhs)
+			{
+				mConcreteSubscribers		= rhs.mConcreteSubscribers;
+				mConcreteSubscribersLock	= rhs.mConcreteSubscribersLock;
+				mbDeleteAfterPublish		= rhs.mbDeleteAfterPublish;
+				mTimeEnqueued				= rhs.mTimeEnqueued;
+				mDelay						= rhs.mDelay;
+			}
+
+			return *this;
+		}
+
+		EventPublisher& EventPublisher::operator=(EventPublisher && rhs)
+		{
+			rhs;;
+			return *this;
 		}
 
 		void EventPublisher::SetTime(const time_point& timeNow, const milliseconds& delay)
@@ -37,10 +74,21 @@ namespace GameEngine
 
 		void EventPublisher::Deliver()
 		{
-			for (EventSubscriber* eventSubscriber : *mConcreteSubscribers)
+			_CRITICAL(*mConcreteSubscribersLock)
+			mSubscribersBuffer = *mConcreteSubscribers;		// Faster than std::copy
+			_CRITICAL_END
+
+			for (EventSubscriber* eventSubscriber : mSubscribersBuffer)
 			{
-				eventSubscriber->Notify(*this);
+				mFutures.PushBack(std::async([eventSubscriber, this] { eventSubscriber->Notify(*this); }));
 			}
+			mSubscribersBuffer.Clear();
+
+			for (auto& f : mFutures)
+			{
+				f.get();
+			}
+			mFutures.Clear();
 		}
 
 		bool EventPublisher::DeleteAfterPublishing() const
