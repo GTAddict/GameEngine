@@ -20,6 +20,7 @@ namespace GameEngine
 
 		ActionEvent::ActionEvent()
 			: mDelay(0)
+			, mEvent(std::make_shared<Event<EventMessageAttributed>>(EventMessageAttributed()))
 		{
 			Populate();
 		}
