@@ -1,6 +1,7 @@
 #pragma once
 #include "Action.h"
 #include "EventMessageAttributed.h"
+#include <memory>
 
 namespace GameEngine
 {
@@ -30,11 +31,6 @@ namespace GameEngine
 									ActionEvent();
 
 			/**
-			*	\brief				Destructor. Deletes the Event created in the constructor.
-			*/
-									~ActionEvent();
-
-			/**
 			*	\brief				Sends an EventMessageAttributed after copying all
 			*						auxiliary attributes from this into the event message.
 			*	\param worldState	The current world state encapsulated as a WorldState
@@ -50,9 +46,9 @@ namespace GameEngine
 
 		private:
 
-			std::string								mSubtype;	/**< The subtype of the event. */
-			std::int32_t							mDelay;		/**< The delay to enqueue this event with. */
-			Event<EventMessageAttributed>*			mEvent;		/**< The Event that will be sent on Update. */
+			std::string										mSubtype;	/**< The subtype of the event. */
+			std::int32_t									mDelay;		/**< The delay to enqueue this event with. */
+			std::shared_ptr<Event<EventMessageAttributed>>	mEvent;		/**< The Event that will be sent on Update. */
 		};
 
 		ActionFactory(ActionEvent);

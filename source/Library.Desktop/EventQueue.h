@@ -2,6 +2,7 @@
 #include "Vector.h"
 #include <future>
 #include <mutex>
+#include <memory>
 
 namespace GameEngine
 {
@@ -31,12 +32,12 @@ namespace GameEngine
 			*							delivered.
 			*	\param
 			*/
-			void						Enqueue(EventPublisher& publisher, const GameTime& gameTime, const milliseconds& delay);
+			void						Enqueue(std::shared_ptr<EventPublisher> publisher, const GameTime& gameTime, const milliseconds& delay);
 
 			/**
 			*	\brief					Delivers the publisher immediately.
 			*/
-			void						Send(EventPublisher& publisher);
+			void						Send(std::shared_ptr<EventPublisher> publisher);
 
 			/**
 			*	\brief					Iterates through the queue, checks if they have 
@@ -65,10 +66,10 @@ namespace GameEngine
 
 		private:
 
-			Vector<EventPublisher*>		mEventQueue;		/**< The collection of pending EventPublishers. */
-			Vector<EventPublisher*>		mSweepQueue;		/**< The collection of EventPublishers to be processed this frame. */
-			Vector<std::future<void>>	mFutures;			/**< Vector of futures that async will create. Don't want to stack alloc this vector every frame on Update. */
-			mutable std::mutex			mEventQueueLock;	/**< The mutex for access to the Event Queue */
+			Vector<std::shared_ptr<EventPublisher>>		mEventQueue;		/**< The collection of pending EventPublishers. */
+			Vector<std::shared_ptr<EventPublisher>>		mSweepQueue;		/**< The collection of EventPublishers to be processed this frame. */
+			Vector<std::future<void>>					mFutures;			/**< Vector of futures that async will create. Don't want to stack alloc this vector every frame on Update. */
+			mutable std::mutex							mEventQueueLock;	/**< The mutex for access to the Event Queue */
 		};
 	}
 }

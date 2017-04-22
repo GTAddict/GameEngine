@@ -10,25 +10,18 @@ namespace GameEngine
 	{
 		RTTI_DEFINITIONS(EventPublisher);
 
-		EventPublisher::EventPublisher(Vector<EventSubscriber*>& concreteSubscribers, std::mutex& conreteMutex, bool deleteAterPublish)
+		EventPublisher::EventPublisher(Vector<EventSubscriber*>& concreteSubscribers, std::mutex& conreteMutex)
 			: mConcreteSubscribers(&concreteSubscribers)
 			, mConcreteSubscribersLock(&conreteMutex)
-			, mbDeleteAfterPublish(deleteAterPublish)
 		{
 		}
 
 		EventPublisher::EventPublisher(const EventPublisher& rhs)
 			: mConcreteSubscribers(rhs.mConcreteSubscribers)
 			, mConcreteSubscribersLock(rhs.mConcreteSubscribersLock)
-			, mbDeleteAfterPublish(rhs.mbDeleteAfterPublish)
 			, mTimeEnqueued(rhs.mTimeEnqueued)
 			, mDelay(rhs.mDelay)
 		{
-		}
-
-		EventPublisher::EventPublisher(EventPublisher&& rhs)
-		{
-			rhs;
 		}
 
 		EventPublisher& EventPublisher::operator=(const EventPublisher& rhs)
@@ -37,17 +30,10 @@ namespace GameEngine
 			{
 				mConcreteSubscribers		= rhs.mConcreteSubscribers;
 				mConcreteSubscribersLock	= rhs.mConcreteSubscribersLock;
-				mbDeleteAfterPublish		= rhs.mbDeleteAfterPublish;
 				mTimeEnqueued				= rhs.mTimeEnqueued;
 				mDelay						= rhs.mDelay;
 			}
 
-			return *this;
-		}
-
-		EventPublisher& EventPublisher::operator=(EventPublisher && rhs)
-		{
-			rhs;;
 			return *this;
 		}
 
@@ -89,11 +75,6 @@ namespace GameEngine
 				f.get();
 			}
 			mFutures.Clear();
-		}
-
-		bool EventPublisher::DeleteAfterPublishing() const
-		{
-			return mbDeleteAfterPublish;
 		}
 	}
 }

@@ -31,10 +31,8 @@ namespace GameEngine
 			*								it should be deleted once published.
 			*	\param concreteSubscribers	The list of subscribers to notify
 			*	\param concreteMutex		The mutex that guards the subscribers.
-			*	\param deleteAfterPublishing Whether this should be deleted once it
-			*								is dispatched from the EventQueue.
 			*/
-											EventPublisher(Vector<EventSubscriber*>& concreteSubscribers, std::mutex& concreteMutex, bool deleteAterPublish = true);
+											EventPublisher(Vector<EventSubscriber*>& concreteSubscribers, std::mutex& concreteMutex);
 
 			/**
 			*	\brief						Copy constructor. Neither futures nor the
@@ -43,22 +41,11 @@ namespace GameEngine
 											EventPublisher(const EventPublisher& rhs);
 
 			/**
-			*	\brief						Default move constructor.
-			*/
-											EventPublisher(EventPublisher&& rhs);
-
-			/**
 			*	\brief						Copy assignment operator. Neither futures nor
 			*								the buffer are copied.
 			*	\return						A reference to the EventPublisher assigned to.
 			*/
 			EventPublisher&					operator=(const EventPublisher& rhs);
-
-			/**
-			*	\brief						Default move assignment operator.
-			*	\return						A reference to the EventPublisher assigned to.
-			*/
-			EventPublisher&					operator=(EventPublisher&& rhs);
 
 			/**
 			*	\brief						Default destructor.
@@ -102,14 +89,6 @@ namespace GameEngine
 			*/
 			void							Deliver();
 
-			/**
-			*	\brief						Returns whether or not this should be deleted after
-			*								being published from the EventQueue.
-			*	\return						Whether or not this should be deleted after being
-			*								published from the EventQueue.
-			*/
-			bool							DeleteAfterPublishing() const;
-
 		private:
 
 			Vector<EventSubscriber*>*		mConcreteSubscribers;		/**< A pointer to the list of subscribers to notify. */
@@ -117,7 +96,6 @@ namespace GameEngine
 			std::mutex*						mConcreteSubscribersLock;	/**< A pointer to the concrete mutex that guards the concrete subscribers. */
 			Vector<std::future<void>>		mFutures;					/**< Vector of futures that async will create. Don't want to stack alloc this vector every frame on Update. */
 
-			bool							mbDeleteAfterPublish;		/**< Whether or not this should be deleted after being published. */
 			time_point						mTimeEnqueued;				/**< The time point at which the was added to the EventQueue. */
 			milliseconds					mDelay;						/**< The delay after the time enqueued that this is schedule to be delivered. */
 		};

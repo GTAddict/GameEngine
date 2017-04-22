@@ -196,14 +196,17 @@ copy /v /y $(SolutionDir)..\data\TableParserTestData.xml $(OutDir)</Command>
     <ClInclude Include="AttributedFoo.h" />
     <ClInclude Include="ConvertVals.h" />
     <ClInclude Include="DummyStruct.h" />
+    <ClInclude Include="DummySubscriber.h" />
     <ClInclude Include="Foo.h" />
     <ClInclude Include="FooXMLHelper.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AsyncTest.cpp" />
     <ClCompile Include="AttributedFoo.cpp" />
     <ClCompile Include="AttributedTest.cpp" />
     <ClCompile Include="DatumTest.cpp" />
+    <ClCompile Include="DummySubscriber.cpp" />
     <ClCompile Include="EventTest.cpp" />
     <ClCompile Include="FactoryTest.cpp" />
     <ClCompile Include="Foo.cpp" />

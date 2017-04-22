@@ -9,22 +9,18 @@ namespace GameEngine
 {
 	namespace Library
 	{
-		void EventQueue::Enqueue(EventPublisher& publisher, const GameTime& gameTime, const milliseconds& delay)
+		void EventQueue::Enqueue(std::shared_ptr<EventPublisher> publisher, const GameTime& gameTime, const milliseconds& delay)
 		{
-			publisher.SetTime(gameTime.CurrentTime(), delay);
+			publisher->SetTime(gameTime.CurrentTime(), delay);
 
 			_CRITICAL(mEventQueueLock)
-			mEventQueue.PushBack(&publisher);
+			mEventQueue.PushBack(publisher);
 			_CRITICAL_END
 		}
 		
-		void EventQueue::Send(EventPublisher& publisher)
+		void EventQueue::Send(std::shared_ptr<EventPublisher> publisher)
 		{
-			publisher.Deliver();
-			if (publisher.DeleteAfterPublishing())
-			{
-				delete &publisher;
-			}
+			publisher->Deliver();
 		}
 
 		void EventQueue::Update(const GameTime& gameTime)
@@ -35,18 +31,18 @@ namespace GameEngine
 				auto it = std::partition(
 					mEventQueue.begin(),
 					mEventQueue.end(),
-					[&gameTime](EventPublisher* eventPublisher) { return !eventPublisher->IsExpired(gameTime.CurrentTime()); }
+					[&gameTime](std::shared_ptr<EventPublisher> eventPublisher) { return !eventPublisher->IsExpired(gameTime.CurrentTime()); }
 				);
 
-				std::back_insert_iterator<Vector<EventPublisher*>> sweepIt(mSweepQueue);
+				std::back_insert_iterator<Vector<std::shared_ptr<EventPublisher>>> sweepIt(mSweepQueue);
 				std::move(it, mEventQueue.end(), sweepIt);
 				mEventQueue.Remove(it, mEventQueue.end());
 			}
 			_CRITICAL_END
 
-			for (EventPublisher* eventPublisher : mSweepQueue)
+			for (std::shared_ptr<EventPublisher>& eventPublisher : mSweepQueue)
 			{
-				mFutures.PushBack(std::async([this, eventPublisher] { Send(*eventPublisher); }));
+				mFutures.PushBack(std::async([this, eventPublisher] { Send(eventPublisher); }));
 			}
 			mSweepQueue.Clear();
 
@@ -60,13 +56,6 @@ namespace GameEngine
 		void EventQueue::Clear()
 		{
 			_CRITICAL(mEventQueueLock)
-			for (EventPublisher* eventPublisher : mEventQueue)
-			{
-				if (eventPublisher->DeleteAfterPublishing())
-				{
-					delete eventPublisher;
-				}
-			}
 			mEventQueue.Clear();
 			_CRITICAL_END
 		}

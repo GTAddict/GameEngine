@@ -14,7 +14,8 @@ namespace UnitTestEvent
 		{
 			EventQueue e;
 			DummyStruct d;
-			Event<DummyStruct> event(d, false);
+			std::shared_ptr<Event<DummyStruct>> event = std::make_shared<Event<DummyStruct>>(d);
+
 			static int called = 0;
 			class BlahBloo : public EventSubscriber
 			{
@@ -39,7 +40,7 @@ namespace UnitTestEvent
 			GameTime g;
 			GameClock gam;
 			gam.UpdateGameTime(g);
-			event.SetTime(g.CurrentTime(), std::chrono::milliseconds(0));
+			event->SetTime(g.CurrentTime(), std::chrono::milliseconds(0));
 			e.Send(event);
 			Assert::IsTrue(called == 1);
 			e.Enqueue(event, g, std::chrono::milliseconds(0));
@@ -51,27 +52,27 @@ namespace UnitTestEvent
 		{
 			EventQueue eventQueue;
 			DummyStruct d;
-			Event<DummyStruct> e(d, false);
-			Event<DummyStruct>* delEvent = new Event<DummyStruct>(d, true);
-			Assert::IsTrue(d == e.Message());
+			std::shared_ptr<Event<DummyStruct>> e = std::make_shared<Event<DummyStruct>>(d);
+			std::shared_ptr<Event<DummyStruct>> delEvent = std::make_shared<Event<DummyStruct>>(d);
+			Assert::IsTrue(d == e->Message());
 			Assert::IsTrue(d == delEvent->Message());
 			GameClock clock;
 			GameTime gameTime;
 			std::chrono::milliseconds delay(1);
 			clock.UpdateGameTime(gameTime);
 			eventQueue.Enqueue(e, gameTime, delay);
-			eventQueue.Enqueue(*delEvent, gameTime, delay);
+			eventQueue.Enqueue(delEvent, gameTime, delay);
 			Assert::IsTrue(eventQueue.Size() == 2);
 			Assert::IsFalse(eventQueue.IsEmpty());
-			Assert::IsTrue(gameTime.CurrentTime() == e.TimeEnqueued());
-			Assert::IsTrue(delay == e.Delay());
-			Assert::IsFalse(e.IsExpired(gameTime.CurrentTime()));
+			Assert::IsTrue(gameTime.CurrentTime() == e->TimeEnqueued());
+			Assert::IsTrue(delay == e->Delay());
+			Assert::IsFalse(e->IsExpired(gameTime.CurrentTime()));
 			eventQueue.Update(gameTime);
 			Assert::IsTrue(eventQueue.Size() == 2);
 			Assert::IsFalse(eventQueue.IsEmpty());
 			Sleep(1);
 			clock.UpdateGameTime(gameTime);
-			Assert::IsTrue(e.IsExpired(gameTime.CurrentTime()));
+			Assert::IsTrue(e->IsExpired(gameTime.CurrentTime()));
 			eventQueue.Update(gameTime);
 			Assert::IsTrue(eventQueue.Size() == 0);
 			Assert::IsTrue(eventQueue.IsEmpty());
@@ -80,7 +81,7 @@ namespace UnitTestEvent
 
 		TEST_METHOD(TestRTTI)
 		{
-			Event<DummyStruct>* event = new Event<DummyStruct>(DummyStruct(), true);
+			Event<DummyStruct>* event = new Event<DummyStruct>(DummyStruct());
 			Assert::IsTrue(event->TypeName() == "Event<T>");
 			Assert::IsTrue(event->TypeIdClass() == Event<DummyStruct>::TypeIdClass());
 			Assert::IsTrue(event->TypeIdInstance() == event->TypeIdClass());
@@ -109,15 +110,15 @@ namespace UnitTestEvent
 		TEST_METHOD(TestCopyMoveSemantics)
 		{
 			DummyStruct d1, d2;
-			Event<DummyStruct> event(d1, true);
-			Event<DummyStruct> anotherEvent(d2, false);
+			Event<DummyStruct> event(d1);
+			Event<DummyStruct> anotherEvent(d2);
 			
 			Event<DummyStruct> copyConstruct(event);
 			Event<DummyStruct> moveConstruct(event);
 			
-			Event<DummyStruct> copyAssign(d1, true);
+			Event<DummyStruct> copyAssign(d1);
 			copyAssign = anotherEvent;
-			Event<DummyStruct> moveAssign(d1, true);
+			Event<DummyStruct> moveAssign(d1);
 			moveAssign = std::move(anotherEvent);
 		}
 

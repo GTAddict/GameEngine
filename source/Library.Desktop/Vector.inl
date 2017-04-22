@@ -475,12 +475,19 @@ inline void Vector<T>::Remove(const Iterator& rangeBegin, const Iterator& rangeE
 		(*it).~T();
 	}
 
-	if (rangeEnd + 1 != end())
+	if (rangeEnd + 1 != end() && rangeEnd != end())
 	{
 		MoveElements(rangeBegin, rangeEnd, end() - rangeEnd);
 	}
 
-	mpEnd -= rangeEnd - rangeBegin + 1;
+	if (rangeEnd == end())
+	{
+		mpEnd = rangeBegin.mpCurrent;
+	}
+	else
+	{
+		mpEnd -= rangeEnd - rangeBegin + 1;
+	}
 }
 
 template<typename T>

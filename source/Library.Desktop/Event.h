@@ -25,10 +25,8 @@ namespace GameEngine
 			*						message to pass and whether to
 			*						delete it after it is published.
 			*	\param message		The message to be stored in this Event.
-			*	\param deleteAfterPublishing Whether this Event should be
-			*						deleted once it's dispatched from the queue.
 			*/
-									Event(const T& message, bool deleteAfterPublishing);
+									Event(const T& message);
 
 			/**
 			*	\brief				Default copy constructor.

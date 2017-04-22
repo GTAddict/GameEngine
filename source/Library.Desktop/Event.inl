@@ -3,8 +3,8 @@ template <typename T> Vector<EventSubscriber*> Event<T>::mSubscribers;
 template <typename T> std::mutex Event<T>::mSubscribersLock;
 
 template <typename T>
-inline GameEngine::Library::Event<T>::Event(const T& message, bool deleteAfterPublishing)
-	: EventPublisher(mSubscribers, mSubscribersLock, deleteAfterPublishing)
+inline GameEngine::Library::Event<T>::Event(const T& message)
+	: EventPublisher(mSubscribers, mSubscribersLock)
 	, mMessage(message)
 {
 }

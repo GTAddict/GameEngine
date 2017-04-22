@@ -20,14 +20,8 @@ namespace GameEngine
 
 		ActionEvent::ActionEvent()
 			: mDelay(0)
-			, mEvent(new Event<EventMessageAttributed>(EventMessageAttributed(), false))
 		{
 			Populate();
-		}
-
-		ActionEvent::~ActionEvent()
-		{
-			delete mEvent;
 		}
 
 		void ActionEvent::Update(WorldState& worldState)
@@ -48,7 +42,7 @@ namespace GameEngine
 
 			assert(worldState.mpEventQueue != nullptr);
 			worldState.mpEventQueue->Enqueue(
-				*mEvent,
+				mEvent,
 				worldState.GetGameTime(),
 				std::chrono::duration<long long, std::milli>(mDelay)
 			);
