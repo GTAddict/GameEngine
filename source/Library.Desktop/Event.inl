@@ -22,7 +22,6 @@ template<typename T>
 inline void GameEngine::Library::Event<T>::Unsubscribe(EventSubscriber& subscriber)
 {
 	_CRITICAL(mSubscribersLock)
-	assert(mSubscribers.Find(&subscriber) != mSubscribers.end());
 	mSubscribers.Remove(&subscriber);
 	_CRITICAL_END
 }

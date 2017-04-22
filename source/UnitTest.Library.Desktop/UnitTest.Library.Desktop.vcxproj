@@ -199,7 +199,12 @@ copy /v /y $(SolutionDir)..\data\TableParserTestData.xml $(OutDir)</Command>
     <ClInclude Include="DummySubscriber.h" />
     <ClInclude Include="Foo.h" />
     <ClInclude Include="FooXMLHelper.h" />
+    <ClInclude Include="MessageAddSubscribers.h" />
+    <ClInclude Include="MessageClearEventQueue.h" />
+    <ClInclude Include="MessageClearSubscribers.h" />
+    <ClInclude Include="MessageEnqueuePublisher.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="SubscriberModifySubsAndQueue.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AsyncTest.cpp" />
@@ -212,6 +217,10 @@ copy /v /y $(SolutionDir)..\data\TableParserTestData.xml $(OutDir)</Command>
     <ClCompile Include="Foo.cpp" />
     <ClCompile Include="FooXMLHelper.cpp" />
     <ClCompile Include="HashMapTest.cpp" />
+    <ClCompile Include="MessageAddSubscribers.cpp" />
+    <ClCompile Include="MessageClearEventQueue.cpp" />
+    <ClCompile Include="MessageClearSubscribers.cpp" />
+    <ClCompile Include="MessageEnqueuePublisher.cpp" />
     <ClCompile Include="ParseMasterTest.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -220,6 +229,7 @@ copy /v /y $(SolutionDir)..\data\TableParserTestData.xml $(OutDir)</Command>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="StackTest.cpp" />
+    <ClCompile Include="SubscriberModifySubsAndQueue.cpp" />
     <ClCompile Include="TableParserTest.cpp" />
     <ClCompile Include="ScopeTest.cpp" />
     <ClCompile Include="SListTest.cpp" />

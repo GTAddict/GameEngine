@@ -13,8 +13,7 @@ namespace UnitTestEvent
 		TEST_METHOD(TestBasicFunctionality)
 		{
 			EventQueue e;
-			DummyStruct d;
-			std::shared_ptr<Event<DummyStruct>> event = std::make_shared<Event<DummyStruct>>(d);
+			std::shared_ptr<Event<DummyStruct>> event = std::make_shared<Event<DummyStruct>>(DummyStruct());
 
 			static int called = 0;
 			class BlahBloo : public EventSubscriber
@@ -52,8 +51,8 @@ namespace UnitTestEvent
 		{
 			EventQueue eventQueue;
 			DummyStruct d;
-			std::shared_ptr<Event<DummyStruct>> e = std::make_shared<Event<DummyStruct>>(d);
-			std::shared_ptr<Event<DummyStruct>> delEvent = std::make_shared<Event<DummyStruct>>(d);
+			std::shared_ptr<Event<DummyStruct>> e = std::make_shared<Event<DummyStruct>>(DummyStruct());
+			std::shared_ptr<Event<DummyStruct>> delEvent = std::make_shared<Event<DummyStruct>>(DummyStruct());
 			Assert::IsTrue(d == e->Message());
 			Assert::IsTrue(d == delEvent->Message());
 			GameClock clock;
